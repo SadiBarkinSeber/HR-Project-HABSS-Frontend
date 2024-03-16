@@ -9,6 +9,8 @@ import DefaultDashboardLayout from "./layouts/DefaultDashboardLayout";
 import { ProfilePictureProvider } from "./components/ProfilePictureContext";
 import { Routes, Route, Router } from "react-router-dom";
 import "./styles/theme.scss";
+import AdvanceList from "./pages/pages/Advancelist";
+import Advance from "./pages/pages/AdvancePage";
 
 export default function App() {
   return (
@@ -62,6 +64,25 @@ export default function App() {
                 </DefaultDashboardLayout>
               }
             />
+             <Route
+              path="/emp-advance"
+              element={
+                <DefaultDashboardLayout>
+                  {" "}
+                  {<Advance />}
+                </DefaultDashboardLayout>
+              }
+            />
+             <Route
+              path="/emp-advance-list"
+              element={
+                <DefaultDashboardLayout>
+                  {" "}
+                  {<AdvanceList />}
+                </DefaultDashboardLayout>
+              }
+            />
+
           </Routes>
         </ProfilePictureProvider>
       </main>
