@@ -14,10 +14,14 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css");
 
 // Feathers CSS for Before Icon
-@import url("/fonts/feather-icons/feather.css");
+//@import url("/fonts/feather-icons/feather.css");
+// Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Bootstrap functions
 @import "../../node_modules/bootstrap/scss/functions";
+
+@import "../../node_modules//bootstrap/scss/maps";
 
 // User Variables
 @import "user-variables";
@@ -28,8 +32,7 @@
 //utilities
 @import "theme/utilities";
 
-// Bootstrap
-@import "../../node_modules/bootstrap/scss/bootstrap";
+
 
 // Theme
 @import "theme/theme";
@@ -40,6 +43,7 @@
 .heading-permalink {
   color: transparent;
   margin-left: -2rem;
+
   &:hover {
     color: transparent;
   }
@@ -48,6 +52,7 @@
     color: rgba(82, 95, 127, 0);
     content: "#";
   }
+
   &:hover:before {
     color: $primary;
   }
