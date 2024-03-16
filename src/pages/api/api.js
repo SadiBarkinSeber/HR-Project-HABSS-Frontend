@@ -125,8 +125,30 @@ async function fetchAdvances() {
 
 export { fetchAdvances };
 
+async function createAdvance(createObject) {
+  try {
+    const response = await axios.post('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances', createObject);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching advance:', error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { createAdvance };
 
 
+async function fetchExpenses() {
+  try {
+    const response = await axios.get('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses'); 
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching expenses:', error);
+    return [];
+  }
+}
+
+export { fetchExpenses };
 
 
 

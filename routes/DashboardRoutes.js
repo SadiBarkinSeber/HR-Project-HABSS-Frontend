@@ -60,7 +60,7 @@ export const DashboardMenu = [
     icon: "monitor",
     children: [
       { id: uuid(), link: "/components/accordions", name: "Harcama Ekle" },
-      { id: uuid(), link: "/components/alerts", name: "Harcama Listesi" },
+      { id: uuid(), link: "/emp-expense-list", name: "Harcama Listesi" },
     ],
   },
   {

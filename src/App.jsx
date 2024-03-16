@@ -11,6 +11,7 @@ import { Routes, Route, Router } from "react-router-dom";
 import "./styles/theme.scss";
 import AdvanceList from "./pages/pages/Advancelist";
 import Advance from "./pages/pages/AdvancePage";
+import ExpenseList from "./pages/ExpenseList";
 
 export default function App() {
   return (
@@ -82,7 +83,15 @@ export default function App() {
                 </DefaultDashboardLayout>
               }
             />
-
+              <Route
+              path="/emp-expense-list"
+              element={
+                <DefaultDashboardLayout>
+                  {" "}
+                  {<ExpenseList />}
+                </DefaultDashboardLayout>
+              }
+            />
           </Routes>
         </ProfilePictureProvider>
       </main>
