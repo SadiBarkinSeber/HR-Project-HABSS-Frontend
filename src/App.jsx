@@ -11,6 +11,7 @@ import { Routes, Route, Router } from "react-router-dom";
 import "./styles/theme.scss";
 import AdvanceList from "./pages/pages/Advancelist";
 import Advance from "./pages/pages/AdvancePage";
+import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
 
 export default function App() {
@@ -80,6 +81,15 @@ export default function App() {
                 <DefaultDashboardLayout>
                   {" "}
                   {<AdvanceList />}
+                </DefaultDashboardLayout>
+              }
+            />
+            <Route
+              path="/emp-expense"
+              element={
+                <DefaultDashboardLayout>
+                  {" "}
+                  {<Expense/>}
                 </DefaultDashboardLayout>
               }
             />

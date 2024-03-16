@@ -150,6 +150,16 @@ async function fetchExpenses() {
 
 export { fetchExpenses };
 
+const sendFormData = async (formData) => {
+  try {
+    const response = await axios.post('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses',formData);
+    return response.data; 
+  } catch (error) {
+    throw new Error('API isteği başarısız oldu.');
+  }
+};
+
+export {sendFormData};
 
 
 export default api;
