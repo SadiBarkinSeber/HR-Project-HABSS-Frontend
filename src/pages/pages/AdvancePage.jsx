@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createAdvance } from '../api/api';
 
 const Advance = () => {
   // State tanımlamaları
@@ -18,7 +19,10 @@ const Advance = () => {
     e.preventDefault();
     // Form verilerini işleme
     const advanceObject = createAdvanceObject(advanceType, currency, amount, description);
+    const response = createAdvance(advanceObject);
+    console.log(response);
     console.log(advanceObject);
+
     // Formu sıfırla
     resetForm();
   };
@@ -37,7 +41,10 @@ const Advance = () => {
       AdvanceType: advanceType,
       Currency: currency,
       Amount: amount,
-      Description: description
+      Description: description,
+      EmployeeId:1,
+      Permission:false,
+      ApprovalStatus:"Requested"
     }
 
     return advance;
