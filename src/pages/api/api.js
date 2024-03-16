@@ -111,4 +111,27 @@ export const fetchPermissions = async () => {
   }
 };
 
+
+
+async function fetchAdvances() {
+  try {
+    const response = await axios.get('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching advance:', error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAdvances };
+
+
+
+
+
+
 export default api;
+
+
+
+

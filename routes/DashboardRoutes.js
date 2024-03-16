@@ -68,10 +68,12 @@ export const DashboardMenu = [
     title: "Avans",
     icon: "corner-left-down",
     children: [
-      { id: uuid(), link: "/components/accordions", name: "Avans Ekle" },
-      { id: uuid(), link: "/components/alerts", name: "Avans Listesi" },
+      { id: uuid(), link: "/emp-advance", name: "Avans Ekle" },
+      { id: uuid(), link: "/emp-advance-list", name: "Avans Listesi" },
     ],
   },
 ];
+
+
 
 export default DashboardMenu;
