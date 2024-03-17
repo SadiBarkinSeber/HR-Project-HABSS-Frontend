@@ -86,12 +86,6 @@ function EmployeeDetail() {
             />
           )}
         </div>
-        <div>
-          <br />
-          <button style={{ marginLeft: "264px" }} onClick={handleBackButton}>
-            Geri Don
-          </button>
-        </div>
       </div>
     </>
   );

@@ -1,47 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { fetchAdvances } from '../api/api';
+import React, { useState, useEffect } from "react";
+import { fetchAdvances } from "../api/api";
 
 function AdvanceList() {
-  const [advance, setAdvance] = useState([]);
+  const [advances, setAdvances] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const data = await fetchAdvances();
-      setAdvance(data);
+      setAdvances(data);
     }
 
     fetchData();
   }, []);
 
+  const handleCancel = (id) => {
+    // İptal işlemi kodu burada
+  };
+
   return (
-    <div>
-      <h1>Advances List</h1>
-      <table className="advance-table">
-        <thead>
-          <tr>
-            <th>Advance Type</th>
-            <th>Request Date</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Currency</th>
-            <th>Permission</th>
-            <th>Process</th>
-          </tr>
-        </thead>
-        <tbody>
-          {advance.map((advance) => (
-            <tr key={advance.id}>
-              <td>{advance.advanceType}</td>
-              <td>{advance.requestDate}</td>
-              <td>{advance.description}</td>
-              <td>{advance.amount}</td>
-              <td>{advance.currency}</td>
-              <td>{advance.permission}</td>
-              <td><button className="cancel-button">İşlem İptal</button></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-10">
+          <h1 className="text-center mb-4">Avans Talebi Listesi</h1>
+          <div className="table-responsive">
+            <table className="table table-striped table-bordered table-hover">
+              <thead className="bg-primary text-light">
+                <tr>
+                  <th>Advance Type</th>
+                  <th>Request Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Currency</th>
+                  <th>Permission</th>
+                  <th>Process</th>
+                </tr>
+              </thead>
+              <tbody>
+                {advances.map((advance) => (
+                  <tr key={advance.id}>
+                    <td>{advance.advanceType}</td>
+                    <td>{advance.requestDate}</td>
+                    <td>{advance.description}</td>
+                    <td>{advance.amount}</td>
+                    <td>{advance.currency}</td>
+                    <td>{advance.permission}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleCancel(advance.id)}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

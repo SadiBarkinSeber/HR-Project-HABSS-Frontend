@@ -105,7 +105,7 @@ function EmployeeUpdate() {
               dateOfBirth={employee.dateOfBirth}
               birthPlace={employee.birthPlace}
               tc={employee.tc}
-              onPhoneChange={(e) => setPhoneNumber(e.target.value)}
+              onPhoneChange={(value) => setPhoneNumber(value)}
               onAddressChange={(e) => setAddress(e.target.value)}
             />
           )}
