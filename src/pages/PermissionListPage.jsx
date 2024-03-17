@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { fetchPermissions } from "./api/api";
 
-function EmployeePermissions() {
+function PermissionList() {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    const getEmployeePermissions = async () => {
+    const fetchData = async () => {
       try {
         const permissionsData = await fetchPermissions();
         setPermissions(permissionsData.permissions);
@@ -14,11 +14,28 @@ function EmployeePermissions() {
       }
     };
 
-    getEmployeePermissions();
+    fetchData();
   }, []);
 
   const handleDownload = async (fileName) => {
-    // İndirme işlemi kodu burada
+    try {
+      const response = await fetch(`/api/files/${fileName}`);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Dosya indirme hatası:", error);
+    }
+  };
+
+  const formatDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    return date.toLocaleDateString('tr-TR');
   };
 
   return (
@@ -43,9 +60,9 @@ function EmployeePermissions() {
                 {permissions.map((permission) => (
                   <tr key={permission.id}>
                     <td>{permission.permissionType}</td>
-                    <td>{permission.requestDate}</td>
-                    <td>{permission.startDate}</td>
-                    <td>{permission.endDate}</td>
+                    <td>{formatDate(permission.requestDate)}</td>
+                    <td>{formatDate(permission.startDate)}</td>
+                    <td>{formatDate(permission.endDate)}</td>
                     <td>{permission.numberOfDays}</td>
                     <td>{permission.approvalStatus}</td>
                     <td className="text-center">
@@ -69,4 +86,4 @@ function EmployeePermissions() {
   );
 }
 
-export default EmployeePermissions;
+export default PermissionList;

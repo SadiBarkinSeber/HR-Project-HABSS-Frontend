@@ -13,8 +13,22 @@ function ExpenseList() {
     fetchData();
   }, []);
 
+  // Dosya indirme işlemi
   const handleDownload = async (fileName) => {
-    // İndirme işlemi kodu burada
+    try {
+      // Dosya indirme işlemi burada yapılacak
+      const response = await fetch(`/api/files/${fileName}`);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Dosya indirme hatası:", error);
+    }
   };
 
   return (
@@ -39,9 +53,7 @@ function ExpenseList() {
                     <td>{expense.type}</td>
                     <td>{expense.amount}</td>
                     <td>{expense.approvalStatus}</td>
-                    <td>
-                      {new Date(expense.requestDate).toLocaleDateString()}
-                    </td>
+                    <td>{new Date(expense.requestDate).toLocaleDateString()}</td>
                     <td className="text-center">
                       {expense.fileName && (
                         <button

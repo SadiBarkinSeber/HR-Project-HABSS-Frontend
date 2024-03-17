@@ -14,7 +14,15 @@ function AdvanceList() {
   }, []);
 
   const handleCancel = (id) => {
-    // İptal işlemi kodu burada
+    // İptal işlemi kodu buraya gelecek
+    const updatedAdvances = advances.filter(advance => advance.id !== id);
+    setAdvances(updatedAdvances);
+  };
+
+  const formatDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return formattedDate;
   };
 
   return (
@@ -39,7 +47,7 @@ function AdvanceList() {
                 {advances.map((advance) => (
                   <tr key={advance.id}>
                     <td>{advance.advanceType}</td>
-                    <td>{advance.requestDate}</td>
+                    <td>{formatDate(advance.requestDate)}</td>
                     <td>{advance.description}</td>
                     <td>{advance.amount}</td>
                     <td>{advance.currency}</td>
