@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useProfilePicture } from "./ProfilePictureContext"; // Assuming you have your context in a file called ProfilePictureContext.js
+import { useProfilePicture } from "./ProfilePictureContext";
+import Input from "react-phone-number-input/input";
 
 export const EmployeeSumCard = (props) => {
   const { email, phoneNumber, address } = props;
@@ -368,10 +369,11 @@ export const EmployeePersonalUpdate = (props) => {
         />
       </div>
       <div>
-        <label htmlFor="">Telefon :</label>{" "}
-        <input
+        <label htmlFor="">Telefon :</label>
+        <Input
+          country="TR"
+          international
           className="form-control"
-          type="number"
           id="phone"
           value={phoneNumber}
           onChange={onPhoneChange}

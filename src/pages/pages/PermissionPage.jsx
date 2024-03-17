@@ -37,7 +37,7 @@ const Permission = () => {
 
     try {
       const uploadedFileResponse = await uploadPhotoAndGetPath(file);
-      const fileName = uploadedFileResponse;
+      const fileName = uploadedFileResponse.fileName;
       const permissionData = {
         permissionType: permissionType,
         startDate: startDate,
@@ -58,62 +58,97 @@ const Permission = () => {
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div>
-      <h1>İzin Talebi Oluştur</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="permissionType">İzin Türü:</label>
-          <select
-            id="permissionType"
-            value={permissionType}
-            onChange={handlePermissionTypeChange}
-          >
-            <option value="">Seçiniz</option>
-            <option value="izin1">İzin 1</option>
-            <option value="izin2">İzin 2</option>
-            <option value="izin3">İzin 3</option>
-          </select>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title text-center mb-4">
+                İzin Talebi Oluştur
+              </h1>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="permissionType" className="form-label">
+                    İzin Türü:
+                  </label>
+                  <select
+                    id="permissionType"
+                    className="form-select"
+                    value={permissionType}
+                    onChange={handlePermissionTypeChange}
+                  >
+                    <option value="">Seçiniz</option>
+                    <option value="izin1">İzin 1</option>
+                    <option value="izin2">İzin 2</option>
+                    <option value="izin3">İzin 3</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="startDate" className="form-label">
+                    İzin Başlangıç Tarihi:
+                  </label>
+                  <input
+                    type="date"
+                    id="startDate"
+                    className="form-control"
+                    value={startDate}
+                    onChange={handleStartDateChange}
+                    min={today}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="endDate" className="form-label">
+                    İzin Bitiş Tarihi:
+                  </label>
+                  <input
+                    type="date"
+                    id="endDate"
+                    className="form-control"
+                    value={endDate}
+                    onChange={handleEndDateChange}
+                    min={today}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="numberOfDays" className="form-label">
+                    Gün Sayısı:
+                  </label>
+                  <input
+                    type="number"
+                    id="numberOfDays"
+                    className="form-control"
+                    value={numberOfDays}
+                    onChange={(e) => setNumberOfDays(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="file" className="form-label">
+                    Dosya Yükle:
+                  </label>
+                  <input
+                    type="file"
+                    id="file"
+                    className="form-control"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <div className="text-center">
+                  <button type="submit" className="btn btn-primary me-2">
+                    Onaya Gönder
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleClear}
+                  >
+                    Temizle
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="startDate">İzin Başlangıç Tarihi:</label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={handleStartDateChange}
-            min={today}
-          />
-        </div>
-        <div>
-          <label htmlFor="endDate">İzin Bitiş Tarihi:</label>
-          <input
-            type="date"
-            id="endDate"
-            value={endDate}
-            onChange={handleEndDateChange}
-            min={today}
-          />
-        </div>
-        <div>
-          <label htmlFor="numberOfDays">Gün Sayısı:</label>
-          <input
-            type="number"
-            id="numberOfDays"
-            value={numberOfDays}
-            onChange={(e) => setNumberOfDays(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="file">Dosya Yükle:</label>
-          <input type="file" id="file" onChange={handleFileChange} />
-        </div>
-        <div>
-          <button type="submit">Onaya Gönder</button>
-          <button type="button" onClick={handleClear}>
-            Temizle
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
