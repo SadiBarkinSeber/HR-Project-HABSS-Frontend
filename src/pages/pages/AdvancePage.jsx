@@ -155,7 +155,8 @@ const Advance = () => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
- 
+  const [formSubmitted, setFormSubmitted] = useState(false); // Yeni state tanımı
+
   // Avans türü seçenekleri
   const advanceTypeOptions = ["Bireysel", "Kurumsal"];
  
@@ -165,6 +166,8 @@ const Advance = () => {
   // Form gönderme işlemi
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormSubmitted(true); // Formun gönderildiğini belirten bayrak
+
     // Kontroller
     if (!advanceType || !currency || !amount || !description) {
       setErrorMessage("Lütfen tüm alanları doldurunuz.");
@@ -193,6 +196,7 @@ const Advance = () => {
     setCurrency("");
     setAmount("");
     setDescription("");
+    setFormSubmitted(false); // Formun tekrar sıfırlandığını belirten bayrağı sıfırla
   };
  
   const createAdvanceObject = (advanceType, currency, amount, description) => {
@@ -214,105 +218,105 @@ const Advance = () => {
   };
  
   return (
-<div className="container mt-5">
-<div className="row justify-content-center">
-<div className="col-md-6">
-<div className="card">
-<div className="card-body">
-<h2 className="card-title mb-4">Avans Talebi Oluştur</h2>
-<form onSubmit={handleSubmit}>
-<div className="mb-3">
-<label htmlFor="advanceType" className="form-label">
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title mb-4">Avans Talebi Oluştur</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="advanceType" className="form-label">
                     Avans Türü:
-</label>
-<select
+                  </label>
+                  <select
                     id="advanceType"
                     value={advanceType}
                     onChange={(e) => { setAdvanceType(e.target.value); clearErrorMessage(); }}
                     className="form-select"
->
-<option value="">Seçiniz</option>
+                  >
+                    <option value="">Seçiniz</option>
                     {advanceTypeOptions.map((option) => (
-<option key={option} value={option}>
+                      <option key={option} value={option}>
                         {option}
-</option>
+                      </option>
                     ))}
-</select>
-                  {!advanceType && (
-<div className="text-danger">Lütfen avans türü seçiniz.</div>
+                  </select>
+                  {formSubmitted && !advanceType && (
+                    <div className="text-danger">Lütfen avans türü seçiniz.</div>
                   )}
-</div>
-<div className="mb-3">
-<label htmlFor="currency" className="form-label">
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="currency" className="form-label">
                     Para Birimi:
-</label>
-<select
+                  </label>
+                  <select
                     id="currency"
                     value={currency}
                     onChange={(e) => { setCurrency(e.target.value); clearErrorMessage(); }}
                     className="form-select"
->
-<option value="">Seçiniz</option>
+                  >
+                    <option value="">Seçiniz</option>
                     {currencyOptions.map((option) => (
-<option key={option} value={option}>
+                      <option key={option} value={option}>
                         {option}
-</option>
+                      </option>
                     ))}
-</select>
-                  {!currency && (
-<div className="text-danger">Lütfen para birimi seçiniz.</div>
+                  </select>
+                  {formSubmitted && !currency && (
+                    <div className="text-danger">Lütfen para birimi seçiniz.</div>
                   )}
-</div>
-<div className="mb-3">
-<label htmlFor="amount" className="form-label">
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="amount" className="form-label">
                     Tutar:
-</label>
-<input
+                  </label>
+                  <input
                     type="number"
                     id="amount"
                     value={amount}
                     onChange={(e) => { setAmount(e.target.value); clearErrorMessage(); }}
                     className="form-control"
                   />
-                  {!amount && (
-<div className="text-danger">Lütfen avans tutarı giriniz.</div>
+                  {formSubmitted && !amount && (
+                    <div className="text-danger">Lütfen avans tutarı giriniz.</div>
                   )}
-</div>
-<div className="mb-3">
-<label htmlFor="description" className="form-label">
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="description" className="form-label">
                     Açıklama:
-</label>
-<textarea
+                  </label>
+                  <textarea
                     id="description"
                     value={description}
                     onChange={(e) => { setDescription(e.target.value); clearErrorMessage(); }}
                     className="form-control"
                   />
-                  {!description && (
-<div className="text-danger">Lütfen açıklama giriniz.</div>
+                  {formSubmitted && !description && (
+                    <div className="text-danger">Lütfen açıklama giriniz.</div>
                   )}
-</div>
+                </div>
                 {errorMessage && (
-<div className="text-danger mb-3">{errorMessage}</div>
+                  <div className="text-danger mb-3">{errorMessage}</div>
                 )}
-<div className="text-center">
-<button type="submit" className="btn btn-primary me-2">
+                <div className="text-center">
+                  <button type="submit" className="btn btn-primary me-2">
                     Onaya Gönder
-</button>
-<button
+                  </button>
+                  <button
                     type="button"
                     onClick={resetForm}
                     className="btn btn-secondary"
->
+                  >
                     Temizle
-</button>
-</div>
-</form>
-</div>
-</div>
-</div>
-</div>
-</div>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
  

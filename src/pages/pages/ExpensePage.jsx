@@ -188,11 +188,10 @@
 
 // export default Expense;
 
-
 import React, { useState } from "react";
 import { sendFormData } from "../api/api";
 import { uploadPhotoAndGetPath } from "../api/api";
- 
+
 function Expense() {
   const [type, setType] = useState("");
   const [currency, setCurrency] = useState("");
@@ -200,19 +199,21 @@ function Expense() {
   const [requestDate, setRequestDate] = useState("");
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
- 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
- 
+    setFormSubmitted(true);
+
     if (!type || !currency || !amount || !requestDate || !file) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
- 
+
     const uploadedFileResponse = await uploadPhotoAndGetPath(file);
     console.log(uploadedFileResponse);
     const fileName = uploadedFileResponse.fileName;
- 
+
     const formData = {
       Type: type,
       Currency: currency,
@@ -224,7 +225,7 @@ function Expense() {
       Response: "Başarılı",
       FileName: fileName,
     };
- 
+
     try {
       const data = await sendFormData(formData);
       console.log("API yanıtı:", data);
@@ -233,7 +234,7 @@ function Expense() {
       console.error("API isteği başarısız oldu:", error);
     }
   };
- 
+
   const resetForm = () => {
     setType("");
     setCurrency("");
@@ -241,17 +242,18 @@ function Expense() {
     setRequestDate("");
     setFile(null);
     setErrorMessage("");
+    setFormSubmitted(false);
   };
- 
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setErrorMessage("");
   };
- 
+
   const handleDateChange = (event) => {
     const selectedDate = new Date(event.target.value);
     const currentDate = new Date();
- 
+
     if (selectedDate < currentDate) {
       setErrorMessage("Bugünden önceki bir tarih seçemezsiniz.");
       setRequestDate("");
@@ -260,79 +262,79 @@ function Expense() {
       setErrorMessage("");
     }
   };
- 
+
   return (
-<div className="container mt-5">
-<div className="row justify-content-center">
-<div className="col-md-6">
-<div className="card">
-<div className="card-body">
-<h1 className="card-title mb-4">Harcama Talebi Oluştur</h1>
-<form onSubmit={handleSubmit}>
-<div className="mb-3">
-<label htmlFor="type" className="form-label">
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title mb-4">Harcama Talebi Oluştur</h1>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="type" className="form-label">
                     Expense Type:
-</label>
-<select
+                  </label>
+                  <select
                     id="type"
                     name="type"
                     className="form-select"
                     value={type}
                     onChange={(e) => setType(e.target.value)}
->
-<option value="">Select</option>
-<option value="Business Trips">Business Trips</option>
-<option value="Office Supplies">Office Supplies</option>
-<option value="Training and Development">
+                  >
+                    <option value="">Select</option>
+                    <option value="Business Trips">Business Trips</option>
+                    <option value="Office Supplies">Office Supplies</option>
+                    <option value="Training and Development">
                       Training and Development
-</option>
-<option value="Advertising and Marketing">
+                    </option>
+                    <option value="Advertising and Marketing">
                       Advertising and Marketing
-</option>
-<option value="Business Relations">
+                    </option>
+                    <option value="Business Relations">
                       Business Relations
-</option>
-<option value="Staff Expenses">Staff Expenses</option>
-</select>
-                  {!type && (
-<div className="text-danger">
+                    </option>
+                    <option value="Staff Expenses">Staff Expenses</option>
+                  </select>
+                  {formSubmitted && !type && (
+                    <div className="text-danger">
                       Lütfen harcama türünü seçin.
-</div>
+                    </div>
                   )}
-</div>
- 
+                </div>
+
                 <div className="mb-3">
-<label htmlFor="currency" className="form-label">
+                  <label htmlFor="currency" className="form-label">
                     Currency:
-</label>
-<select
+                  </label>
+                  <select
                     id="currency"
                     name="currency"
                     className="form-select"
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
->
-<option value="">Select</option>
-<option value="TRY">Turkish Lira (TRY)</option>
-<option value="USD">US Dollar (USD)</option>
-<option value="EUR">Euro (EUR)</option>
-<option value="JPY">Japanese Yen (JPY)</option>
-<option value="GBP">British Pound (GBP)</option>
-<option value="CHF">Swiss Franc (CHF)</option>
-<option value="CAD">Canadian Dollar (CAD)</option>
-</select>
-                  {!currency && (
-<div className="text-danger">
+                  >
+                    <option value="">Select</option>
+                    <option value="TRY">Turkish Lira (TRY)</option>
+                    <option value="USD">US Dollar (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                    <option value="JPY">Japanese Yen (JPY)</option>
+                    <option value="GBP">British Pound (GBP)</option>
+                    <option value="CHF">Swiss Franc (CHF)</option>
+                    <option value="CAD">Canadian Dollar (CAD)</option>
+                  </select>
+                  {formSubmitted && !currency && (
+                    <div className="text-danger">
                       Lütfen para birimini seçin.
-</div>
+                    </div>
                   )}
-</div>
- 
+                </div>
+
                 <div className="mb-3">
-<label htmlFor="amount" className="form-label">
+                  <label htmlFor="amount" className="form-label">
                     Amount:
-</label>
-<input
+                  </label>
+                  <input
                     type="number"
                     id="amount"
                     name="amount"
@@ -341,18 +343,18 @@ function Expense() {
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="Enter Amount"
                   />
-                  {!amount && (
-<div className="text-danger">
+                  {formSubmitted && !amount && (
+                    <div className="text-danger">
                       Lütfen miktarı girin.
-</div>
+                    </div>
                   )}
-</div>
- 
+                </div>
+
                 <div className="mb-3">
-<label htmlFor="requestDate" className="form-label">
+                  <label htmlFor="requestDate" className="form-label">
                     Request Date:
-</label>
-<input
+                  </label>
+                  <input
                     type="date"
                     id="requestDate"
                     name="requestDate"
@@ -361,53 +363,52 @@ function Expense() {
                     onChange={handleDateChange}
                     min={new Date().toISOString().split("T")[0]}
                   />
-                  {!requestDate && (
-<div className="text-danger">
+                  {formSubmitted && !requestDate && (
+                    <div className="text-danger">
                       Lütfen talep tarihini seçin.
-</div>
+                    </div>
                   )}
-</div>
- 
+                  {requestDate && errorMessage && (
+                    <div className="text-danger">{errorMessage}</div>
+                  )}
+                </div>
+
                 <div className="mb-3">
-<label htmlFor="formFileLg" className="form-label">
+                  <label htmlFor="formFileLg" className="form-label">
                     Choose File:
-</label>
-<input
+                  </label>
+                  <input
                     className="form-control"
                     id="formFileLg"
                     type="file"
                     onChange={handleFileChange}
                   />
-                  {!file && (
-<div className="text-danger">Lütfen dosya seçin.</div>
+                  {formSubmitted && !file && (
+                    <div className="text-danger">Lütfen dosya seçin.</div>
                   )}
-</div>
- 
-                {errorMessage && (
-<div className="alert alert-danger" role="alert">
-                    {errorMessage}
-</div>
-                )}
- 
+                </div>
+
                 <div className="text-center">
-<button type="submit" className="btn btn-primary me-2">
+                  <button type="submit" className="btn btn-primary me-2">
                     Submit
-</button>
-<button
+                  </button>
+                  <button
                     type="button"
                     className="btn btn-secondary"
                     onClick={resetForm}
->
+                  >
                     Clear
-</button>
-</div>
-</form>
-</div>
-</div>
-</div>
-</div>
-</div>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
- 
+
 export default Expense;
+``
+
