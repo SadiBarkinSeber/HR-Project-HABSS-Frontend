@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { fetchAdvances } from "../api/api";
 
 function AdvanceList() {
   const [advances, setAdvances] = useState([]);
+  const [filterOption, setFilterOption] = useState("all"); // Varsayılan olarak tüm verileri göster
 
   useEffect(() => {
     async function fetchData() {
@@ -14,15 +16,28 @@ function AdvanceList() {
   }, []);
 
   const handleCancel = (id) => {
-    // İptal işlemi kodu buraya gelecek
-    const updatedAdvances = advances.filter(advance => advance.id !== id);
-    setAdvances(updatedAdvances);
+    const isConfirmed = window.confirm("İşlemi iptal etmek istiyor musunuz?");
+    if (isConfirmed) {
+      const updatedAdvances = advances.filter((advance) => advance.id !== id);
+      setAdvances(updatedAdvances);
+    }
   };
 
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    return formattedDate;
+    return date.toLocaleDateString("tr-TR");
+  };
+
+  const filterAdvances = (advance) => {
+    if (filterOption === "all") {
+      return true; // Tüm verileri göster
+    } else if (filterOption === "individual") {
+      return advance.advanceType === "Bireysel"; // Bireysel avansları göster
+    } else if (filterOption === "corporate") {
+      return advance.advanceType === "Kurumsal"; // Kurumsal avansları göster
+    } else {
+      return advance.permission === filterOption; // Diğer durumlarda izin durumuna göre filtrele
+    }
   };
 
   return (
@@ -31,20 +46,35 @@ function AdvanceList() {
         <div className="col-md-10">
           <h1 className="text-center mb-4">Avans Talebi Listesi</h1>
           <div className="table-responsive">
+            <div className="mb-3">
+              <label>Filtrele:</label>
+              <select
+                className="form-select"
+                value={filterOption}
+                onChange={(e) => setFilterOption(e.target.value)}
+              >
+                <option value="all">Hepsi</option>
+                <option value="individual">Bireysel</option>
+                <option value="corporate">Kurumsal</option>
+                <option value="approved">Onaylı</option>
+                <option value="rejected">Reddedilmiş</option>
+                <option value="pending">Beklemede</option>
+              </select>
+            </div>
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th>Advance Type</th>
-                  <th>Request Date</th>
-                  <th>Description</th>
-                  <th>Amount</th>
-                  <th>Currency</th>
-                  <th>Permission</th>
-                  <th>Process</th>
+                  <th>Avans Türü</th>
+                  <th>Talep Tarihi</th>
+                  <th>Açıklama</th>
+                  <th>Miktar</th>
+                  <th>Para Birimi</th>
+                  <th>Onay Durumu</th>
+                  <th>İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {advances.map((advance) => (
+                {advances.filter(filterAdvances).map((advance) => (
                   <tr key={advance.id}>
                     <td>{advance.advanceType}</td>
                     <td>{formatDate(advance.requestDate)}</td>
@@ -57,7 +87,7 @@ function AdvanceList() {
                         className="btn btn-danger"
                         onClick={() => handleCancel(advance.id)}
                       >
-                        Cancel
+                        İptal Et
                       </button>
                     </td>
                   </tr>

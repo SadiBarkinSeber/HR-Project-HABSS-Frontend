@@ -4,7 +4,6 @@ const ProfilePictureContext = createContext();
 
 export const ProfilePictureProvider = ({ children }) => {
   const [profilePictureData, setProfilePictureData] = useState(null);
-
   return (
     <ProfilePictureContext.Provider
       value={{ profilePictureData, setProfilePictureData }}

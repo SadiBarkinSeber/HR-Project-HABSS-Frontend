@@ -13,11 +13,13 @@ import AdvanceList from "./pages/pages/Advancelist";
 import Advance from "./pages/pages/AdvancePage";
 import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
+import { AuthProvider } from "./components/TokenContext";
 
 export default function App() {
   return (
     <>
       <main>
+        <AuthProvider >
         <ProfilePictureProvider>
           <Routes>
             <Route path="/" element={<SignIn />} />
@@ -104,6 +106,8 @@ export default function App() {
             />
           </Routes>
         </ProfilePictureProvider>
+        </AuthProvider >
+        
       </main>
     </>
   );

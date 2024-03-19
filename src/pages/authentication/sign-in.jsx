@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginCheck } from "../api/api";
-
+import { useAuth } from "../../components/TokenContext";
 import AuthLayout from "../../layouts/AuthLayout";
 
 const SignIn = () => {
@@ -11,12 +11,16 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // Hata mesajını saklamak için state ekledik
   const navigateTo = useNavigate();
+  const { token, setAuthToken } = useAuth();
 
   const handleLogin = async () => {
     try {
-      const status = await LoginCheck(username, password);
-      if (status === 200) {
+      const response = await LoginCheck(username, password);
+      if (response.status === 200) {
         navigateTo("/emp");
+        const jwtoken=response.data;
+        console.log(jwtoken);
+       setAuthToken(jwtoken);
       } else {
         setError("Hatalı kullanıcı adı veya parola. Lütfen tekrar deneyin.");
       }
