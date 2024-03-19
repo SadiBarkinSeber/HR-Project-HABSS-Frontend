@@ -32,7 +32,7 @@ export const DashboardMenu = [
   },
   {
     id: uuid(),
-    title: "LAYOUTS & PAGES",
+    title: "Personel Sayfası",
     grouptitle: true,
   },
   {
@@ -40,18 +40,18 @@ export const DashboardMenu = [
     title: "Personel",
     icon: "layers",
     children: [
-      { id: uuid(), link: "/emp", name: "Profil Ozet" },
+      { id: uuid(), link: "/emp", name: "Profil Özet" },
       { id: uuid(), link: "/emp-detail", name: "Profil Detay" },
-      { id: uuid(), link: "/emp-update", name: "Profil Guncelleme" },
+      { id: uuid(), link: "/emp-update", name: "Profil Güncelleme" },
     ],
   },
   {
     id: uuid(),
-    title: "Izin",
+    title: "İzin",
     icon: "lock",
     children: [
-      { id: uuid(), link: "/emp-permission", name: "Izin Ekle" },
-      { id: uuid(), link: "/emp-permission-list", name: "Izin Listesi" },
+      { id: uuid(), link: "/emp-permission", name: "İzin Ekle" },
+      { id: uuid(), link: "/emp-permission-list", name: "İzin Listesi" },
     ],
   },
   {
@@ -73,7 +73,5 @@ export const DashboardMenu = [
     ],
   },
 ];
-
-
 
 export default DashboardMenu;

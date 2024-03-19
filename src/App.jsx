@@ -9,7 +9,7 @@ import DefaultDashboardLayout from "./layouts/DefaultDashboardLayout";
 import { ProfilePictureProvider } from "./components/ProfilePictureContext";
 import { Routes, Route, Router } from "react-router-dom";
 import "./styles/theme.scss";
-import AdvanceList from "./pages/pages/Advancelist";
+import AdvanceList from "./pages/pages/AdvanceList";
 import Advance from "./pages/pages/AdvancePage";
 import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
@@ -66,16 +66,13 @@ export default function App() {
                 </DefaultDashboardLayout>
               }
             />
-             <Route
+            <Route
               path="/emp-advance"
               element={
-                <DefaultDashboardLayout>
-                  {" "}
-                  {<Advance />}
-                </DefaultDashboardLayout>
+                <DefaultDashboardLayout> {<Advance />}</DefaultDashboardLayout>
               }
             />
-             <Route
+            <Route
               path="/emp-advance-list"
               element={
                 <DefaultDashboardLayout>
@@ -87,13 +84,10 @@ export default function App() {
             <Route
               path="/emp-expense"
               element={
-                <DefaultDashboardLayout>
-                  {" "}
-                  {<Expense/>}
-                </DefaultDashboardLayout>
+                <DefaultDashboardLayout> {<Expense />}</DefaultDashboardLayout>
               }
             />
-              <Route
+            <Route
               path="/emp-expense-list"
               element={
                 <DefaultDashboardLayout>

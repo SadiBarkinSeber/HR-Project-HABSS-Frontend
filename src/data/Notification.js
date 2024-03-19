@@ -1,24 +1,19 @@
 const Notification = [
-	{
-		id: 1,
-		sender: 'Rishi Chopra',
-		message: `Mauris blandit erat id nunc blandit, ac eleifend dolor pretium.`
-	},
-	{
-		id: 2,
-		sender: 'Neha Kannned',
-		message: `Proin at elit vel est condimentum elementum id in ante. Maecenas et sapien metus.`
-	},
-	{
-		id: 3,
-		sender: 'Nirmala Chauhan',
-		message: `Morbi maximus urna lobortis elit sollicitudin sollicitudieget elit vel pretium.`
-	},
-	{
-		id: 4,
-		sender: 'Sina Ray',
-		message: `Sed aliquam augue sit amet mauris volutpat hendrerit sed nunc eu diam.`
-	}
+  {
+    id: 1,
+    sender: "İzin talebı",
+    message: `İzin talebiniz onaylandı.`,
+  },
+  {
+    id: 2,
+    sender: "Harcama talebi",
+    message: `Harcama talebiniz reddedildi.`,
+  },
+  {
+    id: 3,
+    sender: "Avans talebi",
+    message: `Avans talebiniz onaylandı.`,
+  },
 ];
 
 export default Notification;
