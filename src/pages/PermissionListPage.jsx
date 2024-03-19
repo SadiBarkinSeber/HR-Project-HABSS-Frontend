@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { fetchPermissions } from "./api/api";
-
+import { useAuth } from "../components/TokenContext";
 function PermissionList() {
   const [permissions, setPermissions] = useState([]);
+  const { token, setAuthToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const permissionsData = await fetchPermissions();
+        const permissionsData = await fetchPermissions(token);
         setPermissions(permissionsData.permissions);
+        console.log(token);
       } catch (error) {
         console.error("Error fetching permissions:", error);
       }
@@ -47,13 +49,13 @@ function PermissionList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th>Permission Type</th>
-                  <th>Request Date</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Number of Days</th>
-                  <th>Approval Status</th>
-                  <th>Download File</th>
+                  <th>İzin Türü</th>
+                  <th>Talep Tarihi</th>
+                  <th>Başlangıç Tarihi</th>
+                  <th>Bitiş Tarihi</th>
+                  <th>Gün Sayısı</th>
+                  <th>Onay Durumu</th>
+                  <th>Dosya İndir</th>
                 </tr>
               </thead>
               <tbody>

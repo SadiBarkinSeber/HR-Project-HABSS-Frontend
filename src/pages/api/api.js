@@ -79,7 +79,8 @@ export const LoginCheck = (userNameP, passwordP) => {
         }
       )
       .then((response) => {
-        resolve(response.status);
+        resolve(response);
+        console.log(response);
       })
       .catch((error) => {
         reject(error.message);
@@ -99,18 +100,41 @@ export const createPermission = async (formData) => {
   }
 };
 
-export const fetchPermissions = async () => {
+// export const fetchPermissions = async (token) => {
+//   const headers={
+//     'Content-Type': 'application/json',
+//     'Authorization': `Bearer ${token}`
+//   }
+//   try {
+//     const response = await axios.get(
+//       "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/1/byEmployee"
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching permissions:", error);
+//     throw error; // Hata durumunda isteği yukarıya fırlat
+//   }
+// };
+export const fetchPermissions = async (token) => {
+  console.log(token);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}` // Include token in the Authorization header
+    }
+  };
+
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/1"
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/1/byEmployee",
+      config // Pass the config object containing headers
     );
     return response.data;
   } catch (error) {
     console.error("Error fetching permissions:", error);
-    throw error; // Hata durumunda isteği yukarıya fırlat
+    throw error; // Throw the error in case of failure
   }
 };
-
 
 
 async function fetchAdvances() {
