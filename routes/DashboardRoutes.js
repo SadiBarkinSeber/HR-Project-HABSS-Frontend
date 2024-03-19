@@ -38,7 +38,7 @@ export const DashboardMenu = [
   {
     id: uuid(),
     title: "Personel",
-    icon: "layers",
+    icon: "user",
     children: [
       { id: uuid(), link: "/emp", name: "Profil Özet" },
       { id: uuid(), link: "/emp-detail", name: "Profil Detay" },
@@ -48,7 +48,7 @@ export const DashboardMenu = [
   {
     id: uuid(),
     title: "İzin",
-    icon: "lock",
+    icon: "clipboard",
     children: [
       { id: uuid(), link: "/emp-permission", name: "İzin Ekle" },
       { id: uuid(), link: "/emp-permission-list", name: "İzin Listesi" },
@@ -57,7 +57,7 @@ export const DashboardMenu = [
   {
     id: uuid(),
     title: "Harcama",
-    icon: "monitor",
+    icon: "dollar-sign",
     children: [
       { id: uuid(), link: "/emp-expense", name: "Harcama Ekle" },
       { id: uuid(), link: "/emp-expense-list", name: "Harcama Listesi" },
@@ -66,7 +66,7 @@ export const DashboardMenu = [
   {
     id: uuid(),
     title: "Avans",
-    icon: "corner-left-down",
+    icon: "credit-card",
     children: [
       { id: uuid(), link: "/emp-advance", name: "Avans Ekle" },
       { id: uuid(), link: "/emp-advance-list", name: "Avans Listesi" },

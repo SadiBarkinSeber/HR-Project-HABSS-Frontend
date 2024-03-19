@@ -14,7 +14,8 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css");
 
 // Feathers CSS for Before Icon
-@import url("/fonts/feather-icons/feather.css");
+@import "../../dist/fonts/feather-icons/feather.css";
+
 // Bootstrap
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
@@ -24,19 +25,19 @@
 @import "../../node_modules//bootstrap/scss/maps";
 
 // User Variables
-@import "user-variables";
+@import "./user-variables";
 
 // theme variables
-@import "theme/variables";
+@import "./theme/variables";
 
 //utilities
-@import "theme/utilities";
+@import "./theme/utilities";
 
 // Theme
-@import "theme/theme";
+@import "./theme/theme";
 
 // User
-@import "user";
+@import "./user";
 
 .heading-permalink {
   color: transparent;
