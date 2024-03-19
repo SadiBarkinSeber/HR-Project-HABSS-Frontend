@@ -1,4 +1,4 @@
-import { Row, Col, Card, Form, Button, Image, Alert } from "react-bootstrap"; // Alert bileşenini içe aktardık
+import { Row, Col, Card, Form, Button, Image, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import AuthLayout from "../../layouts/AuthLayout";
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // Hata mesajını saklamak için state ekledik
+  const [error, setError] = useState("");
   const navigateTo = useNavigate();
 
   const handleLogin = async () => {
@@ -26,14 +26,21 @@ const SignIn = () => {
   };
 
   return (
-    <Row className="align-items-center justify-content-center g-0 min-vh-100">
+    <Row
+      className="align-items-center justify-content-center g-0 min-vh-100"
+      style={{
+        backgroundImage: `url('../../../dist/images/background/login-background.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <Col xxl={4} lg={6} md={8} xs={12} className="py-8 py-xl-0">
         <Card className="smooth-shadow-md">
           <Card.Body className="p-6">
             <div className="mb-4">
               <Link to="/">
                 <Image
-                  src="/images/brand/logo/logo-primary.svg"
+                  src="../../../dist/images/brand/logo/habss-logo-small1.png"
                   className="mb-2"
                   alt=""
                 />
@@ -69,7 +76,6 @@ const SignIn = () => {
                   <Form.Check.Label>Remember me</Form.Check.Label>
                 </Form.Check>
               </div>
-              {/* Hata mesajını göstermek için Alert bileşenini ekledik */}
               {error && <Alert variant="danger">{error}</Alert>}
               <div>
                 <div className="d-grid">
@@ -78,11 +84,6 @@ const SignIn = () => {
                   </Button>
                 </div>
                 <div className="d-md-flex justify-content-between mt-4">
-                  <div className="mb-2 mb-md-0">
-                    <Link to="/authentication/sign-up" className="fs-5">
-                      Create An Account{" "}
-                    </Link>
-                  </div>
                   <div>
                     <Link
                       to="/authentication/forget-password"
