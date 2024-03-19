@@ -96,7 +96,11 @@ const NavbarVertical = (props) => {
       <SimpleBar style={{ maxHeight: "100vh" }}>
         <div className="nav-scroller">
           <Link to="/emp" className="navbar-brand">
-            <Image src="/images/brand/logo/logo.svg" alt="" />
+            <Image
+              src="../../../dist/images/brand/logo/logo_transparent.png"
+              alt=""
+              style={{ width: "200px", height: "80px" }}
+            />
           </Link>
         </div>
         <Accordion

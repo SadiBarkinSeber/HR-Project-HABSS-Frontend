@@ -1,7 +1,6 @@
 import EmployeeList from "./pages/MainPage";
 import EmployeeDetail from "./pages/EmployeeDetailPage";
 import EmployeeUpdate from "./pages/EmployeeUpdatePage";
-import Login from "./pages/pages/Login";
 import Permission from "./pages/pages/PermissionPage";
 import EmployeePermissions from "./pages/PermissionListPage";
 import SignIn from "./pages/authentication/sign-in";

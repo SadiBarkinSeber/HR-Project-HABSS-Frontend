@@ -216,9 +216,9 @@ $utilities: map-merge(
 
 // Utilities
 
-@import "utilities/_background.scss";
-@import "utilities/_shadows.scss";
-@import "utilities/_position.scss";
-@import "utilities/_border.scss";
-@import "utilities/_icon-shape.scss";
-@import "utilities/_text.scss";
+@import "./utilities/_background.scss";
+@import "./utilities/_shadows.scss";
+@import "./utilities/_position.scss";
+@import "./utilities/_border.scss";
+@import "./utilities/_icon-shape.scss";
+@import "./utilities/_text.scss";
