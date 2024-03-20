@@ -51,12 +51,17 @@ function EmployeeUpdate() {
 
   const handlePhotoChange = async (file) => {
     try {
-      // Dosyayı yükleyin ve dosya adını alın
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert("Sadece jpg ve png dosyaları kabul edilir!");
+        return;
+      }
+
       const uploadedFileResponse = await uploadPhotoAndGetPath(file);
       const fileName = uploadedFileResponse.fileName;
       console.log("Dosya adı:", fileName);
 
-      // Dosya adını state'e ayarlayın
       setPhotoPath(fileName);
     } catch (error) {
       console.error("Error uploading photo:", error);
