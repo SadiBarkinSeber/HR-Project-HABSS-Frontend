@@ -33,7 +33,7 @@ const SignIn = () => {
     <Row
       className="align-items-center justify-content-center g-0 min-vh-100"
       style={{
-        backgroundImage: `url('../../../dist/images/background/login-background.jpg')`,
+        backgroundImage: `url('../../../dist/images/background/login-background6.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
