@@ -49,22 +49,22 @@ const SignIn = () => {
                   alt=""
                 />
               </Link>
-              <p className="mb-6">Please enter your user information.</p>
+              <p className="mb-6">Lütfen bilgilerinizi eksiksiz giriniz</p>
             </div>
             <Form>
               <Form.Group className="mb-3" controlId="username">
-                <Form.Label>Username or email</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="text"
                   name="username"
-                  placeholder="Enter address here"
+                  placeholder="Email adresinizi giriniz"
                   required=""
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Şifre</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
@@ -77,23 +77,23 @@ const SignIn = () => {
               <div className="d-lg-flex justify-content-between align-items-center mb-4">
                 <Form.Check type="checkbox" id="rememberme">
                   <Form.Check.Input type="checkbox" />
-                  <Form.Check.Label>Remember me</Form.Check.Label>
+                  <Form.Check.Label>Beni hatırla</Form.Check.Label>
                 </Form.Check>
               </div>
               {error && <Alert variant="danger">{error}</Alert>}
               <div>
                 <div className="d-grid">
                   <Button variant="primary" onClick={handleLogin}>
-                    Sign In
+                    Giriş Yap
                   </Button>
                 </div>
                 <div className="d-md-flex justify-content-between mt-4">
                   <div>
                     <Link
-                      to="/authentication/forget-password"
+                      to="/forgetpassword"
                       className="text-inherit fs-5"
                     >
-                      Forgot your password?
+                      Şifremi Unuttum
                     </Link>
                   </div>
                 </div>

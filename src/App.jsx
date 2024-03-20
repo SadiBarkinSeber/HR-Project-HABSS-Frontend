@@ -14,6 +14,8 @@ import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
 import { AuthProvider } from "./components/TokenContext";
 
+import ForgetPassword from "./pages/authentication/forget-password";
+
 export default function App() {
   return (
     <>
@@ -21,7 +23,10 @@ export default function App() {
         <AuthProvider >
         <ProfilePictureProvider>
           <Routes>
+
             <Route path="/" element={<SignIn />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+
             <Route
               path="/emp"
               element={
@@ -97,7 +102,9 @@ export default function App() {
                 </DefaultDashboardLayout>
               }
             />
+            
           </Routes>
+
         </ProfilePictureProvider>
         </AuthProvider >
         
