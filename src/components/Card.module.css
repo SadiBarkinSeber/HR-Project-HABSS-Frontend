@@ -3,13 +3,17 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  overflow: hidden;
+  overflow: hidden; /* Dairenin dışına taşan içeriği gizleyin */
+  display: flex; /* İçeriği yatayda hizalamak için flex konteynırı yapın */
+  justify-content: center; /* İçeriği yatayda merkezde hizalayın */
+  align-items: center; /* İçeriği dikeyde merkezde hizalayın */
 }
 
 img {
-  width: 100%;
-  height: auto;
+  width: 100%; /* Fotoğrafın genişliğini %100 olarak ayarlayın */
+  height: 100%; /* Fotoğrafın yüksekliğini %100 olarak ayarlayın */
   display: block;
+  object-fit: cover; /* Fotoğrafı dairenin içine tam olarak sığdırın ve kesinlikle içine oturmasını sağlayın */
 }
 
 .employeeCard {
