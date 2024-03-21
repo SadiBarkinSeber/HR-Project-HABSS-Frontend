@@ -13,6 +13,7 @@ import Advance from "./pages/pages/AdvancePage";
 import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
 import { AuthProvider } from "./components/TokenContext";
+import EmployeeCreate from "./pages/pages/EmployeeCreate";
 
 
 import EmployeeCreate from "./pages/pages/EmployeeCreate";
