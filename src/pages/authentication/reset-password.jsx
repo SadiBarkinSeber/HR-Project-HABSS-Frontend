@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password || !confirmPassword) {
+    if (!password || !confirmPassword) {
       setError("Lütfen tüm alanları doldurun.");
       return;
     }
