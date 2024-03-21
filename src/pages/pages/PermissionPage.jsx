@@ -10,9 +10,11 @@ const Permission = () => {
   const [numberOfDays, setNumberOfDays] = useState("");
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showFileUpload, setShowFileUpload] = useState(false);
 
   const handlePermissionTypeChange = (e) => {
     setPermissionType(e.target.value);
+    setShowFileUpload(e.target.value !== "Yıllık İzin");
     if (startDate) {
       if (e.target.value === "Yıllık İzin") {
         setNumberOfDays("");
@@ -117,13 +119,13 @@ const Permission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!permissionType || !startDate || !endDate || !numberOfDays || (permissionType !== "Yıllık İzin" && !file)) {
+    if (!permissionType || !startDate || !endDate || !numberOfDays || (showFileUpload && !file)) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
 
     try {
-      if (permissionType !== "Yıllık İzin") {
+      if (showFileUpload) {
         const uploadedFileResponse = await uploadPhotoAndGetPath(file);
         const fileName = uploadedFileResponse.fileName;
         const permissionData = {
@@ -241,7 +243,7 @@ const Permission = () => {
                     disabled={true}
                   />
                 </div>
-                {permissionType !== "Yıllık İzin" && (
+                {showFileUpload && (
                   <div className="mb-3">
                     <label htmlFor="file" className="form-label">
                       Dosya Yükle:
@@ -286,7 +288,5 @@ const Permission = () => {
 };
 
 export default Permission;
-
-
 
 
