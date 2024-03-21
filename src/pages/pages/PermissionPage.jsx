@@ -1,7 +1,7 @@
-
-
 import React, { useState } from "react";
 import { createPermission, uploadPhotoAndGetPath } from "../api/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Permission = () => {
   const [permissionType, setPermissionType] = useState("");
@@ -18,8 +18,7 @@ const Permission = () => {
     if (startDate) {
       if (e.target.value === "Yıllık İzin") {
         setNumberOfDays("");
-        // Clear end date for yearly leave
-        setFile(null); // Clear file when yearly leave is selected
+        setFile(null);
       } else {
         calculateEndDate(e.target.value, startDate);
       }
@@ -58,7 +57,6 @@ const Permission = () => {
         end = calculateEndExcludingWeekends(startDateObj, days);
         break;
       default:
-        // For other types, leave end date empty
         break;
     }
 
@@ -140,6 +138,8 @@ const Permission = () => {
         const permissionResponse = await createPermission(permissionData);
 
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
+
+        toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
       } else {
         const permissionData = {
           permissionType: permissionType,
@@ -152,10 +152,13 @@ const Permission = () => {
         const permissionResponse = await createPermission(permissionData);
 
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
+
+        toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
       }
       handleClear();
     } catch (error) {
       console.error("İzin talebi oluşturulurken bir hata oluştu:", error);
+      toast.error('İzin talebi oluşturulurken bir hata oluştu: ' + error.message, { position: "top-right" });
     }
   };
 
@@ -200,7 +203,7 @@ const Permission = () => {
                   </label>
                   <input
                     type="date"
-                    id="startDate"
+                    id="startDate"                    
                     className="form-control"
                     value={startDate}
                     onChange={handleStartDateChange}
@@ -283,10 +286,21 @@ const Permission = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        transition="Bounce"
+        theme="colored"
+      />
     </div>
   );
 };
 
 export default Permission;
-
-
