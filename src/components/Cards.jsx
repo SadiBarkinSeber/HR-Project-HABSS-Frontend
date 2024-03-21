@@ -5,7 +5,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useProfilePicture } from "./ProfilePictureContext";
 import Input from "react-phone-number-input/input";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export const EmployeeSumCard = (props) => {
   const { email, phoneNumber, address } = props;
 
@@ -114,9 +115,15 @@ export const EmployeeUpdateCardLeftSide = (props) => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    onPhotoChange(file);
+    try {
+      onPhotoChange(file);
+      toast.success("Fotoğraf başarıyla yüklendi.");
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      toast.error("Fotoğraf yüklenirken bir hata oluştu.");
+    }
   };
 
   const {
@@ -148,6 +155,19 @@ export const EmployeeUpdateCardLeftSide = (props) => {
       <br />
 
       <button onClick={handleButtonClick}>Fotografi Guncelle</button>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        transition="Bounce"
+      />
     </div>
   );
 };
