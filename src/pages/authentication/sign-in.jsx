@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Row, Col, Card, Form, Button, Image, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginCheck } from "../api/api";
 import { useAuth } from "../../components/TokenContext";
@@ -9,20 +9,35 @@ import AuthLayout from "../../layouts/AuthLayout";
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigateTo = useNavigate();
   const { token, setAuthToken } = useAuth();
 
+  const isValidEmail = (value) => {
+    const emailRegex = /^[^\s@]+@bilgeadamboost\.com$/;
+    return emailRegex.test(value);
+  };
+
   const handleLogin = async () => {
+    if (!username || !password) {
+      setError("Lütfen tüm alanları doldurun.");
+      return;
+    }
+    // if (!isValidEmail(username)) {
+    //   setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+    //   return;
+    // }
     try {
       const response = await LoginCheck(username, password);
+      console.log(response.status);
       if (response.status === 200) {
         navigateTo("/emp");
-        const jwtoken=response.data;
+        const jwtoken = response.data;
         console.log(jwtoken);
-       setAuthToken(jwtoken);
+        setAuthToken(jwtoken);
       } else {
-        setError("Hatalı kullanıcı adı veya parola. Lütfen tekrar deneyin.");
+        setError("Kullanıcı adı veya şifre yanlış. Lütfen tekrar deneyin.");
       }
     } catch (error) {
       setError("Bir hata oluştu. Lütfen tekrar deneyin.");
@@ -55,31 +70,34 @@ const SignIn = () => {
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="email"
                   name="username"
                   placeholder="Email adresinizi giriniz"
-                  required=""
+                  required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
                 <Form.Label>Şifre</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  placeholder="**************"
-                  required=""
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="input-group">
+                  <Form.Control
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="**************"
+                    required=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <Button
+                    variant="light"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Gizle" : "Göster"}
+                  </Button>
+                </div>
               </Form.Group>
-              <div className="d-lg-flex justify-content-between align-items-center mb-4">
-                <Form.Check type="checkbox" id="rememberme">
-                  <Form.Check.Input type="checkbox" />
-                  <Form.Check.Label>Beni hatırla</Form.Check.Label>
-                </Form.Check>
-              </div>
+
               {error && <Alert variant="danger">{error}</Alert>}
               <div>
                 <div className="d-grid">
@@ -89,10 +107,7 @@ const SignIn = () => {
                 </div>
                 <div className="d-md-flex justify-content-between mt-4">
                   <div>
-                    <Link
-                      to="/forgetpassword"
-                      className="text-inherit fs-5"
-                    >
+                    <Link to="/forgetpassword" className="text-inherit fs-5">
                       Şifremi Unuttum
                     </Link>
                   </div>
