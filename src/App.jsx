@@ -14,6 +14,9 @@ import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
 import { AuthProvider } from "./components/TokenContext";
 
+
+import EmployeeCreate from "./pages/pages/EmployeeCreate";
+
 export default function App() {
   return (
     <>
@@ -97,6 +100,19 @@ export default function App() {
                 </DefaultDashboardLayout>
               }
             />
+
+            <Route
+            path = "/emp-employee-create"
+            element={
+              <DefaultDashboardLayout>
+                {" "}
+                {<EmployeeCreate />}
+              </DefaultDashboardLayout>
+            }
+
+
+            />
+
           </Routes>
         </ProfilePictureProvider>
         </AuthProvider >
