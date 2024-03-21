@@ -1,24 +1,28 @@
 
+
 import React, { useState, useEffect } from "react";
 import { fetchExpenses } from "./api/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
-  const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi için state
+  const [sortedExpenses, setSortedExpenses] = useState([]);
+  const [sortDirection, setSortDirection] = useState({});
+  const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
 
   useEffect(() => {
     async function fetchData() {
       const data = await fetchExpenses();
       setExpenses(data);
+      setSortedExpenses(data);
     }
 
     fetchData();
   }, []);
 
-  // Dosya indirme işlemi
   const handleDownload = async (fileName) => {
     try {
-      // Dosya indirme işlemi burada yapılacak
       const response = await fetch(`/api/files/${fileName}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
@@ -33,7 +37,6 @@ function ExpenseList() {
     }
   };
 
-  // İşlemi iptal etme fonksiyonu
   const cancelExpense = (id) => {
     const isConfirmed = window.confirm("İşlemi gerçekten iptal etmek istiyor musunuz?");
     if (isConfirmed) {
@@ -48,12 +51,25 @@ function ExpenseList() {
     return date.toLocaleDateString('tr-TR');
   };
 
-  // Harcama türüne göre filtreleme işlevi
+  const sortBy = (key) => {
+    let direction = sortDirection[key] === "asc" ? "desc" : "asc";
+    setSortDirection({ [key]: direction });
+
+    const sorted = [...sortedExpenses].sort((a, b) => {
+      if (direction === "asc") {
+        return a[key] > b[key] ? 1 : -1;
+      } else {
+        return a[key] < b[key] ? 1 : -1;
+      }
+    });
+    setSortedExpenses(sorted);
+  };
+
   const filterExpenses = (expense) => {
     if (filterOption === "") {
-      return true; // Herhangi bir filtre seçilmediyse tüm verileri göster
+      return true;
     } else {
-      return expense.type === filterOption; // Harcama türüne göre filtrele
+      return expense.type === filterOption;
     }
   };
 
@@ -62,37 +78,68 @@ function ExpenseList() {
       <div className="row justify-content-center">
         <div className="col-md-10">
           <h1 className="text-center mb-4">Harcama Talebi Listesi</h1>
+          <div className="mb-3">
+            <label htmlFor="filterOption">Harcama Türü Seçiniz :</label>
+            <select
+              id="filterOption"
+              className="form-select"
+              value={filterOption}
+              onChange={(e) => {
+                setFilterOption(e.target.value);
+                setSortedExpenses(expenses.filter(expense => expense.type === e.target.value));
+              }}
+            >
+              <option value="">Hepsi</option>
+              <option value="İş Seyahatleri">İş Seyahatleri</option>
+              <option value="Ofis Malzemeleri">Ofis Malzemeleri</option>
+              <option value="Eğitim ve Gelişim">Eğitim ve Gelişim</option>
+              <option value="Reklam ve Pazarlama">Reklam ve Pazarlama</option>
+              <option value="İş İlişkileri">İş İlişkileri</option>
+              <option value="Personel Harcamaları">Personel Harcamaları</option>
+            </select>
+          </div>
           <div className="table-responsive">
-            <div className="mb-3">
-              <label htmlFor="filterOption">Filtrele :</label>
-              <select
-                id="filterOption"
-                className="form-select"
-                value={filterOption}
-                onChange={(e) => setFilterOption(e.target.value)}
-              >
-                <option value="">Hepsi</option>
-                <option value="İş Seyahatleri">İş Seyahatleri</option>
-                <option value="Ofis Malzemeleri">Ofis Malzemeleri</option>
-                <option value="Eğitim ve Gelişim">Eğitim ve Gelişim</option>
-                <option value="Reklam ve Pazarlama">Reklam ve Pazarlama</option>
-                <option value="İş İlişkileri">İş İlişkileri</option>
-                <option value="Personel Harcamaları">Personel Harcamaları</option>
-              </select>
-            </div>
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th>Harcama türü</th>
-                  <th>Talep Tarihi</th>
-                  <th>Miktar</th>
-                  <th>Onay Durumu</th>
+                  <th onClick={() => sortBy("type")}>
+                    Harcama türü 
+                    {sortDirection["type"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("requestDate")}>
+                    Talep Tarihi 
+                    {sortDirection["requestDate"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("amount")}>
+                    Miktar 
+                    {sortDirection["amount"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("approvalStatus")}>
+                    Onay Durumu 
+                    {sortDirection["approvalStatus"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
                   <th>Döküman</th>
                   <th>İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {expenses.filter(filterExpenses).map((expense) => (
+                {sortedExpenses.filter(filterExpenses).map((expense) => (
                   <tr key={expense.id}>
                     <td>{expense.type}</td>
                     <td>{formatDate(expense.requestDate)}</td>
