@@ -83,9 +83,19 @@ export const LoginCheck = (userNameP, passwordP) => {
         console.log(response);
       })
       .catch((error) => {
-        reject(error.message);
+        resolve(error.response); // API'den gelen yanıtı resolve ediyoruz
       });
   });
+};
+
+export const checkEmailExists = async (email) => {
+  try {
+    const response = await axios.post("/api/user/check", { email });
+    return response.data.exists; // Backend'den gelen veriye göre email varsa true, yoksa false döner
+  } catch (error) {
+    console.error("Email kontrolü sırasında bir hata oluştu:", error);
+    return false; // Hata durumunda false döner
+  }
 };
 
 export const createPermission = async (formData) => {
@@ -119,9 +129,9 @@ export const fetchPermissions = async (token) => {
   console.log(token);
   const config = {
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Include token in the Authorization header
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Include token in the Authorization header
+    },
   };
 
   try {
@@ -136,13 +146,14 @@ export const fetchPermissions = async (token) => {
   }
 };
 
-
 async function fetchAdvances() {
   try {
-    const response = await axios.get('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances');
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching advance:', error);
+    console.error("Error fetching advance:", error);
     return []; // Hata durumunda boş bir dizi döndürüyoruz
   }
 }
@@ -151,23 +162,27 @@ export { fetchAdvances };
 
 async function createAdvance(createObject) {
   try {
-    const response = await axios.post('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances', createObject);
+    const response = await axios.post(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances",
+      createObject
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching advance:', error);
+    console.error("Error fetching advance:", error);
     return []; // Hata durumunda boş bir dizi döndürüyoruz
   }
 }
 
 export { createAdvance };
 
-
 async function fetchExpenses() {
   try {
-    const response = await axios.get('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses'); 
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching expenses:', error);
+    console.error("Error fetching expenses:", error);
     return [];
   }
 }
@@ -176,20 +191,16 @@ export { fetchExpenses };
 
 const sendFormData = async (formData) => {
   try {
-    const response = await axios.post('https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses',formData);
-    return response.data; 
+    const response = await axios.post(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses",
+      formData
+    );
+    return response.data;
   } catch (error) {
-    throw new Error('API isteği başarısız oldu.');
+    throw new Error("API isteği başarısız oldu.");
   }
 };
 
-export {sendFormData};
-
-
-
+export { sendFormData };
 
 export default api;
-
-
-
-
