@@ -153,7 +153,7 @@ function ExpenseList() {
               <tbody>
                 {sortedExpenses.filter(filterExpenses).map((expense) => (
                   <tr key={expense.id}>
-                    <td>{expense.type}</td>
+                    <td>{expense.expenseType}</td>
                     <td>{formatDate(expense.requestDate)}</td>
                     <td>{expense.amount}</td>
                     <td>{expense.approvalStatus}</td>
