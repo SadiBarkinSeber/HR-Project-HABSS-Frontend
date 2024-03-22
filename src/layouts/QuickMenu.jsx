@@ -115,7 +115,7 @@ const QuickMenu = () => {
           >
             <Dropdown.Item as="div" className="px-4 pb-0 pt-2" bsPrefix=" ">
               <div className="lh-3 ">
-                <h5 className="mb-1"> John E. Grainger</h5>
+                <h5 className="mb-1">John Doe</h5>
               </div>
               <div className=" dropdown-divider mt-3 mb-2"></div>
             </Dropdown.Item>
