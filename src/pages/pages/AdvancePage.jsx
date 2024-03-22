@@ -1,7 +1,8 @@
-
 import React, { useState } from "react";
 import { createAdvance } from "../api/api";
- 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Advance = () => {
   // State tanımlamaları
   const [advanceType, setAdvanceType] = useState("");
@@ -27,6 +28,12 @@ const Advance = () => {
       setErrorMessage("Lütfen tüm alanları doldurunuz.");
       return;
     }
+
+    // Para kontrolü
+    if (parseInt(amount) > 180000) {
+      toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz");
+      return;
+    }
  
     // Form verilerini işleme
     const advanceObject = createAdvanceObject(
@@ -42,6 +49,7 @@ const Advance = () => {
     // Formu sıfırla ve hata mesajını temizle
     resetForm();
     setErrorMessage("");
+    toast.success("Avans talebi başarıyla gönderildi.");
   };
  
   // Formu sıfırlama işlemi
@@ -170,6 +178,18 @@ const Advance = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </div>
   );
 };

@@ -1,9 +1,9 @@
-
-
 import React, { useState, useEffect } from "react";
 import { fetchExpenses } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
@@ -32,8 +32,10 @@ function ExpenseList() {
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
+      toast.success("Dosya indirildi.");
     } catch (error) {
       console.error("Dosya indirme hatası:", error);
+      toast.error("Dosya indirme sırasında bir hata oluştu.");
     }
   };
 
@@ -43,6 +45,7 @@ function ExpenseList() {
       const updatedExpenses = expenses.filter(expense => expense.id !== id);
       setExpenses(updatedExpenses);
       console.log("İptal edilen işlem ID:", id);
+      toast.success("İşlem iptal edildi.");
     }
   };
 
@@ -72,6 +75,10 @@ function ExpenseList() {
       return expense.type === filterOption;
     }
   };
+
+  const notify = (message) => toast(message);
+  
+  const notifyError = (message) => toast.error(message);
 
   return (
     <div className="container mt-5">
@@ -164,15 +171,28 @@ function ExpenseList() {
                       </button>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default ExpenseList;
-
+               ))}
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+       <ToastContainer
+         position="top-right"
+         autoClose={2500}
+         hideProgressBar={false}
+         newestOnTop
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover={false}
+         theme="colored"
+         transition="bounce"
+       />
+     </div>
+   );
+ }
+ 
+ export default ExpenseList;
+ 
