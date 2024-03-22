@@ -77,7 +77,7 @@ function ExpenseList() {
   };
 
   const notify = (message) => toast(message);
-  
+
   const notifyError = (message) => toast.error(message);
 
   return (
@@ -92,8 +92,13 @@ function ExpenseList() {
               className="form-select"
               value={filterOption}
               onChange={(e) => {
-                setFilterOption(e.target.value);
-                setSortedExpenses(expenses.filter(expense => expense.type === e.target.value));
+                const selectedValue = e.target.value;
+                setFilterOption(selectedValue);
+                if (selectedValue === "") {
+                  setSortedExpenses([...expenses]); // Tüm harcamaları göstermek için sıralı harcamaları tüm harcamalarla güncelle
+                } else {
+                  setSortedExpenses(expenses.filter(expense => expense.type === selectedValue));
+                }
               }}
             >
               <option value="">Hepsi</option>
@@ -110,7 +115,7 @@ function ExpenseList() {
               <thead className="bg-primary text-light">
                 <tr>
                   <th onClick={() => sortBy("type")}>
-                    Harcama türü 
+                    Harcama türü
                     {sortDirection["type"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
@@ -118,7 +123,7 @@ function ExpenseList() {
                     )}
                   </th>
                   <th onClick={() => sortBy("requestDate")}>
-                    Talep Tarihi 
+                    Talep Tarihi
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
@@ -126,7 +131,7 @@ function ExpenseList() {
                     )}
                   </th>
                   <th onClick={() => sortBy("amount")}>
-                    Miktar 
+                    Miktar
                     {sortDirection["amount"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
@@ -134,7 +139,7 @@ function ExpenseList() {
                     )}
                   </th>
                   <th onClick={() => sortBy("approvalStatus")}>
-                    Onay Durumu 
+                    Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
@@ -171,28 +176,28 @@ function ExpenseList() {
                       </button>
                     </td>
                   </tr>
-               ))}
-               </tbody>
-             </table>
-           </div>
-         </div>
-       </div>
-       <ToastContainer
-         position="top-right"
-         autoClose={2500}
-         hideProgressBar={false}
-         newestOnTop
-         closeOnClick
-         rtl={false}
-         pauseOnFocusLoss
-         draggable
-         pauseOnHover={false}
-         theme="colored"
-         transition="bounce"
-       />
-     </div>
-   );
- }
- 
- export default ExpenseList;
- 
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        transition="bounce"
+      />
+    </div>
+  );
+}
+
+export default ExpenseList;
+
