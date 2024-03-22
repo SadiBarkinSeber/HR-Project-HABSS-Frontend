@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { sendFormData } from "../api/api";
 import { uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Expense() {
-  const [type, setType] = useState("");
+  const [expenseType, setExpenseType] = useState("");
   const [currency, setCurrency] = useState("");
   const [amount, setAmount] = useState("");
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,23 +27,23 @@ function Expense() {
       const fileName = uploadedFileResponse.fileName;
 
       const formData = {
-        Type: type,
+        ExpenseType: expenseType,
         Currency: currency,
         Amount: parseFloat(amount),
         EmployeeId: 1,
         Permission: false,
         ApprovalStatus: "Requested",
-        Response: "Başarılı",
         FileName: fileName,
       };
 
       const data = await sendFormData(formData);
       console.log("API yanıtı:", data);
       notifySuccess();
-      resetForm();
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
       notifyError();
+    } finally {
+      resetForm();
     }
   };
 
@@ -53,6 +54,11 @@ function Expense() {
     setFile(null);
     setErrorMessage("");
     setFormSubmitted(false);
+    
+    // Dosya girişinin değerini sıfırla
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleFileChange = (e) => {
@@ -100,13 +106,13 @@ function Expense() {
                     id="type"
                     name="type"
                     className="form-select"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
+                    value={expenseType}
+                    onChange={(e) => setExpenseType(e.target.value)}
                   >
                     <option value="">Seçiniz</option>
                     <option value="İş Seyahatleri">İş Seyahatleri</option>
                     <option value="Ofis Malzemeleri">Ofis Malzemeleri</option>
-                    <option value=" Eğitim ve Gelişim">Eğitim ve Gelişim</option>
+                    <option value="Eğitim ve Gelişim">Eğitim ve Gelişim</option>
                     <option value="Reklam ve Pazarlama">Reklam ve Pazarlama</option>
                     <option value="İş İlişkileri">İş İlişkileri</option>
                     <option value="Personel Harcamaları">Personel Harcamaları</option>
@@ -130,7 +136,7 @@ function Expense() {
                     onChange={(e) => setCurrency(e.target.value)}
                   >
                     <option value="">Seçiniz</option>
-                    <option value="TRY">TRY</option>
+                    <option value="TL">TL</option>
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
                   </select>
@@ -165,6 +171,7 @@ function Expense() {
                     Dosya Seç:
                   </label>
                   <input
+                    ref={fileInputRef}
                     className="form-control"
                     id="formFileLg"
                     type="file"
