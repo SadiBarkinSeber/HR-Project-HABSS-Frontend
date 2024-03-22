@@ -227,7 +227,7 @@ function PermissionList() {
 
   const filterPermissions = (permission) => {
     if (filterOption === "" || filterOption === "Hepsi") {
-      return true; // Filtre seçilmediyse veya "Hepsi" seçildiyse tüm izinleri göster
+      return true;
     } else {
       return permission.permissionType === filterOption;
     }
@@ -259,8 +259,13 @@ function PermissionList() {
               className="form-select"
               value={filterOption}
               onChange={(e) => {
-                setFilterOption(e.target.value);
-                setSortedPermissions(permissions.filter(permission => permission.permissionType === e.target.value));
+                const selectedValue = e.target.value;
+                setFilterOption(selectedValue);
+                if (selectedValue === "") {
+                  setSortedPermissions([...permissions]); // Tüm izinleri göstermek için sıralı izinleri tüm izinlerle güncelle
+                } else {
+                  setSortedPermissions(permissions.filter(permission => permission.permissionType === selectedValue));
+                }
               }}
             >
               <option value="">Hepsi</option>
