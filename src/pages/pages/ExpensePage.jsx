@@ -1,7 +1,8 @@
-
 import React, { useState } from "react";
 import { sendFormData } from "../api/api";
 import { uploadPhotoAndGetPath } from "../api/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Expense() {
   const [type, setType] = useState("");
@@ -37,9 +38,11 @@ function Expense() {
 
       const data = await sendFormData(formData);
       console.log("API yanıtı:", data);
+      notifySuccess();
       resetForm();
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
+      notifyError();
     }
   };
 
@@ -58,7 +61,29 @@ function Expense() {
   };
 
   const today = new Date().toISOString().split("T")[0];
-  
+
+  const notifySuccess = () =>
+    toast.success("Harcama talebi başarıyla gönderildi!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const notifyError = () =>
+    toast.error("Harcama talebi gönderimi sırasında bir hata oluştu!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -166,10 +191,21 @@ function Expense() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        transition="Bounce"
+      />
     </div>
   );
 }
 
 export default Expense;
-
-

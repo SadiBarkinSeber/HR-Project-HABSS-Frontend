@@ -146,8 +146,11 @@
 // export default PermissionList;
 
 import React, { useState, useEffect } from "react";
-import { fetchPermissions } from "./api/api";
+import { fetchPermissions } from "./api/api"; // Örnek bir downloadFile fonksiyonunu ekledim
 import { useAuth } from "../components/TokenContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function PermissionList() {
   const [permissions, setPermissions] = useState([]);
@@ -208,7 +211,13 @@ function PermissionList() {
   };
 
   const handleDownload = async (fileName) => {
-    // Dosya indirme işlevi burada
+    try {
+      await downloadFile(fileName); // Örnek indirme fonksiyonu çağrısı
+      toast.success("Dosya başarıyla indirildi");
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast.error("Dosya indirme sırasında bir hata oluştu");
+    }
   };
 
   const formatDate = (dateTimeString) => {
@@ -234,6 +243,7 @@ function PermissionList() {
         return permission;
       });
       setPermissions(updatedPermissions);
+      toast.success("İzin başarıyla iptal edildi");
     }
   };
 
@@ -316,8 +326,21 @@ function PermissionList() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </div>
   );
 }
 
 export default PermissionList;
+
