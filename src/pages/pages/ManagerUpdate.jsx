@@ -4,16 +4,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   fetchManager,
   updateManager,
-  uploadPhotoAndGetPath,
-} from "./api/api";
-
+  uploadPhotoAndGetPath
+} from "../api/api";
 import {
   EmployeeUpdateCardLeftSide,
   EmployeePersonalUpdate,
   EmployeeJobDetail,
-} from "../components/Cards";
+} from "../../components/Cards";
 
-import NavbarVertical from "../layouts/navbars/NavbarVertical";
 
 function ManagerUpdate() {
   const [manager, setManager] = useState(null);

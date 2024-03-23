@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchManager } from "./api/api";
+import { fetchManager } from "../api/api";
 import {
   EmployeeCardLeftSide,
   EmployeePersonalDetail,
   EmployeeJobDetail,
-} from "../components/Cards";
+} from "../../components/Cards";
 
-import NavbarVertical from "../layouts/navbars/NavbarVertical";
 
 function ManagerDetail() {
   const navigateTo = useNavigate();
