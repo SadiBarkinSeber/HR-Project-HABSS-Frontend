@@ -5,8 +5,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useProfilePicture } from "./ProfilePictureContext";
 import Input from "react-phone-number-input/input";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const EmployeeSumCard = (props) => {
   const { email, phoneNumber, address } = props;
   const navigateTo = useNavigate();
@@ -366,7 +366,7 @@ export const EmployeePersonalUpdate = (props) => {
     .join(" ");
 
   return (
-    <div className={styles.managerCard}>
+    <div className={styles.employeeCard}>
       <div>
         <label htmlFor="">Ad Soyad :</label>{" "}
         <input
@@ -442,4 +442,3 @@ export const EmployeePersonalUpdate = (props) => {
     </div>
   );
 };
-

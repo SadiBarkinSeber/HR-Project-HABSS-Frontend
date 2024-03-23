@@ -32,12 +32,12 @@ export const DashboardMenu = [
   },
   {
     id: uuid(),
-    title: "Personel Sayfası",
+    title: "Personel Paneli",
     grouptitle: true,
   },
   {
     id: uuid(),
-    title: "Personel",
+    title: "Profil",
     icon: "user",
     children: [
       { id: uuid(), link: "/emp", name: "Profil Özet" },

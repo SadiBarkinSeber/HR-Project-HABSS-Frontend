@@ -14,14 +14,14 @@ function ManagerPermissionList() {
     const fetchData = async () => {
       try {
         const permissionsData = await fetchAllPermission(token);
-        setPermissions(permissionsData.permissions);
+        setPermissions(permissionsData); // permissionsData.permissions yerine sadece permissionsData kullanıldı
       } catch (error) {
         console.error("Error fetching permissions:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [token]); // token bağımlılığı eklendi
 
   useEffect(() => {
     setSortedPermissions([...permissions]);
@@ -64,7 +64,8 @@ function ManagerPermissionList() {
 
   const handleDownload = async (fileName) => {
     try {
-      await downloadFile(fileName); // Örnek indirme fonksiyonu çağrısı
+      // downloadFile fonksiyonu eklendi
+      await downloadFile(fileName);
       toast.success("Dosya başarıyla indirildi");
     } catch (error) {
       console.error("Error downloading file:", error);
