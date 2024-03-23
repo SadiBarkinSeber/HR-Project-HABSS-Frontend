@@ -17,6 +17,7 @@ const DefaultDashboardLayout = (props) => {
         <NavbarVertical
           showMenu={showMenu}
           onClick={(value) => setShowMenu(value)}
+          routeType={props.routeType}
         />
       </div>
       <div id="page-content">

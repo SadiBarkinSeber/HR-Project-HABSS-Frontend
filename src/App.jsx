@@ -1,3 +1,5 @@
+import { DashboardMenu } from "../routes/DashboardRoutes";
+import { DashboardMenuManager } from "../routes/DashboardRoutesManager";
 import EmployeeList from "./pages/EmployeeMainPage";
 import EmployeeDetail from "./pages/EmployeeDetailPage";
 import EmployeeUpdate from "./pages/EmployeeUpdatePage";
@@ -38,7 +40,7 @@ export default function App() {
               <Route
                 path="/emp"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<EmployeeList />}
                   </DefaultDashboardLayout>
@@ -47,7 +49,7 @@ export default function App() {
               <Route
                 path="/emp-detail"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<EmployeeDetail />}
                   </DefaultDashboardLayout>
@@ -56,7 +58,7 @@ export default function App() {
               <Route
                 path="/emp-update"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<EmployeeUpdate />}
                   </DefaultDashboardLayout>
@@ -65,7 +67,7 @@ export default function App() {
               <Route
                 path="/emp-permission"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<Permission />}
                   </DefaultDashboardLayout>
@@ -74,7 +76,7 @@ export default function App() {
               <Route
                 path="/emp-permission-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<EmployeePermissions />}
                   </DefaultDashboardLayout>
@@ -83,7 +85,7 @@ export default function App() {
               <Route
                 path="/emp-advance"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<Advance />}
                   </DefaultDashboardLayout>
@@ -92,7 +94,7 @@ export default function App() {
               <Route
                 path="/emp-advance-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<AdvanceList />}
                   </DefaultDashboardLayout>
@@ -101,7 +103,7 @@ export default function App() {
               <Route
                 path="/emp-expense"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<Expense />}
                   </DefaultDashboardLayout>
@@ -110,7 +112,7 @@ export default function App() {
               <Route
                 path="/emp-expense-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenu}>
                     {" "}
                     {<ExpenseList />}
                   </DefaultDashboardLayout>
@@ -119,7 +121,7 @@ export default function App() {
               <Route
                 path="/mng"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerList />}
                   </DefaultDashboardLayout>
@@ -128,7 +130,7 @@ export default function App() {
               <Route
                 path="/mng-detail"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerDetail />}
                   </DefaultDashboardLayout>
@@ -137,16 +139,16 @@ export default function App() {
               <Route
                 path="/mng-update"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerUpdate />}
                   </DefaultDashboardLayout>
                 }
               />
               <Route
-                path="/emp-employee-create"
+                path="/mng-employee-create"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<EmployeeCreate />}
                   </DefaultDashboardLayout>
@@ -155,7 +157,7 @@ export default function App() {
               <Route
                 path="/mng-permission-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerPermissionList />}
                   </DefaultDashboardLayout>
@@ -164,7 +166,7 @@ export default function App() {
               <Route
                 path="/mng-advance-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerAdvanceList />}
                   </DefaultDashboardLayout>
@@ -173,7 +175,7 @@ export default function App() {
               <Route
                 path="/mng-expense-list"
                 element={
-                  <DefaultDashboardLayout>
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerExpenseList />}
                   </DefaultDashboardLayout>

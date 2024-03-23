@@ -13,7 +13,6 @@ import {
 } from "react-bootstrap";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
-import { DashboardMenu } from "../../../routes/DashboardRoutes";
 
 const NavbarVertical = (props) => {
   const location = useNavigate();
@@ -95,7 +94,7 @@ const NavbarVertical = (props) => {
     <Fragment>
       <SimpleBar style={{ maxHeight: "100vh" }}>
         <div className="nav-scroller">
-          <Link to="/emp" className="navbar-brand">
+          <Link to={props.routeType[0].link} className="navbar-brand">
             <Image
               src="../../../dist/images/brand/logo/logo_transparent.png"
               alt=""
@@ -108,7 +107,7 @@ const NavbarVertical = (props) => {
           as="ul"
           className="navbar-nav flex-column"
         >
-          {DashboardMenu.map(function (menu, index) {
+          {props.routeType.map(function (menu, index) {
             if (menu.grouptitle) {
               return (
                 <Card bsPrefix="nav-item" key={index}>
