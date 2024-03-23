@@ -1,4 +1,4 @@
-import EmployeeList from "./pages/MainPage";
+import EmployeeList from "./pages/EmployeeMainPage";
 import EmployeeDetail from "./pages/EmployeeDetailPage";
 import EmployeeUpdate from "./pages/EmployeeUpdatePage";
 import Permission from "./pages/pages/PermissionPage";
@@ -16,6 +16,9 @@ import ExpenseList from "./pages/ExpenseList";
 import ManagerPermissionList from "./pages/pages/ManagerPermissionList";
 import ManagerAdvanceList from "./pages/pages/ManagerAdvanceList";
 import ManagerExpenseList from "./pages/pages/ManagerExpenseList";
+import ManagerDetail from "./pages/pages/ManagerDetailPage";
+import ManagerList from "./pages/pages/ManagerMain";
+import ManagerUpdate from "./pages/pages/ManagerUpdate";
 import { AuthProvider } from "./components/TokenContext";
 
 import EmployeeCreate from "./pages/pages/EmployeeCreate";
@@ -110,6 +113,33 @@ export default function App() {
                   <DefaultDashboardLayout>
                     {" "}
                     {<ExpenseList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-detail"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerDetail />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-update"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerUpdate />}
                   </DefaultDashboardLayout>
                 }
               />

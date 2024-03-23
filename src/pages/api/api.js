@@ -260,4 +260,32 @@ async function fetchAllExpenses() {
 
 export { fetchAllExpenses };
 
+
+export const fetchManager = async () => {
+  try {
+    const response = await api.get("/manager/1");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching manager:", error);
+    throw error;
+  }
+};
+
+export const updateManager = async (id, phoneNumber, address, photoPath) => {
+  try {
+    const response = await api.put("/manager/", {
+      id: id,
+      phoneNumber: phoneNumber,
+      address: address,
+      imagePath: photoPath,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating manager:", error);
+    throw error;
+  }
+};
+
+
+
 export default api;
