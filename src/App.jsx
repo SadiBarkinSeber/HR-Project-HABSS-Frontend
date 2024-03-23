@@ -13,14 +13,12 @@ import AdvanceList from "./pages/pages/AdvanceList";
 import Advance from "./pages/pages/AdvancePage";
 import Expense from "./pages/pages/ExpensePage";
 import ExpenseList from "./pages/ExpenseList";
+import ManagerPermissionList from "./pages/pages/ManagerPermissionList";
+import ManagerAdvanceList from "./pages/pages/ManagerAdvanceList";
+import ManagerExpenseList from "./pages/pages/ManagerExpenseList";
 import { AuthProvider } from "./components/TokenContext";
 
-
-
 import EmployeeCreate from "./pages/pages/EmployeeCreate";
-
-
-
 
 import ForgetPassword from "./pages/authentication/forget-password";
 
@@ -112,30 +110,45 @@ export default function App() {
                   <DefaultDashboardLayout>
                     {" "}
                     {<ExpenseList />}
-
                   </DefaultDashboardLayout>
-
-                
-              }
-            />
-
-            <Route
-            path = "/emp-employee-create"
-            element={
-              <DefaultDashboardLayout>
-                {" "}
-                {<EmployeeCreate />}
-              </DefaultDashboardLayout>
-
-
-                
-
-            }
-
-
-
+                }
               />
-
+              <Route
+                path="/emp-employee-create"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<EmployeeCreate />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-permission-list"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerPermissionList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-advance-list"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerAdvanceList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-expense-list"
+                element={
+                  <DefaultDashboardLayout>
+                    {" "}
+                    {<ManagerExpenseList />}
+                  </DefaultDashboardLayout>
+                }
+              />
             </Routes>
           </ProfilePictureProvider>
         </AuthProvider>

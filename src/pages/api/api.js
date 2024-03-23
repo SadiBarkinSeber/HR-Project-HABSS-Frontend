@@ -149,7 +149,7 @@ export const fetchPermissions = async (token) => {
 async function fetchAdvances() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances/1/byEmployee"
     );
     return response.data;
   } catch (error) {
@@ -178,7 +178,7 @@ export { createAdvance };
 async function fetchExpenses() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses/1/byEmployee"
     );
     return response.data;
   } catch (error) {
@@ -201,7 +201,7 @@ const sendFormData = async (formData) => {
   }
 };
 
-export {sendFormData};
+export { sendFormData };
 
 async function createEmployee(createObject) {
   try {
@@ -216,5 +216,48 @@ async function createEmployee(createObject) {
   }
 }
 
-export {createEmployee};
+export { createEmployee };
+
+async function fetchAllPermission() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching advance:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAllPermission };
+
+async function fetchAllAdvances() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching advance:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAllAdvances };
+
+async function fetchAllExpenses() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    return [];
+  }
+}
+
+export { fetchAllExpenses };
+
 export default api;
