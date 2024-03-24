@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchAdvances } from "../api/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 function AdvanceList() {
   const [advances, setAdvances] = useState([]);

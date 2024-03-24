@@ -6,18 +6,24 @@ const EmployeeCreate = () => {
   const [employeeData, setEmployeeData] = useState({
     firstName: "",
     secondName: "",
-    lastName: "",
+    firstSurname: "",
     secondSurname: "",
     phoneNumber: "",
-    birthDate: "",
-    gender: "",
+    DateOfBirth: "", 
+    // gender: "",backend tarafına eklenecek
     birthPlace: "",
     tc: "", // TC kimlik numarası alanı eklendi
     address: "",
     company: "",
     position: "",
     startDate: "",
-    wage: ""
+    wage: "",
+    isActive:true,
+    // departmant:?
+    email:"",
+    // imagepath:?
+    // userId:?
+
   });
 
   const [photo, setPhoto] = useState(null);
@@ -83,10 +89,10 @@ const EmployeeCreate = () => {
     setEmployeeData({
       firstName: "",
       secondName: "",
-      lastName: "",
+      firstSurname: "",
       secondSurname: "",
       phoneNumber: "",
-      birthDate: "",
+      DateOfBirth: "",
       gender: "",
       birthPlace: "",
       tc: "",
@@ -152,9 +158,9 @@ const EmployeeCreate = () => {
                 <input type="text" id="secondName" name="secondName" value={employeeData.secondName} onChange={handleInputChange} className="form-control mb-2" />
               </div>
               <div className="mb-3">
-                <label htmlFor="lastName">Soyad:</label>
-                <input type="text" id="lastName" name="lastName" value={employeeData.lastName} onChange={handleInputChange} className="form-control mb-2" />
-                {formSubmitted && !employeeData.lastName && (
+                <label htmlFor="firstSurname">Soyad:</label>
+                <input type="text" id="firstSurname" name="firstSurname" value={employeeData.firstSurname} onChange={handleInputChange} className="form-control mb-2" />
+                {formSubmitted && !employeeData.firstSurname && (
                   <div className="text-danger">Soyadı boş bırakamazsınız.</div>
                 )}
               </div>
@@ -176,9 +182,9 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="birthDate">Doğum Tarihi:</label>
-                <input type="date" id="birthDate" name="birthDate" value={employeeData.birthDate} onChange={handleInputChange} className="form-control mb-2" />
-                {formSubmitted && !employeeData.birthDate && (
+                <label htmlFor="DateOfBirth">Doğum Tarihi:</label>
+                <input type="date" id="DateOfBirth" name="DateOfBirth" value={employeeData.DateOfBirth} onChange={handleInputChange} className="form-control mb-2" />
+                {formSubmitted && !employeeData.DateOfBirth && (
                   <div className="text-danger">Doğum tarihi boş bırakılamaz.</div>
                 )}
               </div>

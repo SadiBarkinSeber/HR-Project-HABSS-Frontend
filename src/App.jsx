@@ -176,7 +176,7 @@ export default function App() {
                 path="/mng-expense-list"
                 element={
                   <DefaultDashboardLayout routeType={DashboardMenuManager}>
-                    {" "}
+                 {" "}
                     {<ManagerExpenseList />}
                   </DefaultDashboardLayout>
                 }

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { fetchExpenses } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,6 +39,7 @@ function ExpenseList() {
       toast.error("Dosya indirme sırasında bir hata oluştu.");
     }
   };
+
 
   const cancelExpense = (id) => {
     const isConfirmed = window.confirm("İşlemi gerçekten iptal etmek istiyor musunuz?");
@@ -138,6 +140,14 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
+                  <th onClick={() => sortBy("currency")}>
+                    Para Birimi
+                    {sortDirection["currency"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
                   <th onClick={() => sortBy("approvalStatus")}>
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
@@ -156,6 +166,7 @@ function ExpenseList() {
                     <td>{expense.expenseType}</td>
                     <td>{formatDate(expense.requestDate)}</td>
                     <td>{expense.amount}</td>
+                    <td>{expense.currency}</td>
                     <td>{expense.approvalStatus}</td>
                     <td className="text-center">
                       {expense.fileName && (
@@ -200,4 +211,3 @@ function ExpenseList() {
 }
 
 export default ExpenseList;
-
