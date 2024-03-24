@@ -26,7 +26,7 @@ import { AuthProvider } from "./components/TokenContext";
 import EmployeeCreate from "./pages/pages/EmployeeCreate";
 
 import ForgetPassword from "./pages/authentication/forget-password";
-
+import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
 export default function App() {
   return (
     <>
@@ -178,6 +178,15 @@ export default function App() {
                   <DefaultDashboardLayout routeType={DashboardMenuManager}>
                  {" "}
                     {<ManagerExpenseList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/mng-employee-list"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerEmployeeList />}
                   </DefaultDashboardLayout>
                 }
               />

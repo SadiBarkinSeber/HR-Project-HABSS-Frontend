@@ -286,6 +286,15 @@ export const updateManager = async (id, phoneNumber, address, photoPath) => {
   }
 };
 
+export const fetchEmployees2 = async () => {
+  try {
+    const response = await api.get("/employees");
+    return response.data; // API'den dönen verinin direkt olarak dönüşü sağlanıyor
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    throw error;
+  }
+};
 
 
 export default api;
