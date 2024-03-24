@@ -144,8 +144,6 @@ function ManagerAdvanceList() {
                       >
                         Onayla
                       </button>
-                    </td>
-                    <td className="text-center">
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => handleReject(advance.id)}

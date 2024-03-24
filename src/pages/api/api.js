@@ -260,10 +260,9 @@ async function fetchAllExpenses() {
 
 export { fetchAllExpenses };
 
-
 export const fetchManager = async () => {
   try {
-    const response = await api.get("/manager/1");
+    const response = await api.get("/manager/3");
     return response.data;
   } catch (error) {
     console.error("Error fetching manager:", error);
@@ -295,6 +294,5 @@ export const fetchEmployees2 = async () => {
     throw error;
   }
 };
-
 
 export default api;
