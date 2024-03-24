@@ -41,7 +41,7 @@ function ManagerEmployeeList() {
           {employees.map((employee) => (
             <tr key={employee.id}>
               <td>{employee.firstName}</td>
-              <td>{employee.lastName}</td>
+              <td>{employee.firstSurname}</td>
               <td>{employee.phoneNumber}</td>
               <td>{employee.email}</td>
               <td>{employee.isActive ? "Aktif" : "Pasif"}</td>

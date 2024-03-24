@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createEmployee } from "../api/api";
 import PhoneInput from "react-phone-number-input/input";
+import { uploadPhotoAndGetPath } from "../api/api";
 
 const EmployeeCreate = () => {
   const [employeeData, setEmployeeData] = useState({
@@ -9,21 +10,19 @@ const EmployeeCreate = () => {
     firstSurname: "",
     secondSurname: "",
     phoneNumber: "",
-    DateOfBirth: "", 
-    // gender: "",backend tarafına eklenecek
+    dateOfBirth: "",
     birthPlace: "",
-    tc: "", // TC kimlik numarası alanı eklendi
+    tc: "",
     address: "",
     company: "",
     position: "",
     startDate: "",
     wage: "",
-    isActive:true,
-    // departmant:?
-    email:"",
-    // imagepath:?
-    // userId:?
-
+    isActive: true,
+    department: "",
+    email: "deneme@bilgeadam.com",
+    imagePath:""
+    
   });
 
   const [photo, setPhoto] = useState(null);
@@ -34,38 +33,56 @@ const EmployeeCreate = () => {
     setEmployeeData({ ...employeeData, [name]: value });
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPhoto(reader.result);
-    };
-    reader.readAsDataURL(file);
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setPhoto(URL.createObjectURL(file)); // Fotoğrafı önizleme için URL oluştur
+    handlePhotoChange(file);
+  };
+
+  const handlePhotoChange = async (file) => {
+    try {
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert("Sadece jpg ve png dosyaları kabul edilir!");
+        return;
+      }
+
+      const uploadedFileResponse = await uploadPhotoAndGetPath(file);
+      const fileName = uploadedFileResponse.fileName;
+      console.log("Dosya adı:", fileName);
+
+      setEmployeeData({ ...employeeData, imagePath: fileName });
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
 
+    // Geçerli bir telefon numarası kontrolü
     if (employeeData.phoneNumber.length !== 13) {
       alert("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
 
     // TC kimlik numarası doğrulama işlemi
-    const tcValidationResult = validateTcNumber(employeeData.tc);
-    if (!tcValidationResult.valid) {
-      alert(tcValidationResult.message);
-      return;
-    }
+    // const tcValidationResult = validateTcNumber(employeeData.tc);
+    // if (!tcValidationResult.valid) {
+    //   alert(tcValidationResult.message);
+    //   return;
+    // }
 
-    // Diğer alanların kontrolü
-    if (!validateForm()) {
-      console.error("Lütfen tüm alanları doldurunuz.");
-      return;
-    }
+    // // Diğer alanların kontrolü
+    // if (!validateForm()) {
+    //   alert("Lütfen tüm alanları doldurunuz.");
+    //   return;
+    // }
 
     try {
+      console.log(employeeData);
       const response = await createEmployee(employeeData);
       console.log("Employee created:", response);
       resetForm();
@@ -93,14 +110,17 @@ const EmployeeCreate = () => {
       secondSurname: "",
       phoneNumber: "",
       DateOfBirth: "",
-      gender: "",
       birthPlace: "",
       tc: "",
       address: "",
       company: "",
+      department: "",
       position: "",
       startDate: "",
-      wage: ""
+      wage: "",
+      isActive: true,
+      email: "",
+      imagepath: ""
     });
     setPhoto(null);
     setFormSubmitted(false);
@@ -110,23 +130,20 @@ const EmployeeCreate = () => {
     if (!tc || tc.length !== 11 || isNaN(tc)) {
       return { valid: false, message: "Geçerli bir T.C. kimlik numarası giriniz...." };
     }
-  
+
     const digits = Array.from(tc, Number);
 
-    // Dizi elemanlarını ayır
+    // T.C. kimlik numarasının doğruluğunu kontrol et
     const [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11] = digits;
-
-    // Kimlik numarasının doğruluğunu kontrol et
     const total = (t1 + t3 + t5 + t7 + t9) * 7 - (t2 + t4 + t6 + t8);
-    const total2 = (t1+t2+t3+t4+t5+t6+t7+t8+t9+t10);
-    if (total2 %10 !==t11 ||total % 10 !== t10 || (t1 === t2 && t2 === t3 && t3 === t4 && t4 === t5 && t5 === t6 && t6 === t7 && t7 === t8 && t8 === t9 && t9 === t10)) {
-        return { valid: false, message: "Geçerli bir T.C. kimlik numarası giriniz." };
+    const total2 = t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10;
+    if (total2 % 10 !== t11 || total % 10 !== t10 || (t1 === t2 && t2 === t3 && t3 === t4 && t4 === t5 && t5 === t6 && t6 === t7 && t7 === t8 && t8 === t9 && t9 === t10)) {
+      return { valid: false, message: "Geçerli bir T.C. kimlik numarası giriniz." };
     }
 
     // Doğrulama başarılı ise true dön
     return { valid: true, message: "" };
-};
-
+  };
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Çalışan Ekle</h2>
@@ -139,7 +156,7 @@ const EmployeeCreate = () => {
                   <label htmlFor="photo" className="btn btn-primary rounded-circle upload-btn" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {photo ? <img src={photo} alt="Employee" className="uploaded-photo" style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "50%" }} /> : "+"}
                   </label>
-                  <input type="file" id="photo" accept="image/*" onChange={handlePhotoChange} style={{ display: "none" }} />
+                  <input type="file" id="photo" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
                 </div>
                 <div>
                   <h5>Fotoğraf Seç</h5>
@@ -182,13 +199,13 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="DateOfBirth">Doğum Tarihi:</label>
-                <input type="date" id="DateOfBirth" name="DateOfBirth" value={employeeData.DateOfBirth} onChange={handleInputChange} className="form-control mb-2" />
-                {formSubmitted && !employeeData.DateOfBirth && (
+                <label htmlFor="dateOfBirth">Doğum Tarihi:</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" value={employeeData.dateOfBirth} onChange={handleInputChange} className="form-control mb-2" />
+                {formSubmitted && !employeeData.dateOfBirth && (
                   <div className="text-danger">Doğum tarihi boş bırakılamaz.</div>
                 )}
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label>Cinsiyet:</label>
                 <div className="form-check">
                   <input type="radio" id="male" name="gender" value="male" checked={employeeData.gender === "male"} onChange={handleInputChange} className="form-check-input" />
@@ -201,7 +218,7 @@ const EmployeeCreate = () => {
                 {formSubmitted && !employeeData.gender && (
                   <div className="text-danger">Cinsiyet seçimi yapmalısınız.</div>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -241,6 +258,13 @@ const EmployeeCreate = () => {
                 <input type="text" id="position" name="position" value={employeeData.position} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !employeeData.position && (
                   <div className="text-danger">Pozisyon boş bırakılamaz.</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="department">Departman:</label>
+                <input type="text" id="department" name="department" value={employeeData.department} onChange={handleInputChange} className="form-control mb-2" />
+                {formSubmitted && !employeeData.department && (
+                  <div className="text-danger">Departman boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
