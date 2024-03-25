@@ -67,7 +67,7 @@ export const LoginCheck = (userNameP, passwordP) => {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        "https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/",
+        "https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/login",
         {
           userName: userNameP,
           password: passwordP,
