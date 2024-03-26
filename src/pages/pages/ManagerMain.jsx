@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchManager } from "../api/api";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../../components/Cards";
 
-
 function ManagerList() {
   const navigateTo = useNavigate();
 
@@ -42,6 +41,7 @@ function ManagerList() {
             secondSurname={manager.secondSurname}
             department={manager.department}
             imagePath={manager.imagePath}
+            routeUpdatePage="/mng-update"
           />
         )}
         {manager && (
@@ -49,6 +49,7 @@ function ManagerList() {
             email={manager.email}
             phoneNumber={manager.phoneNumber}
             address={manager.address}
+            routeDetailPage="/mng-detail"
           />
         )}
       </div>

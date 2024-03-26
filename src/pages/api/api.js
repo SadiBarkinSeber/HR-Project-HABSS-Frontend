@@ -295,4 +295,69 @@ export const fetchEmployees2 = async () => {
   }
 };
 
+export async function downloadFile(fileName) {
+  try {
+    const response = await fetch(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/file/download?fileName=${fileName}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Dosya indirme sırasında bir hata oluştu.");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url); // Bellek sızıntısını önlemek için URL'yi serbest bırakın
+    return { success: true, message: "Dosya indirildi." };
+  } catch (error) {
+    console.error("Dosya indirme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function updateAdvanceStatus(id, permission) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/advances/manager`,
+      { id, permission }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Avans durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function updateExpenseStatus(id, permission) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/expenses/manager`,
+      { id, permission }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Harcama durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function updatePermissionStatus(id, permission) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/manager`,
+      { id, permission }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Izin durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
 export default api;

@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPermission } from "../api/api"; // Örnek bir downloadFile fonksiyonunu ekledim
+import { fetchAllPermission } from "../api/api";
 import { useAuth } from "../../components/TokenContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
+import { downloadFile } from "../api/api";
+import { updatePermissionStatus } from "../api/api";
+import { confirmAlert } from "react-confirm-alert"; // react-confirm-alert paketini ekledik
 import "react-toastify/dist/ReactToastify.css";
+import "react-confirm-alert/src/react-confirm-alert.css"; // react-confirm-alert için CSS dosyasını ekledik
 
 function ManagerPermissionList() {
   const [permissions, setPermissions] = useState([]);
   const [sortedPermissions, setSortedPermissions] = useState([]);
+  const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // İzin türü filtresi
   const { token, setAuthToken } = useAuth();
 
@@ -14,57 +21,65 @@ function ManagerPermissionList() {
     const fetchData = async () => {
       try {
         const permissionsData = await fetchAllPermission(token);
-        setPermissions(permissionsData); // permissionsData.permissions yerine sadece permissionsData kullanıldı
+        setPermissions(permissionsData);
       } catch (error) {
         console.error("Error fetching permissions:", error);
       }
     };
 
     fetchData();
-  }, [token]); // token bağımlılığı eklendi
+  }, [token]);
 
   useEffect(() => {
-    setSortedPermissions([...permissions]);
+    setSortedPermissions([...permissions].reverse());
   }, [permissions]);
 
-  const sortByPermissionType = () => {
-    const sorted = [...sortedPermissions].sort((a, b) => {
-      return a.permissionType.localeCompare(b.permissionType);
-    });
-    setSortedPermissions(sorted);
+  const handleApprove = async (id) => {
+    const updateResult = await updatePermissionStatus(id, true);
+    if (updateResult.success) {
+      toast.success(updateResult.message);
+      const permissionsData = await fetchAllPermission(token);
+      setPermissions(permissionsData);
+    } else {
+      toast.error(updateResult.message);
+    }
   };
 
-  const sortByStartDate = () => {
-    const sorted = [...sortedPermissions].sort((a, b) => {
-      return new Date(a.startDate) - new Date(b.startDate);
-    });
-    setSortedPermissions(sorted);
+  const handleReject = async (id) => {
+    const updateResult = await updatePermissionStatus(id, false);
+    if (updateResult.success) {
+      toast.success(updateResult.message);
+      const permissionsData = await fetchAllPermission(token);
+      setPermissions(permissionsData);
+    } else {
+      toast.error(updateResult.message);
+    }
   };
 
-  const sortByRequestDate = () => {
-    const sorted = [...sortedPermissions].sort((a, b) => {
-      return new Date(a.requestDate) - new Date(b.requestDate);
-    });
-    setSortedPermissions(sorted);
-  };
+  const sortBy = (key) => {
+    let direction = sortDirection[key] === "asc" ? "desc" : "asc";
+    setSortDirection({ [key]: direction });
 
-  const sortByEndDate = () => {
     const sorted = [...sortedPermissions].sort((a, b) => {
-      return new Date(a.endDate) - new Date(b.endDate);
-    });
-    setSortedPermissions(sorted);
-  };
-
-  const sortByApprovalStatus = () => {
-    const sorted = [...sortedPermissions].sort((a, b) => {
-      return a.approvalStatus.localeCompare(b.approvalStatus);
+      if (key === "permissionType") {
+        return direction === "asc"
+          ? a[key].localeCompare(b[key])
+          : b[key].localeCompare(a[key]);
+      } else {
+        return direction === "asc"
+          ? a[key] > b[key]
+            ? 1
+            : -1
+          : a[key] < b[key]
+          ? 1
+          : -1;
+      }
     });
     setSortedPermissions(sorted);
   };
 
   const handleDownload = async (fileName) => {
     try {
-      // downloadFile fonksiyonu eklendi
       await downloadFile(fileName);
       toast.success("Dosya başarıyla indirildi");
     } catch (error) {
@@ -86,38 +101,38 @@ function ManagerPermissionList() {
     }
   };
 
-  const handleApprove = async (id) => {
-    try {
-      await approvePermission(id);
-      const updatedPermissions = permissions.map((permission) => {
-        if (permission.id === id) {
-          return { ...permission, approvalStatus: "Onaylandı" };
-        }
-        return permission;
-      });
-      setPermissions(updatedPermissions);
-      toast.success("İzin başarıyla onaylandı");
-    } catch (error) {
-      console.error("Error approving permission:", error);
-      toast.error("İzin onaylama sırasında bir hata oluştu");
-    }
+  const confirmApprove = (id) => {
+    confirmAlert({
+      title: "İzin Onayı",
+      message: "Bu izni onaylamak istediğinizden emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () => handleApprove(id),
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
-  const handleReject = async (id) => {
-    try {
-      await rejectPermission(id);
-      const updatedPermissions = permissions.map((permission) => {
-        if (permission.id === id) {
-          return { ...permission, approvalStatus: "Reddedildi" };
-        }
-        return permission;
-      });
-      setPermissions(updatedPermissions);
-      toast.success("İzin başarıyla reddedildi");
-    } catch (error) {
-      console.error("Error rejecting permission:", error);
-      toast.error("İzin reddetme sırasında bir hata oluştu");
-    }
+  const confirmReject = (id) => {
+    confirmAlert({
+      title: "İzin Reddi",
+      message: "Bu izni reddetmek istediğinizden emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () => handleReject(id),
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   return (
@@ -135,7 +150,7 @@ function ManagerPermissionList() {
                 const selectedValue = e.target.value;
                 setFilterOption(selectedValue);
                 if (selectedValue === "") {
-                  setSortedPermissions([...permissions]); // Tüm izinleri göstermek için sıralı izinleri tüm izinlerle güncelle
+                  setSortedPermissions([...permissions]);
                 } else {
                   setSortedPermissions(
                     permissions.filter(
@@ -158,35 +173,53 @@ function ManagerPermissionList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={sortByPermissionType}>
+                  <th onClick={() => sortBy("employeeName")}>
+                    Çalışan Ad Soyad
+                    {sortDirection["employeeName"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("permissionType")}>
                     İzin Türü{" "}
-                    <span className="sort-icon" onClick={sortByPermissionType}>
-                      ▼
-                    </span>
+                    {sortDirection["permissionType"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByRequestDate}>
-                    Talep Tarihi{" "}
-                    <span className="sort-icon" onClick={sortByRequestDate}>
-                      ▼
-                    </span>
+                  <th onClick={() => sortBy("requestDate")}>
+                    Talep Tarihi
+                    {sortDirection["requestDate"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByStartDate}>
+                  <th onClick={() => sortBy("startDate")}>
                     Başlangıç Tarihi{" "}
-                    <span className="sort-icon" onClick={sortByStartDate}>
-                      ▼
-                    </span>
+                    {sortDirection["startDate"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByEndDate}>
+                  <th onClick={() => sortBy("endDate")}>
                     Bitiş Tarihi{" "}
-                    <span className="sort-icon" onClick={sortByEndDate}>
-                      ▼
-                    </span>
+                    {sortDirection["endDate"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByApprovalStatus}>
-                    Onay Durumu{" "}
-                    <span className="sort-icon" onClick={sortByApprovalStatus}>
-                      ▼
-                    </span>
+                  <th onClick={() => sortBy("approvalStatus")}>
+                    Onay Durumu
+                    {sortDirection["approvalStatus"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
                   <th>Dosya İndir</th>
                   <th>İşlem</th>
@@ -197,6 +230,12 @@ function ManagerPermissionList() {
                   .filter(filterPermissions)
                   .map((permission) => (
                     <tr key={permission.id}>
+                      <td>
+                        {permission.employeeFirstName}
+                        {permission.employeeSecondName}
+                        {permission.employeeLastName}
+                        {permission.employeeSecondLastName}
+                      </td>
                       <td>{permission.permissionType}</td>
                       <td>{formatDate(permission.requestDate)}</td>
                       <td>{formatDate(permission.startDate)}</td>
@@ -215,13 +254,13 @@ function ManagerPermissionList() {
                       <td className="text-center">
                         <button
                           className="btn btn-sm btn-success"
-                          onClick={() => handleApprove(permission.id)}
+                          onClick={() => confirmApprove(permission.id)}
                         >
                           Onayla
                         </button>
                         <button
                           className="btn btn-sm btn-danger"
-                          onClick={() => handleReject(permission.id)}
+                          onClick={() => confirmReject(permission.id)}
                         >
                           Reddet
                         </button>

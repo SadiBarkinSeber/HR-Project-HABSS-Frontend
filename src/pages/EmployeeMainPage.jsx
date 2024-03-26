@@ -42,6 +42,7 @@ function EmployeeList() {
             secondSurname={employee.secondSurname}
             department={employee.department}
             imagePath={employee.imagePath}
+            routeUpdatePage="/emp-update"
           />
         )}
         {employee && (
@@ -49,6 +50,7 @@ function EmployeeList() {
             email={employee.email}
             phoneNumber={employee.phoneNumber}
             address={employee.address}
+            routeDetailPage="/emp-detail"
           />
         )}
       </div>
