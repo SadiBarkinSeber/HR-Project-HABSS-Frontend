@@ -15,8 +15,9 @@ function ExpenseList() {
   useEffect(() => {
     async function fetchData() {
       const data = await fetchExpenses();
-      setExpenses(data);
-      setSortedExpenses(data);
+      const sortedData = data.sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate)); // Yeni taleplere göre ters sıralama yap
+      setExpenses(sortedData);
+      setSortedExpenses(sortedData);
     }
 
     fetchData();
@@ -40,12 +41,12 @@ function ExpenseList() {
     }
   };
 
-
   const cancelExpense = (id) => {
     const isConfirmed = window.confirm("İşlemi gerçekten iptal etmek istiyor musunuz?");
     if (isConfirmed) {
       const updatedExpenses = expenses.filter(expense => expense.id !== id);
       setExpenses(updatedExpenses);
+      setSortedExpenses(updatedExpenses); // Sıralı talepleri güncelle
       console.log("İptal edilen işlem ID:", id);
       toast.success("İşlem iptal edildi.");
     }
@@ -74,13 +75,9 @@ function ExpenseList() {
     if (filterOption === "") {
       return true;
     } else {
-      return expense.type === filterOption;
+      return expense.expenseType === filterOption;
     }
   };
-
-  const notify = (message) => toast(message);
-
-  const notifyError = (message) => toast.error(message);
 
   return (
     <div className="container mt-5">
@@ -97,9 +94,9 @@ function ExpenseList() {
                 const selectedValue = e.target.value;
                 setFilterOption(selectedValue);
                 if (selectedValue === "") {
-                  setSortedExpenses([...expenses]); // Tüm harcamaları göstermek için sıralı harcamaları tüm harcamalarla güncelle
+                  setSortedExpenses([...expenses]);
                 } else {
-                  setSortedExpenses(expenses.filter(expense => expense.type === selectedValue));
+                  setSortedExpenses(expenses.filter(expense => expense.expenseType === selectedValue));
                 }
               }}
             >
@@ -116,9 +113,9 @@ function ExpenseList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("type")}>
+                  <th onClick={() => sortBy("expenseType")}>
                     Harcama türü
-                    {sortDirection["type"] === "asc" ? (
+                    {sortDirection["expenseType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
@@ -211,3 +208,6 @@ function ExpenseList() {
 }
 
 export default ExpenseList;
+
+                  
+
