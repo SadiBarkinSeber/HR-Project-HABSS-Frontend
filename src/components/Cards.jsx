@@ -8,11 +8,11 @@ import Input from "react-phone-number-input/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const EmployeeSumCard = (props) => {
-  const { email, phoneNumber, address } = props;
+  const { email, phoneNumber, address, routeDetailPage } = props;
   const navigateTo = useNavigate();
 
   const handleDetailButton = () => {
-    navigateTo("/emp-detail");
+    navigateTo(routeDetailPage);
   };
 
   return (
@@ -61,7 +61,7 @@ export const EmployeeCardLeftSide = (props) => {
   const { setProfilePictureData, profilePictureData } = useProfilePicture();
 
   const handleUpdateButton = () => {
-    navigateTo("/emp-update");
+    navigateTo(routeUpdatePage);
   };
 
   const {
@@ -71,6 +71,7 @@ export const EmployeeCardLeftSide = (props) => {
     secondSurname,
     department,
     imagePath,
+    routeUpdatePage,
   } = props;
 
   useEffect(() => {

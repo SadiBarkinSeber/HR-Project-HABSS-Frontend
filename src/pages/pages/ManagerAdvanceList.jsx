@@ -1,41 +1,77 @@
 import React, { useState, useEffect } from "react";
 import { fetchAllAdvances } from "../api/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
+import { updateAdvanceStatus } from "../api/api";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function ManagerAdvanceList() {
   const [advances, setAdvances] = useState([]);
   const [filterOption, setFilterOption] = useState("all");
+  const [sortDirection, setSortDirection] = useState({});
+  const [sortedAdvances, setSortedAdvances] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await fetchAllAdvances();
-      setAdvances(data);
-    }
-
     fetchData();
   }, []);
 
-  const handleApprove = (id) => {
-    const updatedAdvances = advances.map((advance) => {
-      if (advance.id === id) {
-        toast.success("İşlem başarıyla onaylandı");
-        return { ...advance, permission: "Onaylandı" };
-      }
-      return advance;
-    });
-    setAdvances(updatedAdvances);
+  const fetchData = async () => {
+    const data = await fetchAllAdvances();
+    setAdvances(data);
+    setSortedAdvances([...data].reverse());
   };
 
-  const handleReject = (id) => {
-    const updatedAdvances = advances.map((advance) => {
-      if (advance.id === id) {
-        toast.success("İşlem başarıyla reddedildi");
-        return { ...advance, permission: "Reddedildi" };
-      }
-      return advance;
+  const handleApprove = async (id) => {
+    confirmAlert({
+      title: "Avans Talebini Onayla",
+      message: "Avans talebini onaylamak istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: async () => {
+            const updateResult = await updateAdvanceStatus(id, true);
+            if (updateResult.success) {
+              toast.success(updateResult.message);
+              fetchData();
+            } else {
+              toast.error(updateResult.message);
+            }
+          },
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
     });
-    setAdvances(updatedAdvances);
+  };
+
+  const handleReject = async (id) => {
+    confirmAlert({
+      title: "Avans Talebini Reddet",
+      message: "Avans talebini reddetmek istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: async () => {
+            const updateResult = await updateAdvanceStatus(id, false);
+            if (updateResult.success) {
+              toast.success(updateResult.message);
+              fetchData();
+            } else {
+              toast.error(updateResult.message);
+            }
+          },
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   const formatDate = (dateTimeString) => {
@@ -45,47 +81,36 @@ function ManagerAdvanceList() {
 
   const filterAdvances = (advance) => {
     if (filterOption === "all") {
-      return true; // Tüm verileri göster
+      return true;
     } else if (filterOption === "individual") {
-      return advance.advanceType === "Bireysel"; // Bireysel avansları göster
+      return advance.advanceType === "Bireysel";
     } else if (filterOption === "corporate") {
-      return advance.advanceType === "Kurumsal"; // Kurumsal avansları göster
+      return advance.advanceType === "Kurumsal";
     } else {
-      return advance.permission === filterOption; // Diğer durumlarda izin durumuna göre filtrele
+      return advance.permission === filterOption;
     }
   };
 
-  const sortByAdvanceType = () => {
-    const sorted = [...advances].sort((a, b) =>
-      a.advanceType.localeCompare(b.advanceType)
-    );
-    setAdvances(sorted);
-  };
+  const sortBy = (key) => {
+    let direction = sortDirection[key] === "asc" ? "desc" : "asc";
+    setSortDirection({ [key]: direction });
 
-  const sortByRequestDate = () => {
-    const sorted = [...advances].sort(
-      (a, b) => new Date(a.requestDate) - new Date(b.requestDate)
-    );
-    setAdvances(sorted);
-  };
-
-  const sortByCurrency = () => {
-    const sorted = [...advances].sort((a, b) =>
-      a.currency.localeCompare(b.currency)
-    );
-    setAdvances(sorted);
-  };
-
-  const sortByAmount = () => {
-    const sorted = [...advances].sort((a, b) => a.amount - b.amount);
-    setAdvances(sorted);
-  };
-
-  const sortByApprovalStatus = () => {
-    const sorted = [...advances].sort((a, b) =>
-      a.permission.localeCompare(b.permission)
-    );
-    setAdvances(sorted);
+    const sorted = [...sortedAdvances].sort((a, b) => {
+      if (key === "advanceType") {
+        return direction === "asc"
+          ? a[key].localeCompare(b[key])
+          : b[key].localeCompare(a[key]);
+      } else {
+        return direction === "asc"
+          ? a[key] > b[key]
+            ? 1
+            : -1
+          : a[key] < b[key]
+          ? 1
+          : -1;
+      }
+    });
+    setSortedAdvances(sorted);
   };
 
   return (
@@ -109,34 +134,73 @@ function ManagerAdvanceList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={sortByAdvanceType}>
-                    Avans Türü <span className="sort-icon">▼</span>
+                  <th onClick={() => sortBy("employeeName")}>
+                    Çalışan Ad Soyad
+                    {sortDirection["employeeName"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByRequestDate}>
-                    Talep Tarihi <span className="sort-icon">▼</span>
+                  <th onClick={() => sortBy("advanceType")}>
+                    Avans Türü{" "}
+                    {sortDirection["advanceType"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("requestDate")}>
+                    Talep Tarihi
+                    {sortDirection["requestDate"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
                   <th>Açıklama</th>
-                  <th onClick={sortByAmount}>
-                    Miktar <span className="sort-icon">▼</span>
+                  <th onClick={() => sortBy("amount")}>
+                    Miktar{" "}
+                    {sortDirection["amount"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByCurrency}>
-                    Para Birimi <span className="sort-icon">▼</span>
+                  <th onClick={() => sortBy("currency")}>
+                    Para Birimi{" "}
+                    {sortDirection["currency"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
-                  <th onClick={sortByApprovalStatus}>
-                    Onay Durumu <span className="sort-icon">▼</span>
+                  <th onClick={() => sortBy("approvalStatus")}>
+                    Onay Durumu
+                    {sortDirection["approvalStatus"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
                   </th>
                   <th>İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {advances.filter(filterAdvances).map((advance) => (
+                {sortedAdvances.filter(filterAdvances).map((advance) => (
                   <tr key={advance.id}>
+                    <td>
+                      {advance.employeeFirstName}
+                      {advance.employeeSecondName}
+                      {advance.employeeLastName}
+                      {advance.employeeSecondLastName}
+                    </td>
                     <td>{advance.advanceType}</td>
                     <td>{formatDate(advance.requestDate)}</td>
                     <td>{advance.description}</td>
                     <td>{advance.amount}</td>
                     <td>{advance.currency}</td>
-                    <td>{advance.permission}</td>
+                    <td>{advance.approvalStatus}</td>
                     <td className="text-center">
                       <button
                         className="btn btn-sm btn-success"

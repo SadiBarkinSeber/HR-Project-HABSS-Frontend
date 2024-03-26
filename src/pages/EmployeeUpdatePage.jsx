@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   fetchEmployees,
   updateEmployee,
@@ -46,10 +46,14 @@ function EmployeeUpdate() {
         photoPath
       );
       console.log("Güncellenmiş Çalışan:", updatedEmp);
-      toast.success('Çalışan başarıyla güncellendi.', { position: "top-right" });
+      toast.success("Çalışan başarıyla güncellendi.", {
+        position: "top-right",
+      });
     } catch (error) {
       console.error("Error updating employee:", error);
-      toast.error('Çalışan güncellenemedi: ' + error.message, { position: "top-right" });
+      toast.error("Çalışan güncellenemedi: " + error.message, {
+        position: "top-right",
+      });
     }
   };
 

@@ -3,6 +3,10 @@ import { fetchAllExpenses } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
+import { downloadFile } from "../api/api";
+import { updateExpenseStatus } from "../api/api";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function ManagerExpenseList() {
@@ -11,53 +15,44 @@ function ManagerExpenseList() {
   const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await fetchAllExpenses();
-      setExpenses(data);
-      setSortedExpenses(data);
-    }
+  // fetchData fonksiyonu burada tanımlandı
+  const fetchData = async () => {
+    const data = await fetchAllExpenses();
+    console.log(data);
+    setExpenses(data);
+    setSortedExpenses(data.reverse());
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchData(); // useEffect içinde fetchData çağrıldı
   }, []);
 
   const handleDownload = async (fileName) => {
-    try {
-      const response = await fetch(`/api/files/${fileName}`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      toast.success("Dosya indirildi.");
-    } catch (error) {
-      console.error("Dosya indirme hatası:", error);
-      toast.error("Dosya indirme sırasında bir hata oluştu.");
+    const downloadResult = await downloadFile(fileName);
+    if (downloadResult.success) {
+      toast.success(downloadResult.message);
+    } else {
+      toast.error(downloadResult.message);
     }
   };
 
-  const approveExpense = (id) => {
-    const isConfirmed = window.confirm(
-      "İşlemi gerçekten onaylamak istiyor musunuz?"
-    );
-    if (isConfirmed) {
-      // İşlemi onaylama işlemlerini burada gerçekleştirin
-      console.log("Onaylanan işlem ID:", id);
-      toast.success("İşlem onaylandı.");
+  const approveExpense = async (id) => {
+    const updateResult = await updateExpenseStatus(id, true);
+    if (updateResult.success) {
+      toast.success(updateResult.message);
+      fetchData(); // fetchData fonksiyonu burada çağrıldı
+    } else {
+      toast.error(updateResult.message);
     }
   };
 
-  const rejectExpense = (id) => {
-    const isConfirmed = window.confirm(
-      "İşlemi gerçekten reddetmek istiyor musunuz?"
-    );
-    if (isConfirmed) {
-      // İşlemi reddetme işlemlerini burada gerçekleştirin
-      console.log("Reddedilen işlem ID:", id);
-      toast.success("İşlem reddedildi.");
+  const rejectExpense = async (id) => {
+    const updateResult = await updateExpenseStatus(id, false);
+    if (updateResult.success) {
+      toast.success(updateResult.message);
+      fetchData(); // fetchData fonksiyonu burada çağrıldı
+    } else {
+      toast.error(updateResult.message);
     }
   };
 
@@ -71,10 +66,20 @@ function ManagerExpenseList() {
     setSortDirection({ [key]: direction });
 
     const sorted = [...sortedExpenses].sort((a, b) => {
-      if (direction === "asc") {
-        return a[key] > b[key] ? 1 : -1;
+      if (key === "expenseType") {
+        // Harcama türü kolonu için alfabetik sıralama yapılıyor
+        return direction === "asc"
+          ? a[key].localeCompare(b[key])
+          : b[key].localeCompare(a[key]);
       } else {
-        return a[key] < b[key] ? 1 : -1;
+        // Diğer kolonlar için varsayılan sıralama yapılıyor
+        return direction === "asc"
+          ? a[key] > b[key]
+            ? 1
+            : -1
+          : a[key] < b[key]
+          ? 1
+          : -1;
       }
     });
     setSortedExpenses(sorted);
@@ -84,13 +89,43 @@ function ManagerExpenseList() {
     if (filterOption === "") {
       return true;
     } else {
-      return expense.type === filterOption;
+      return expense.expenseType.toLowerCase() === filterOption.toLowerCase();
     }
   };
 
-  const notify = (message) => toast(message);
+  const confirmApprove = (id) => {
+    confirmAlert({
+      title: "Onayla",
+      message: "Bu harcama talebini onaylamak istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () => approveExpense(id),
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
 
-  const notifyError = (message) => toast.error(message);
+  const confirmReject = (id) => {
+    confirmAlert({
+      title: "Reddet",
+      message: "Bu harcama talebini reddetmek istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () => rejectExpense(id),
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
 
   return (
     <div className="container mt-5">
@@ -110,7 +145,9 @@ function ManagerExpenseList() {
                   setSortedExpenses([...expenses]); // Tüm harcamaları göstermek için sıralı harcamaları tüm harcamalarla güncelle
                 } else {
                   setSortedExpenses(
-                    expenses.filter((expense) => expense.type === selectedValue)
+                    expenses.filter(
+                      (expense) => expense.expenseType === selectedValue
+                    )
                   );
                 }
               }}
@@ -128,9 +165,17 @@ function ManagerExpenseList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("type")}>
+                  <th onClick={() => sortBy("employeeName")}>
+                    Çalışan Ad Soyad
+                    {sortDirection["employeeName"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
+                  <th onClick={() => sortBy("expenseType")}>
                     Harcama türü
-                    {sortDirection["type"] === "asc" ? (
+                    {sortDirection["expenseType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
@@ -152,6 +197,14 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
+                  <th onClick={() => sortBy("currency")}>
+                    Miktar
+                    {sortDirection["currency"] === "asc" ? (
+                      <FontAwesomeIcon icon={faSortUp} />
+                    ) : (
+                      <FontAwesomeIcon icon={faSortDown} />
+                    )}
+                  </th>
                   <th onClick={() => sortBy("approvalStatus")}>
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
@@ -167,9 +220,16 @@ function ManagerExpenseList() {
               <tbody>
                 {sortedExpenses.filter(filterExpenses).map((expense) => (
                   <tr key={expense.id}>
+                    <td>
+                      {expense.employeeFirstName}
+                      {expense.employeeSecondName}
+                      {expense.employeeLastName}
+                      {expense.employeeSecondLastName}
+                    </td>
                     <td>{expense.expenseType}</td>
                     <td>{formatDate(expense.requestDate)}</td>
                     <td>{expense.amount}</td>
+                    <td>{expense.currency}</td>
                     <td>{expense.approvalStatus}</td>
                     <td className="text-center">
                       {expense.fileName && (
@@ -184,13 +244,13 @@ function ManagerExpenseList() {
                     <td className="text-center">
                       <button
                         className="btn btn-sm btn-success"
-                        onClick={() => approveExpense(expense.id)}
+                        onClick={() => confirmApprove(expense.id)}
                       >
                         Onayla
                       </button>
                       <button
                         className="btn btn-sm btn-danger"
-                        onClick={() => rejectExpense(expense.id)}
+                        onClick={() => confirmReject(expense.id)}
                       >
                         Reddet
                       </button>
