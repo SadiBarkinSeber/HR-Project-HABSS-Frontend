@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { createPermission, uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,17 +11,19 @@ const Permission = () => {
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [showFileUpload, setShowFileUpload] = useState(false);
+  const fileInputRef = useRef(null); // Step 2
 
   const handlePermissionTypeChange = (e) => {
     setPermissionType(e.target.value);
-    setShowFileUpload(e.target.value !== "Yıllık İzin");
-    if (startDate) {
-      if (e.target.value === "Yıllık İzin") {
-        setNumberOfDays("");
-        setFile(null);
-      } else {
+    if (e.target.value !== "") {
+      setShowFileUpload(true);
+      if (startDate) {
         calculateEndDate(e.target.value, startDate);
       }
+    } else {
+      setShowFileUpload(false);
+      setNumberOfDays("");
+      setFile(null);
     }
   };
 
@@ -101,10 +103,6 @@ const Permission = () => {
     setNumberOfDays(count);
   };
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
   const handleClear = () => {
     setPermissionType("");
     setStartDate("");
@@ -112,18 +110,27 @@ const Permission = () => {
     setNumberOfDays("");
     setFile(null);
     setErrorMessage("");
+
+    // Reset file input value using ref
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!permissionType || !startDate || !endDate || !numberOfDays || (showFileUpload && !file)) {
+    if (!permissionType || !startDate || !endDate || !numberOfDays || (permissionType !== "Yıllık İzin" && !file)) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
 
     try {
-      if (showFileUpload) {
+      if (permissionType !== "Yıllık İzin") {
         const uploadedFileResponse = await uploadPhotoAndGetPath(file);
         const fileName = uploadedFileResponse.fileName;
         const permissionData = {
@@ -176,7 +183,7 @@ const Permission = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="permissionType" className="form-label">
-                    İzin Türü:
+                  * İzin Türü:
                   </label>
                   <select
                     id="permissionType"
@@ -199,7 +206,7 @@ const Permission = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="startDate" className="form-label">
-                    İzin Başlangıç Tarihi:
+                    * İzin Başlangıç Tarihi:
                   </label>
                   <input
                     type="date"
@@ -226,6 +233,12 @@ const Permission = () => {
                     value={endDate}
                     onChange={handleEndDateChange}
                     min={startDate || today} // Minimum date is either start date or today
+                    disabled={
+                      permissionType === "Baba İzni" ||
+                      permissionType === "Anne İzni" ||
+                      permissionType === "Cenaze İzni" ||
+                      permissionType === "Evlilik İzni"
+                    }
                   />
                   {errorMessage && !endDate && (
                     <div className="text-danger">
@@ -252,6 +265,7 @@ const Permission = () => {
                       Dosya Yükle:
                     </label>
                     <input
+                      ref={fileInputRef} // Step 4: Attach the ref to file input
                       type="file"
                       id="file"
                       className="form-control"
