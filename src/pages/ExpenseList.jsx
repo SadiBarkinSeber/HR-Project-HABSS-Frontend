@@ -91,7 +91,7 @@ function ExpenseList() {
 
   const confirmReject = (id) => {
     confirmAlert({
-      title: "İptal",
+      title: "Harcama İptali",
       message: "Bu harcama talebini iptal etmek istediğinize emin misiniz?",
       buttons: [
         {

@@ -4,11 +4,13 @@ import { fetchAllPermission } from "./api/api"; // Örnek bir downloadFile fonks
 import { useAuth } from "../components/TokenContext";
 import { ToastContainer, toast } from 'react-toastify';
 import { downloadFile } from "./api/api";
+import { updatePermissionStatus } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
 import "react-confirm-alert/src/react-confirm-alert.css"; 
 import { confirmAlert } from "react-confirm-alert"; 
+
 
 
 function PermissionList() {
@@ -38,7 +40,7 @@ function PermissionList() {
     const updateResult = await updatePermissionStatus(id, false);
     if (updateResult.success) {
       toast.success(updateResult.message);
-      const permissionsData = await fetchAllPermission(token);
+   const permissionsData = await fetchAllPermission(token);
       setPermissions(permissionsData);
     } else {
       toast.error(updateResult.message);
@@ -98,16 +100,16 @@ function PermissionList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => handleReject(id),
+          onClick: () => handleReject(id), // handleReject fonksiyonunu çağır
         },
         {
           label: "Hayır",
-          onClick: () => {},
+          onClick: () => {}, // Hiçbir şey yapma
         },
       ],
     });
   };
- 
+  
 
   return (
     <div className="container mt-5">
@@ -183,7 +185,7 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Dosya İndir</th>
+                  <th>Döküman</th>
                   <th>İşlem</th>
                 </tr>
               </thead>
@@ -239,4 +241,6 @@ function PermissionList() {
 }
 
 export default PermissionList;
+
+
 
