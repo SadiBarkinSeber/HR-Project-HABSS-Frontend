@@ -70,21 +70,18 @@ function AdvanceList() {
   };
 
   const sortBy = (key) => {
-    // Sıralama yönü ve sıralanacak anahtar kelimenin değerlerini güncelle
     const direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ ...sortDirection, [key]: direction });
-  
-    // sortedAdvances yerine advances dizisini sırala
     const sorted = [...advances].sort((a, b) => {
       if (key === "advanceType" || key === "requestDate" || key === "currency" || key === "approvalStatus") {
-        // String veriler için doğru sıralama metodu
+    
         return direction === "asc" ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
       } else {
-        // Diğer veriler için sayısal sıralama
+     
         return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
       }
     });
-    setAdvances(sorted); // advances dizisini güncelle
+    setAdvances(sorted); 
   };
   
   
@@ -165,7 +162,6 @@ function AdvanceList() {
                     <td>{advance.currency}</td>
                     <td>{advance.approvalStatus}</td>
                     <td className="text-center">
-                      
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => handleReject(advance.id)}
