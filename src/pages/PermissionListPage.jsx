@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from "react";
 import { fetchAllPermission } from "./api/api"; // Örnek bir downloadFile fonksiyonunu ekledim
 import { useAuth } from "../components/TokenContext";
@@ -9,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
 import "react-confirm-alert/src/react-confirm-alert.css"; 
-import { confirmAlert } from "react-confirm-alert"; // react-confirm-alert paketini ekledik
+import { confirmAlert } from "react-confirm-alert"; 
 
 
 function PermissionList() {

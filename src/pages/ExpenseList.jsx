@@ -25,7 +25,7 @@ function ExpenseList() {
   };
 
   useEffect(() => {
-    fetchData(); // useEffect içinde fetchData çağrıldı
+    fetchData(); 
   }, []);
 
 
