@@ -1,10 +1,15 @@
 
 import React, { useState, useEffect } from "react";
-import { fetchExpenses } from "./api/api";
+import { fetchAllExpenses } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
+import { downloadFile } from "./api/api";
+import { updateExpenseStatus } from "./api/api";
+import { confirmAlert } from "react-confirm-alert";
 import "react-toastify/dist/ReactToastify.css";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
@@ -12,64 +17,69 @@ function ExpenseList() {
   const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await fetchExpenses();
-      const sortedData = data.sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate)); // Yeni taleplere göre ters sıralama yap
-      setExpenses(sortedData);
-      setSortedExpenses(sortedData);
-    }
+  const fetchData = async () => {
+    const data = await fetchAllExpenses();
+    console.log(data);
+    setExpenses(data);
+    setSortedExpenses(data.reverse());
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchData(); // useEffect içinde fetchData çağrıldı
   }, []);
 
+
+  
+
   const handleDownload = async (fileName) => {
-    try {
-      const response = await fetch(`/api/files/${fileName}`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      toast.success("Dosya indirildi.");
-    } catch (error) {
-      console.error("Dosya indirme hatası:", error);
-      toast.error("Dosya indirme sırasında bir hata oluştu.");
+    const downloadResult = await downloadFile(fileName);
+    if (downloadResult.success) {
+      toast.success(downloadResult.message);
+    } else {
+      toast.error(downloadResult.message);
     }
   };
 
-  const cancelExpense = (id) => {
-    const isConfirmed = window.confirm("İşlemi gerçekten iptal etmek istiyor musunuz?");
-    if (isConfirmed) {
-      const updatedExpenses = expenses.filter(expense => expense.id !== id);
-      setExpenses(updatedExpenses);
-      setSortedExpenses(updatedExpenses); // Sıralı talepleri güncelle
-      console.log("İptal edilen işlem ID:", id);
-      toast.success("İşlem iptal edildi.");
+  const rejectExpense = async (id) => {
+    const updateResult = await updateExpenseStatus(id, false);
+    if (updateResult.success) {
+      toast.success(updateResult.message);
+      fetchData(); // fetchData fonksiyonu burada çağrıldı
+    } else {
+      toast.error(updateResult.message);
     }
   };
+
+  
 
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
     return date.toLocaleDateString('tr-TR');
   };
-
   const sortBy = (key) => {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ [key]: direction });
 
     const sorted = [...sortedExpenses].sort((a, b) => {
-      if (direction === "asc") {
-        return a[key] > b[key] ? 1 : -1;
+      if (key === "expenseType") {
+        // Harcama türü kolonu için alfabetik sıralama yapılıyor
+        return direction === "asc"
+          ? a[key].localeCompare(b[key])
+          : b[key].localeCompare(a[key]);
       } else {
-        return a[key] < b[key] ? 1 : -1;
+        // Diğer kolonlar için varsayılan sıralama yapılıyor
+        return direction === "asc"
+          ? a[key] > b[key]
+            ? 1
+            : -1
+          : a[key] < b[key]
+          ? 1
+          : -1;
       }
     });
     setSortedExpenses(sorted);
   };
+
 
   const filterExpenses = (expense) => {
     if (filterOption === "") {
@@ -78,6 +88,24 @@ function ExpenseList() {
       return expense.expenseType === filterOption;
     }
   };
+
+  const confirmReject = (id) => {
+    confirmAlert({
+      title: "İptal",
+      message: "Bu harcama talebini iptal etmek istediğinize emin misiniz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: () => rejectExpense(id),
+        },
+        {
+          label: "Hayır",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+
 
   return (
     <div className="container mt-5">
@@ -176,9 +204,10 @@ function ExpenseList() {
                       )}
                     </td>
                     <td className="text-center">
-                      <button
+                      
+                       <button
                         className="btn btn-sm btn-danger"
-                        onClick={() => cancelExpense(expense.id)}
+                        onClick={() => confirmReject(expense.id)}
                       >
                         İptal Et
                       </button>
