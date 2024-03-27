@@ -1,6 +1,8 @@
+
+
 import React, { useState, useEffect } from "react";
 import { fetchAllAdvances } from "../api/api";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from 'react-toastify';
 import { updateAdvanceStatus } from "../api/api";
@@ -10,7 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 function AdvanceList() {
   const [advances, setAdvances] = useState([]);
-  const [filterOption, setFilterOption] = useState("all"); 
+  const [filterOption, setFilterOption] = useState("all");
   const [sortDirection, setSortDirection] = useState({});
   const [sortedAdvances, setSortedAdvances] = useState([]);
 
@@ -20,11 +22,9 @@ function AdvanceList() {
 
   const fetchData = async () => {
     const data = await fetchAllAdvances();
-    setAdvances(data);
+    setAdvances([...data].reverse()); // Yeni eklenenler en üste gelecek şekilde ters sırala
     setSortedAdvances([...data].reverse());
   };
-
-
 
   const handleReject = async (id) => {
     confirmAlert({
@@ -45,13 +45,13 @@ function AdvanceList() {
         },
         {
           label: "Hayır",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
   };
- 
-  
+
+
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
     return date.toLocaleDateString("tr-TR");
@@ -74,17 +74,17 @@ function AdvanceList() {
     setSortDirection({ ...sortDirection, [key]: direction });
     const sorted = [...advances].sort((a, b) => {
       if (key === "advanceType" || key === "requestDate" || key === "currency" || key === "approvalStatus") {
-    
+
         return direction === "asc" ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
       } else {
-     
+
         return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
       }
     });
-    setAdvances(sorted); 
+    setAdvances(sorted);
   };
-  
-  
+
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -101,13 +101,13 @@ function AdvanceList() {
                 <option value="all">Hepsi</option>
                 <option value="individual">Bireysel</option>
                 <option value="corporate">Kurumsal</option>
-               
+
               </select>
             </div>
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                 
+
                   <th onClick={() => sortBy("advanceType")}>
                     Avans Türü{" "}
                     {sortDirection["advanceType"] === "asc" ? (
@@ -150,12 +150,12 @@ function AdvanceList() {
                     )}
                   </th>
                   <th>İşlem</th>
-                </tr>    
+                </tr>
               </thead>
               <tbody>
                 {advances.filter(filterAdvances).map((advance) => (
                   <tr key={advance.id}>
-                     <td>{advance.advanceType}</td>
+                    <td>{advance.advanceType}</td>
                     <td>{formatDate(advance.requestDate)}</td>
                     <td>{advance.description}</td>
                     <td>{advance.amount}</td>
@@ -169,7 +169,7 @@ function AdvanceList() {
                         İptal Et
                       </button>
                     </td>
-                   
+
                   </tr>
                 ))}
               </tbody>
@@ -178,19 +178,20 @@ function AdvanceList() {
         </div>
       </div>
       <ToastContainer
-        position="top-right"
+       position="top-right"
         autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="colored"
-      />
-    </div>
-  );
-}
+         hideProgressBar={false}
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+       draggable
+         pauseOnHover={false}
+         theme="colored"
+       />
+     </div>
+   );
+ }
 
-export default AdvanceList;
+ export default AdvanceList;
+
