@@ -39,14 +39,19 @@ function EmployeeUpdate() {
 
   const handleUpdateEmployee = async () => {
     try {
-      const updatedEmp = await updateEmployee(
-        employee.id,
-        phoneNumber,
-        address,
-        photoPath
-      );
-      console.log("Güncellenmiş Çalışan:", updatedEmp);
-      toast.success('Çalışan başarıyla güncellendi.', { position: "top-right" });
+      // Adres alanında en az bir harf kontrolü
+      if (/[a-zA-Z]/.test(address)) {
+        const updatedEmp = await updateEmployee(
+          employee.id,
+          phoneNumber,
+          address,
+          photoPath
+        );
+        console.log("Güncellenmiş Çalışan:", updatedEmp);
+        toast.success('Çalışan başarıyla güncellendi.', { position: "top-right" });
+      } else {
+        toast.error('En az bir harf içeren bir adres girin.', { position: "top-right" });
+      }
     } catch (error) {
       console.error("Error updating employee:", error);
       toast.error('Çalışan güncellenemedi: ' + error.message, { position: "top-right" });

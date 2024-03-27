@@ -69,27 +69,51 @@ const EmployeeCreate = () => {
     }
 
     // TC kimlik numarası doğrulama işlemi
-    // const tcValidationResult = validateTcNumber(employeeData.tc);
-    // if (!tcValidationResult.valid) {
-    //   alert(tcValidationResult.message);
-    //   return;
-    // }
+     const tcValidationResult = validateTcNumber(employeeData.tc);
+     if (!tcValidationResult.valid) {
+      alert(tcValidationResult.message);
+       return;
+    }
 
-    // // Diğer alanların kontrolü
-    // if (!validateForm()) {
-    //   alert("Lütfen tüm alanları doldurunuz.");
-    //   return;
-    // }
+     // Diğer alanların kontrolü
+     if (!validateForm()) {
+       alert("Lütfen tüm alanları doldurunuz.");
+       return;
+     }
 
-    try {
-      console.log(employeeData);
+     if (!validateAddress(employeeData.address)) {
+      alert("Adres en az bir harf ve bir rakam içermelidir.");
+      return;
+    }
+    
+    const minWage = 17002; // Asgari ücret tutarı
+    if (parseInt(employeeData.wage) < minWage) {
+      alert("Maaş asgari ücretin altında olamaz.");
+      return;
+    }
+    
+  try {
+    console.log(employeeData);
+    const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
+    if (confirmed) {
       const response = await createEmployee(employeeData);
       console.log("Employee created:", response);
       resetForm();
-    } catch (error) {
-      console.error("Error creating employee:", error);
+      alert("Kayıt onaylandı.");
+    } else {
+      console.log("Kaydetme işlemi iptal edildi.");
     }
+  } catch (error) {
+    console.error("Error creating employee:", error);
+  }
   };
+
+  const validateAddress = (address) => {
+    // Adresin sadece rakam içerip içermediğini kontrol et
+    return !/^\d+$/.test(address);
+};
+
+
 
   const validateForm = () => {
     for (const key in employeeData) {
@@ -144,6 +168,21 @@ const EmployeeCreate = () => {
     // Doğrulama başarılı ise true dön
     return { valid: true, message: "" };
   };
+
+  const handleDateOfBirthChange = (e) => {
+    const selectedDate = e.target.value;
+    const today = new Date();
+    const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate()).toISOString().split('T')[0];
+    
+    if (selectedDate > minDate) {
+      alert("Yaşınız 18'den küçük olamaz.");
+      return;
+    }
+    
+    setEmployeeData({ ...employeeData, dateOfBirth: selectedDate });
+  };
+
+
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Çalışan Ekle</h2>
@@ -199,12 +238,21 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="dateOfBirth">Doğum Tarihi:</label>
-                <input type="date" id="dateOfBirth" name="dateOfBirth" value={employeeData.dateOfBirth} onChange={handleInputChange} className="form-control mb-2" />
-                {formSubmitted && !employeeData.dateOfBirth && (
-                  <div className="text-danger">Doğum tarihi boş bırakılamaz.</div>
-                )}
-              </div>
+  <label htmlFor="dateOfBirth">Doğum Tarihi:</label>
+  <input 
+    type="date" 
+    id="dateOfBirth" 
+    name="dateOfBirth" 
+    value={employeeData.dateOfBirth} 
+    onChange={handleDateOfBirthChange} 
+    className="form-control mb-2" 
+    max={new Date().toISOString().split('T')[0]} 
+  />
+  {formSubmitted && !employeeData.dateOfBirth && (
+    <div className="text-danger">Doğum tarihi boş bırakılamaz.</div>
+  )}
+</div>
+
               {/* <div className="mb-3">
                 <label>Cinsiyet:</label>
                 <div className="form-check">
@@ -269,10 +317,10 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="startDate">İşe Giriş Tarihi:</label>
-                <input type="date" id="startDate" name="startDate" value={employeeData.startDate} onChange={handleInputChange} className="form-control mb-2" />
-                {formSubmitted && !employeeData.startDate && (
-                  <div className="text-danger">İşe giriş tarihi boş bırakılamaz.</div>
-                )}
+               <input type="date" id="startDate" name="startDate" value={employeeData.startDate} onChange={handleInputChange} className="form-control mb-2" max={new Date().toISOString().split('T')[0]} />
+              {formSubmitted && !employeeData.startDate && (
+              <div className="text-danger">İşe giriş tarihi boş bırakılamaz.</div>
+              )}
               </div>
               <div className="mb-3">
                 <label htmlFor="wage">Maaş:</label>
