@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Row, Col, Card, Form, Button, Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // useNavigate'ı buradan ekleyin
 import { checkEmailExists } from "../api/api";
 import AuthLayout from "../../layouts/AuthLayout";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const navigateTo = useNavigate(); // useNavigate'ı burada kullanın
 
   const isValidEmail = (value) => {
     const emailRegex = /^[^\s@]+@bilgeadamboost\.com$/;
@@ -19,15 +20,16 @@ const ForgetPassword = () => {
       setError("Lütfen email adresinizi giriniz.");
       return;
     }
-    if (!isValidEmail(email)) {
-      setError("Geçerli bir Bilge Adam Boost email adresi girin.");
-      return;
-    }
+    // if (!isValidEmail(email)) {
+    //   setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+    //   return;
+    // }
 
     try {
       const exists = await checkEmailExists(email);
       if (exists) {
-        console.log("Email adresi var.");
+        alert("Email adresinize tek kullanimlik sifre gonderildi !");
+        navigateTo("/"); // navigateTo kullanarak yönlendirme yapın
       } else {
         setError("Girilen email adresi sistemde bulunamadı.");
       }

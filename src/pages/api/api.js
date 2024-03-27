@@ -90,8 +90,16 @@ export const LoginCheck = (userNameP, passwordP) => {
 
 export const checkEmailExists = async (email) => {
   try {
-    const response = await axios.post("/api/user/check", { email });
-    return response.data.exists; // Backend'den gelen veriye göre email varsa true, yoksa false döner
+    const response = await axios.post(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/resetpassword?email=${email}`
+    );
+    if (response.status === 200) {
+      // Başarılı bir yanıt geldi, exists değerini döndür
+      return true;
+    } else {
+      // Başarısız bir yanıt geldi, false döndür
+      return false;
+    }
   } catch (error) {
     console.error("Email kontrolü sırasında bir hata oluştu:", error);
     return false; // Hata durumunda false döner

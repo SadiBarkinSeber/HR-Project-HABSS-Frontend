@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Form, Button, Image, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { HiOutlineCheckCircle } from "react-icons/hi"; // React Icons'tan onay işareti ikonu
 import AuthLayout from "../../layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +12,7 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(false); // Durum değişkeni ekleyin
   const navigateTo = useNavigate();
 
   const isValidPassword = (value) => {
@@ -19,13 +21,34 @@ const ResetPassword = () => {
       return false;
     }
 
-    // Şifrenin en az bir büyük harf, bir küçük harf ve bir rakam içerip içermediğini kontrol et
+    // Şifrenin en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içerip içermediğini kontrol et
     const containsUpperCase = /[A-Z]/.test(value);
     const containsLowerCase = /[a-z]/.test(value);
     const containsNumber = /\d/.test(value);
+    const containsSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(
+      value
+    );
 
-    return containsUpperCase && containsLowerCase && containsNumber;
+    return (
+      containsUpperCase &&
+      containsLowerCase &&
+      containsNumber &&
+      containsSpecialChar
+    );
   };
+
+  const passwordsMatchCheck = () => {
+    if (password === confirmPassword && password && confirmPassword) {
+      setPasswordsMatch(true);
+    } else {
+      setPasswordsMatch(false);
+    }
+  };
+
+  // Şifrelerin herhangi biri değiştiğinde eşleşmeyi kontrol et
+  useEffect(() => {
+    passwordsMatchCheck();
+  }, [password, confirmPassword]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +64,7 @@ const ResetPassword = () => {
 
     if (!isValidPassword(password)) {
       setError(
-        "Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermeli ve en az 6 karakter uzunluğunda olmalıdır."
+        "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermeli ve en az 6 karakter uzunluğunda olmalıdır."
       );
       return;
     }
@@ -130,6 +153,10 @@ const ResetPassword = () => {
                 </div>
               </div>
             </Form>
+            {/* Şifreler eşleştiğinde onay işareti göstermek */}
+            {passwordsMatch && (
+              <HiOutlineCheckCircle className="text-success position-absolute top-50 end-0 translate-middle-y me-3" />
+            )}
           </Card.Body>
         </Card>
       </Col>
