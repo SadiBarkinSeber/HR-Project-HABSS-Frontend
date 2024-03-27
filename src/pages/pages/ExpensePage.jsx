@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
-import { sendFormData } from "../api/api";
-import { uploadPhotoAndGetPath } from "../api/api";
+import { sendFormData, uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,27 +16,32 @@ function Expense() {
     event.preventDefault();
     setFormSubmitted(true);
 
-    if (!type || !currency || !amount || !file) {
+    if (!expenseType || !currency || !amount || !file) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
 
+    // Kullanıcının maaşını kontrol etme
     try {
-      const uploadedFileResponse = await uploadPhotoAndGetPath(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      const uploadedFileResponse = await uploadPhotoAndGetPath(formData);
       const fileName = uploadedFileResponse.fileName;
 
-      const formData = {
+      const data = await sendFormData({
         ExpenseType: expenseType,
         Currency: currency,
         Amount: parseFloat(amount),
-        EmployeeId: 1,
+        EmployeeId: 1, // Burada ilgili çalışanın ID'sini gönderebilirsiniz
         Permission: false,
         ApprovalStatus: "Requested",
         FileName: fileName,
-      };
+      });
 
-      const data = await sendFormData(formData);
-      console.log("API yanıtı:", data);
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
       notifySuccess();
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
@@ -48,13 +52,13 @@ function Expense() {
   };
 
   const resetForm = () => {
-    setType("");
+    setExpenseType("");
     setCurrency("");
     setAmount("");
     setFile(null);
     setErrorMessage("");
     setFormSubmitted(false);
-    
+
     // Dosya girişinin değerini sıfırla
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -117,7 +121,7 @@ function Expense() {
                     <option value="İş İlişkileri">İş İlişkileri</option>
                     <option value="Personel Harcamaları">Personel Harcamaları</option>
                   </select>
-                  {formSubmitted && !type && (
+                  {formSubmitted && !expenseType && (
                     <div className="text-danger">
                       Lütfen harcama türünü seçin.
                     </div>
