@@ -37,14 +37,19 @@ function ManagerUpdate() {
 
   const handleUpdateEmployee = async () => {
     try {
-      const updatedMng = await updateManager(
-        manager.id,
-        phoneNumber,
-        address,
-        photoPath
-      );
-      console.log("Güncellenmiş Yönetici:", updatedMng);
-      toast.success('Yönetici başarıyla güncellendi.', { position: "top-right" });
+      // Adres alanında en az bir harf kontrolü
+      if (/[a-zA-Z]/.test(address)) {
+        const updatedMng = await updateManager(
+          manager.id,
+          phoneNumber,
+          address,
+          photoPath
+        );
+        console.log("Güncellenmiş Yönetici:", updatedMng);
+        toast.success('Yönetici başarıyla güncellendi.', { position: "top-right" });
+      } else {
+        toast.error('En az bir harf içeren bir adres girin.', { position: "top-right" });
+      }
     } catch (error) {
       console.error("Error updating manager:", error);
       toast.error('Yönetici güncellenemedi: ' + error.message, { position: "top-right" });
@@ -68,6 +73,10 @@ function ManagerUpdate() {
     } catch (error) {
       console.error("Error uploading photo:", error);
     }
+  };
+
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
   };
 
   return (
@@ -113,7 +122,7 @@ function ManagerUpdate() {
               birthPlace={manager.birthPlace}
               tc={manager.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
-              onAddressChange={(e) => setAddress(e.target.value)}
+              onAddressChange={handleAddressChange} // Adres değişikliğini yönetici
             />
           )}
           {manager && (

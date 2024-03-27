@@ -111,14 +111,16 @@ export const EmployeeUpdateCardLeftSide = (props) => {
 
   const fileInputRef = useRef(null);
 
-  const handleButtonClick = () => {
+  const handleFileClick = () => {
     fileInputRef.current.click();
   };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     try {
-      onPhotoChange(file);
+      const imageUrl = URL.createObjectURL(file); // Dosya için önizleme URL'si oluştur
+      setProfilePictureData(imageUrl); // Profil resmi verisini güncelle
+      props.onPhotoChange(file);
       toast.success("Fotoğraf başarıyla yüklendi.");
     } catch (error) {
       console.error("Error uploading photo:", error);
@@ -132,45 +134,29 @@ export const EmployeeUpdateCardLeftSide = (props) => {
     firstSurname,
     secondSurname,
     department,
-    onPhotoChange,
   } = props;
 
   return (
     <div className={styles.leftCard}>
-      <div className={styles.picture}>
+      <div className={styles.picture} onClick={handleFileClick}>
         <img src={profilePictureData} alt="" />
+        <input
+          ref={fileInputRef}
+          type="file"
+          onChange={handleFileChange}
+          accept="image/jpeg, image/png"
+          style={{ display: "none" }}
+        />
       </div>
       <br />
       <div>
         {firstName} {secondName} {firstSurname} {secondSurname}
       </div>
       <div> {department}</div>
-      <input
-        ref={fileInputRef}
-        type="file"
-        onChange={handleFileChange}
-        accept="image/jpeg, image/png"
-        style={{ display: "none" }}
-      />
-      <br />
-
-      <button onClick={handleButtonClick}>Fotografi Guncelle</button>
-      <ToastContainer
-        position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="colored"
-        transition="Bounce"
-      />
     </div>
   );
 };
+
 export const EmployeePersonalDetail = (props) => {
   const {
     firstName,
@@ -397,6 +383,8 @@ export const EmployeePersonalUpdate = (props) => {
           id="phone"
           value={phoneNumber}
           onChange={onPhoneChange}
+          limitMaxLength={true} // Maksimum karakter sınırını etkinleştir
+          maxLength={13}
         />
       </div>
 
