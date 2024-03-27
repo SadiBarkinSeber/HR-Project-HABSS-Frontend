@@ -176,7 +176,7 @@ export default function App() {
                 path="/mng-expense-list"
                 element={
                   <DefaultDashboardLayout routeType={DashboardMenuManager}>
-                 {" "}
+                    {" "}
                     {<ManagerExpenseList />}
                   </DefaultDashboardLayout>
                 }
@@ -187,6 +187,69 @@ export default function App() {
                   <DefaultDashboardLayout routeType={DashboardMenuManager}>
                     {" "}
                     {<ManagerEmployeeList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-detail"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerDetail />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-update"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerUpdate />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-company-create"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<EmployeeCreate />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-company-list"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerPermissionList />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-manager-create"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<EmployeeCreate />}
+                  </DefaultDashboardLayout>
+                }
+              />
+              <Route
+                path="/admin-manager-list"
+                element={
+                  <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    {" "}
+                    {<ManagerPermissionList />}
                   </DefaultDashboardLayout>
                 }
               />
