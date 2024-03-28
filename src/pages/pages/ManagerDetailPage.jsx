@@ -7,7 +7,6 @@ import {
   EmployeeJobDetail,
 } from "../../components/Cards";
 
-
 function ManagerDetail() {
   const navigateTo = useNavigate();
 
@@ -40,7 +39,7 @@ function ManagerDetail() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "120px",
+          padding: "50px 120px",
         }}
       >
         <div
@@ -57,6 +56,7 @@ function ManagerDetail() {
               secondSurname={manager.secondSurname}
               department={manager.department}
               imagePath={manager.imagePath}
+              routeUpdatePage="/mng-update"
             />
           )}
           {manager && (

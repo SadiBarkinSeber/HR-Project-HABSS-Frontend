@@ -7,6 +7,7 @@ import { useProfilePicture } from "./ProfilePictureContext";
 import Input from "react-phone-number-input/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 export const EmployeeSumCard = (props) => {
   const { email, phoneNumber, address, routeDetailPage } = props;
   const navigateTo = useNavigate();
@@ -128,13 +129,8 @@ export const EmployeeUpdateCardLeftSide = (props) => {
     }
   };
 
-  const {
-    firstName,
-    secondName,
-    firstSurname,
-    secondSurname,
-    department,
-  } = props;
+  const { firstName, secondName, firstSurname, secondSurname, department } =
+    props;
 
   return (
     <div className={styles.leftCard}>
@@ -357,21 +353,21 @@ export const EmployeePersonalUpdate = (props) => {
       <div>
         <label htmlFor="">Ad Soyad :</label>{" "}
         <input
-          className="form-control"
+          className="form-control text-secondary"
           type="text"
           placeholder="-"
           value={fullName}
-          readOnly
+          disabled
         />
       </div>
       <div>
         <label htmlFor="">Mail :</label>
         <input
-          className="form-control"
+          className="form-control text-secondary"
           type="text"
           placeholder="-"
           value={email}
-          readOnly
+          disabled
         />
       </div>
       <div>
@@ -379,7 +375,7 @@ export const EmployeePersonalUpdate = (props) => {
         <Input
           country="TR"
           international
-          className="form-control"
+          className="form-control border-success border-3"
           id="phone"
           value={phoneNumber}
           onChange={onPhoneChange}
@@ -391,7 +387,7 @@ export const EmployeePersonalUpdate = (props) => {
       <div>
         <label htmlFor="">Adres :</label>{" "}
         <input
-          className="form-control"
+          className="form-control border-success border-3"
           type="text"
           id="address"
           value={address}
@@ -401,31 +397,31 @@ export const EmployeePersonalUpdate = (props) => {
       <div>
         <label htmlFor="">Dogum Tarihi :</label>
         <input
-          className="form-control"
+          className="form-control text-secondary"
           type="text"
           placeholder="-"
           value={new Date(dateOfBirth).toLocaleDateString()}
-          readOnly
+          disabled
         />
       </div>
       <div>
         <label htmlFor="">Dogum Yeri :</label>
         <input
-          className="form-control"
+          className="form-control text-secondary"
           type="text"
           placeholder="-"
           value={birthPlace}
-          readOnly
+          disabled
         />
       </div>
       <div>
         <label htmlFor="">T.C:</label>
         <input
-          className="form-control"
+          className="form-control text-secondary"
           type="text"
           placeholder="-"
           value={tc}
-          readOnly
+          disabled
         />
       </div>
     </div>
