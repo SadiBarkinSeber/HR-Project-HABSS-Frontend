@@ -3,17 +3,20 @@ import { Row, Col, Card, Form, Button, Image, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { HiOutlineCheckCircle } from "react-icons/hi"; // React Icons'tan onay işareti ikonu
 import AuthLayout from "../../layouts/AuthLayout";
+import { changePassword } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [error, setError] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false); // Durum değişkeni ekleyin
   const navigateTo = useNavigate();
+  const queryParams = new URLSearchParams(window.location.search);
+  const email = queryParams.get("email");
 
   const isValidPassword = (value) => {
     // Şifrenin en az 6 karakter uzunluğunda olup olmadığını kontrol et
@@ -38,7 +41,7 @@ const ResetPassword = () => {
   };
 
   const passwordsMatchCheck = () => {
-    if (password === confirmPassword && password && confirmPassword) {
+    if (password === repeatPassword && password && repeatPassword) {
       setPasswordsMatch(true);
     } else {
       setPasswordsMatch(false);
@@ -48,16 +51,16 @@ const ResetPassword = () => {
   // Şifrelerin herhangi biri değiştiğinde eşleşmeyi kontrol et
   useEffect(() => {
     passwordsMatchCheck();
-  }, [password, confirmPassword]);
+  }, [password, repeatPassword]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!password || !confirmPassword) {
+    if (!password || !repeatPassword) {
       setError("Lütfen tüm alanları doldurun.");
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (password !== repeatPassword) {
       setError("Şifreler eşleşmiyor.");
       return;
     }
@@ -70,6 +73,19 @@ const ResetPassword = () => {
     }
 
     // Şifre yenileme işlemleri
+
+    try {
+      const response = await changePassword(email, password, repeatPassword);
+      if (response.status === 200) {
+        alert("Sifre basarili bir sekilde degistirildi !");
+        // Başarılı bir şekilde şifre değiştirildiğinde yapılacak işlemler buraya
+        navigateTo("/"); // Örneğin anasayfaya yönlendirme
+      } else {
+        setError(response.data.message);
+      }
+    } catch (error) {
+      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+    }
   };
 
   return (
@@ -104,7 +120,7 @@ const ResetPassword = () => {
                   name="email"
                   readOnly
                   placeholder="Email adresinizi giriniz"
-                  value={"test@bilgeadamboost.com"}
+                  value={email}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
@@ -125,21 +141,21 @@ const ResetPassword = () => {
                   </Button>
                 </div>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="confirmPassword">
+              <Form.Group className="mb-3" controlId="repeatPassword">
                 <Form.Label>Şifre Tekrarı</Form.Label>
                 <div className="input-group">
                   <Form.Control
-                    type={showConfirmPassword ? "text" : "password"}
-                    name="confirmPassword"
+                    type={showRepeatPassword ? "text" : "password"}
+                    name="repeatPassword"
                     placeholder="Yeni şifrenizi tekrar giriniz"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
                   />
                   <Button
                     variant="light"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() => setShowRepeatPassword(!showRepeatPassword)}
                   >
-                    {showConfirmPassword ? "Gizle" : "Göster"}
+                    {showRepeatPassword ? "Gizle" : "Göster"}
                   </Button>
                 </div>
               </Form.Group>
