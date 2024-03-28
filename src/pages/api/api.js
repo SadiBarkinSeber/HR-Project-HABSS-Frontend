@@ -63,14 +63,15 @@ export const uploadPhotoAndGetPath = async (file) => {
   }
 };
 
-export const LoginCheck = (userNameP, passwordP) => {
+export const LoginCheck = (emailP, passwordP) => {
   return new Promise((resolve, reject) => {
     axios
       .post(
         "https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/login",
         {
-          userName: userNameP,
+          email: emailP,
           password: passwordP,
+          oneTimeCode: passwordP,
         },
         {
           headers: {
@@ -364,6 +365,19 @@ export async function updatePermissionStatus(id, permission) {
     return { success: true, message: response.data.message };
   } catch (error) {
     console.error("Izin durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function changePassword(email, password, repeatPassword) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/account`,
+      { email, password, repeatPassword }
+    );
+    return response;
+  } catch (error) {
+    console.error("Sifre güncelleme hatası:", error);
     return { success: false, message: error.message };
   }
 }

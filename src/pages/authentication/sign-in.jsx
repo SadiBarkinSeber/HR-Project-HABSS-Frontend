@@ -7,7 +7,7 @@ import { useAuth } from "../../components/TokenContext";
 import AuthLayout from "../../layouts/AuthLayout";
 
 const SignIn = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -20,24 +20,28 @@ const SignIn = () => {
   };
 
   const handleLogin = async () => {
-    if (!username || !password) {
+    if (!email || !password) {
       setError("Lütfen tüm alanları doldurun.");
       return;
     }
-    // if (!isValidEmail(username)) {
+    // if (!isValidEmail(email)) {
     //   setError("Geçerli bir Bilge Adam Boost email adresi girin.");
     //   return;
     // }
     try {
-      const response = await LoginCheck(username, password);
+      const response = await LoginCheck(email, password);
       console.log(response.status);
       if (response.status === 200) {
+        if (response.data === "Password change.") {
+          navigateTo(`/resetpassword?email=${email}`);
+          return;
+        }
         navigateTo("/emp");
         const jwtoken = response.data;
         console.log(jwtoken);
         setAuthToken(jwtoken);
       } else {
-        setError("Kullanıcı adı veya şifre yanlış. Lütfen tekrar deneyin.");
+        setError("Mail adresi veya şifre yanlış. Lütfen tekrar deneyin.");
       }
     } catch (error) {
       setError("Bir hata oluştu. Lütfen tekrar deneyin.");
@@ -67,15 +71,15 @@ const SignIn = () => {
               <p className="mb-6">Lütfen bilgilerinizi eksiksiz giriniz</p>
             </div>
             <Form>
-              <Form.Group className="mb-3" controlId="username">
+              <Form.Group className="mb-3" controlId="email">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
-                  name="username"
+                  name="email"
                   placeholder="Email adresinizi giriniz"
                   required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
