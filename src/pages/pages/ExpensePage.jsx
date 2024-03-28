@@ -15,33 +15,39 @@ function Expense() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
-
+  
     if (!expenseType || !currency || !amount || !file) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
-
-    // Kullanıcının maaşını kontrol etme
+  
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const uploadedFileResponse = await uploadPhotoAndGetPath(formData);
+      if (!checkAmountLimit()) {
+        return;
+      }
+  
+      
+      const uploadedFileResponse = await uploadPhotoAndGetPath(file);
       const fileName = uploadedFileResponse.fileName;
-
-      const data = await sendFormData({
+      
+      const formData = {
         ExpenseType: expenseType,
         Currency: currency,
         Amount: parseFloat(amount),
-        EmployeeId: 1, // Burada ilgili çalışanın ID'sini gönderebilirsiniz
+        EmployeeId: 1,
         Permission: false,
         ApprovalStatus: "Requested",
         FileName: fileName,
-      });
-
+      };
+  
+      
+  
+      const data = await sendFormData(formData);
+  
       if (data.error) {
         throw new Error(data.error);
       }
-
+  
       notifySuccess();
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
@@ -83,8 +89,8 @@ function Expense() {
       progress: undefined,
     });
 
-  const notifyError = () =>
-    toast.error("Harcama talebi gönderimi sırasında bir hata oluştu!", {
+  const notifyError = (message) =>
+    toast.error(message, {
       position: "top-right",
       autoClose: 2500,
       hideProgressBar: false,
@@ -93,6 +99,33 @@ function Expense() {
       draggable: true,
       progress: undefined,
     });
+
+  const checkAmountLimit = () => {
+    const parsedAmount = parseFloat(amount);
+    switch (currency) {
+      case "TL":
+        if (parsedAmount > 250000) {
+          toast.warning("Limiti aştınız. Harcama miktarı TL için en fazla 250000 olabilir.");
+          return false;
+        }
+        break;
+      case "USD":
+        if (parsedAmount > 7800) {
+          toast.warning("Limiti aştınız. Harcama miktarı USD için en fazla 7800 olabilir.");
+          return false;
+        }
+        break;
+      case "EUR":
+        if (parsedAmount > 7300) {
+          toast.warning("Limiti aştınız. Harcama miktarı EUR için en fazla 7300 olabilir.");
+          return false;
+        }
+        break;
+      default:
+        break;
+    }
+    return true;
+  };
 
   return (
     <div className="container mt-5">

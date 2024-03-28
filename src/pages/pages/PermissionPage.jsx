@@ -2,6 +2,7 @@ import React, { useState,useRef } from "react";
 import { createPermission, uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEmp } from "../../components/EmployeeContext";
 
 const Permission = () => {
   const [permissionType, setPermissionType] = useState("");
@@ -12,8 +13,23 @@ const Permission = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showFileUpload, setShowFileUpload] = useState(false);
   const fileInputRef = useRef(null); // Step 2
+  const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
 
   const handlePermissionTypeChange = (e) => {
+
+    const selectedPermissionType = e.target.value;
+    const gender = empData.gender;
+  
+    if (gender === "female" && selectedPermissionType === "Baba İzni") {
+      toast.warning('Kadınlar baba izni alamaz.', { position: "top-right" });
+      return;
+    }
+  
+    if (gender === "male" && selectedPermissionType === "Anne İzni") {
+      toast.warning('Erkekler anne izni alamaz.', { position: "top-right" });
+      return;
+    }
+
     setPermissionType(e.target.value);
     if (e.target.value !== "") {
       setShowFileUpload(true);
@@ -123,12 +139,17 @@ const Permission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(empData.gender);
     if (!permissionType || !startDate || !endDate || !numberOfDays || (permissionType !== "Yıllık İzin" && !file)) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
-
+  
+    if (permissionType === "Yıllık İzin" && numberOfDays > 15) {
+      toast.warning('Yıllık izin süresi 15 günden fazla olamaz.', { position: "top-right" });
+      return;
+    }
+  
     try {
       if (permissionType !== "Yıllık İzin") {
         const uploadedFileResponse = await uploadPhotoAndGetPath(file);
@@ -141,11 +162,11 @@ const Permission = () => {
           fileName: fileName,
           employeeId: 1,
         };
-
+  
         const permissionResponse = await createPermission(permissionData);
-
+  
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
-
+  
         toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
       } else {
         const permissionData = {
@@ -155,17 +176,17 @@ const Permission = () => {
           numberOfDays: numberOfDays,
           employeeId: 1,
         };
-
+  
         const permissionResponse = await createPermission(permissionData);
-
+  
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
-
+  
         toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
       }
       handleClear();
     } catch (error) {
       console.error("İzin talebi oluşturulurken bir hata oluştu:", error);
-      toast.error('İzin talebi oluşturulurken bir hata oluştu: ' + error.message, { position: "top-right" });
+      toast.warning('Cinsiyetinizle uyumlu olan izinleri seçiniz', { position: "top-right" });
     }
   };
 
