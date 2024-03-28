@@ -41,7 +41,7 @@ function EmployeeDetail() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "120px",
+          padding: "50px 120px",
         }}
       >
         <div
@@ -58,6 +58,7 @@ function EmployeeDetail() {
               secondSurname={employee.secondSurname}
               department={employee.department}
               imagePath={employee.imagePath}
+              routeUpdatePage="/emp-update"
             />
           )}
           {employee && (

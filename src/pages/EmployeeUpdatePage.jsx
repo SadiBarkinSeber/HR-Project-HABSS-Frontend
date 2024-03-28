@@ -94,7 +94,7 @@ function EmployeeUpdate() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "120px",
+          padding: "50px 120px",
         }}
       >
         <div
@@ -128,17 +128,6 @@ function EmployeeUpdate() {
               tc={employee.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
               onAddressChange={(e) => setAddress(e.target.value)}
-            />
-          )}
-          {employee && (
-            <EmployeeJobDetail
-              startDate={employee.startDate}
-              endDate={employee.endDate}
-              isActive={employee.isActive ? "Aktif" : "Pasif"}
-              position={employee.position}
-              department={employee.department}
-              company={employee.company}
-              wage={employee.wage + " TL"}
             />
           )}
         </div>

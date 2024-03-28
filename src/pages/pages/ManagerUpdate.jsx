@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import {
-  fetchManager,
-  updateManager,
-  uploadPhotoAndGetPath
-} from "../api/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fetchManager, updateManager, uploadPhotoAndGetPath } from "../api/api";
 import {
   EmployeeUpdateCardLeftSide,
   EmployeePersonalUpdate,
   EmployeeJobDetail,
 } from "../../components/Cards";
-
 
 function ManagerUpdate() {
   const [manager, setManager] = useState(null);
@@ -46,13 +41,19 @@ function ManagerUpdate() {
           photoPath
         );
         console.log("Güncellenmiş Yönetici:", updatedMng);
-        toast.success('Yönetici başarıyla güncellendi.', { position: "top-right" });
+        toast.success("Yönetici başarıyla güncellendi.", {
+          position: "top-right",
+        });
       } else {
-        toast.error('En az bir harf içeren bir adres girin.', { position: "top-right" });
+        toast.error("En az bir harf içeren bir adres girin.", {
+          position: "top-right",
+        });
       }
     } catch (error) {
       console.error("Error updating manager:", error);
-      toast.error('Yönetici güncellenemedi: ' + error.message, { position: "top-right" });
+      toast.error("Yönetici güncellenemedi: " + error.message, {
+        position: "top-right",
+      });
     }
   };
 
@@ -89,7 +90,7 @@ function ManagerUpdate() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "120px",
+          padding: "50px 120px",
         }}
       >
         <div
@@ -123,17 +124,6 @@ function ManagerUpdate() {
               tc={manager.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
               onAddressChange={handleAddressChange} // Adres değişikliğini yönetici
-            />
-          )}
-          {manager && (
-            <EmployeeJobDetail
-              startDate={manager.startDate}
-              endDate={manager.endDate}
-              isActive={manager.isActive ? "Aktif" : "Pasif"}
-              position={manager.position}
-              department={manager.department}
-              company={manager.company}
-              wage={manager.wage + " TL"}
             />
           )}
         </div>
