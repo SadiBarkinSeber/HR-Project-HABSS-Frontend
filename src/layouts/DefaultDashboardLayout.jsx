@@ -23,6 +23,7 @@ const DefaultDashboardLayout = (props) => {
       <div id="page-content">
         <div className="header">
           <NavbarTop
+            routeType={props.routeType}
             data={{
               showMenu: showMenu,
               SidebarToggleMenu: ToggleMenu,

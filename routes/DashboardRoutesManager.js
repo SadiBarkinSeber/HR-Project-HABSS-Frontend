@@ -25,7 +25,7 @@ export const DashboardMenuManager = [
   {
     id: uuid(),
     title: "Personel",
-    icon: "clipboard",
+    icon: "users",
     children: [
       { id: uuid(), link: "/mng-employee-create", name: "Personel Ekle" },
       { id: uuid(), link: "/mng-employee-list", name: "Personel Listesi" },
@@ -34,7 +34,7 @@ export const DashboardMenuManager = [
   {
     id: uuid(),
     title: "Talepler",
-    icon: "dollar-sign",
+    icon: "inbox",
     children: [
       { id: uuid(), link: "/mng-permission-list", name: "İzin Talepleri" },
       { id: uuid(), link: "/mng-expense-list", name: "Harcama Talepleri" },

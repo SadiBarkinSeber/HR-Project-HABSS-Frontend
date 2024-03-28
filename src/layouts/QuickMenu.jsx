@@ -1,6 +1,14 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Image, Dropdown, ListGroup, Modal, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Image,
+  Dropdown,
+  ListGroup,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import { useMediaQuery } from "react-responsive";
 import { useProfilePicture } from "../components/ProfilePictureContext";
 import SimpleBar from "simplebar-react";
@@ -8,7 +16,7 @@ import "simplebar/dist/simplebar.min.css";
 import NotificationList from "../data/Notification";
 import useMounted from "../hooks/useMounted";
 
-const QuickMenu = () => {
+const QuickMenu = (props) => {
   const hasMounted = useMounted();
   const [showLogoutModal, setShowLogoutModal] = useState(false); // State to control logout modal visibility
 
@@ -47,8 +55,6 @@ const QuickMenu = () => {
     const handleLogout = () => {
       setShowLogoutModal(true);
     };
-
-
 
     return (
       <ListGroup
@@ -121,13 +127,19 @@ const QuickMenu = () => {
             </Dropdown.Item>
             <Dropdown.Item eventKey="2">
               <i className="fe fe-user me-2"></i>{" "}
-              <Link to="/emp-detail">Profil Detayı</Link>
+              <Link to={props.routeType[2].children[1].link}>
+                Profil Detayı
+              </Link>
             </Dropdown.Item>
             <Dropdown.Item>
               <i className="fe fe-settings me-2"></i>{" "}
-              <Link to="/emp-update">Profili Güncelle</Link>
+              <Link to={props.routeType[2].children[2].link}>
+                Profili Güncelle
+              </Link>
             </Dropdown.Item>
-            <Dropdown.Item onClick={handleLogout}> {/* Logout function is called on click */}
+            <Dropdown.Item onClick={handleLogout}>
+              {" "}
+              {/* Logout function is called on click */}
               <i className="fe fe-power me-2"></i>
               Çıkış Yap
             </Dropdown.Item>
@@ -140,11 +152,24 @@ const QuickMenu = () => {
           </Modal.Header>
           <Modal.Body>Çıkış yapmak istediğinizden emin misiniz?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowLogoutModal(false)}
+            >
               İptal
             </Button>
-            <Button variant="primary" style={{ backgroundColor: 'dodgerblue', border: 'none' }} className="custom-button">
-              <Link to="/" style={{ textDecoration: 'none', color: 'white' }} className="link-text">Çıkış Yap</Link>
+            <Button
+              variant="primary"
+              style={{ backgroundColor: "dodgerblue", border: "none" }}
+              className="custom-button"
+            >
+              <Link
+                to="/"
+                style={{ textDecoration: "none", color: "white" }}
+                className="link-text"
+              >
+                Çıkış Yap
+              </Link>
             </Button>
           </Modal.Footer>
         </Modal>
