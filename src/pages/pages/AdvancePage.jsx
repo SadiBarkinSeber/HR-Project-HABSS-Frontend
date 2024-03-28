@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createAdvance } from "../api/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEmp } from "../../components/EmployeeContext";
 
 const Advance = () => {
   // State tanımlamaları
@@ -11,7 +12,8 @@ const Advance = () => {
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false); // Yeni state tanımı
-
+  const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
+  
   // Avans türü seçenekleri
   const advanceTypeOptions = ["Bireysel", "Kurumsal"];
  
@@ -21,20 +23,46 @@ const Advance = () => {
   // Form gönderme işlemi
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormSubmitted(true); // Formun gönderildiğini belirten bayrak
-
-    // Kontroller
+    setFormSubmitted(true);
+  
     if (!advanceType || !currency || !amount || !description) {
       setErrorMessage("Lütfen tüm alanları doldurunuz.");
       return;
     }
 
-    // Para kontrolü
-    if (parseInt(amount) > 180000) {
-      toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz");
-      return;
+    let limit = 0;
+    if (advanceType === "Kurumsal") {
+      // Kurumsal seçildiğinde harcama limiti kontrolü
+      switch(currency) {
+        case "TL":
+          limit = 500000;
+          break;
+        case "USD":
+          limit = 500000 / 32;
+          break;
+        case "EUR":
+          limit = 500000 / 34;
+          break;
+        default:
+          break;
+      }
+      if (parseInt(amount) > limit) {
+        toast.warning(`Girilen avans miktarı kurumsal limiti aştı. Limit: ${limit.toFixed(2)} ${currency}`);
+        return;
+      }
+    } else {
+      if (currency === "TL" && parseInt(amount) > empData.wage * 3) {
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz tl");
+        return;
+      } else if (currency === "USD" && parseInt(amount) > empData.wage * 3 / 32) {
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz d");
+        return;
+      } else if (currency === "EUR" && parseInt(amount) > empData.wage * 3 / 34) {
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz e");
+        return;
+      }
     }
- 
+  
     // Form verilerini işleme
     const advanceObject = createAdvanceObject(
       advanceType,
@@ -44,8 +72,10 @@ const Advance = () => {
     );
     const response = createAdvance(advanceObject);
     console.log(response);
+    // Burada API'ye isteği göndermek yerine, senkron bir şekilde advanceObject'i işleme alabilirsiniz.
     console.log(advanceObject);
- 
+    // createAdvance(advanceObject);
+  
     // Formu sıfırla ve hata mesajını temizle
     resetForm();
     setErrorMessage("");
@@ -78,7 +108,6 @@ const Advance = () => {
   const clearErrorMessage = () => {
     setErrorMessage("");
   };
- 
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
