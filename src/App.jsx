@@ -1,5 +1,6 @@
 import { DashboardMenu } from "../routes/DashboardRoutes";
 import { DashboardMenuManager } from "../routes/DashboardRoutesManager";
+import DashboardMenuAdmin from "../routes/DashboardRoutesAdmin";
 import EmployeeList from "./pages/EmployeeMainPage";
 import EmployeeDetail from "./pages/EmployeeDetailPage";
 import EmployeeUpdate from "./pages/EmployeeUpdatePage";
@@ -194,7 +195,7 @@ export default function App() {
                 <Route
                   path="/admin"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<ManagerList />}
                     </DefaultDashboardLayout>
@@ -203,7 +204,7 @@ export default function App() {
                 <Route
                   path="/admin-detail"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<ManagerDetail />}
                     </DefaultDashboardLayout>
@@ -212,7 +213,7 @@ export default function App() {
                 <Route
                   path="/admin-update"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<ManagerUpdate />}
                     </DefaultDashboardLayout>
@@ -221,7 +222,7 @@ export default function App() {
                 <Route
                   path="/admin-company-create"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<EmployeeCreate />}
                     </DefaultDashboardLayout>
@@ -230,7 +231,7 @@ export default function App() {
                 <Route
                   path="/admin-company-list"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<ManagerPermissionList />}
                     </DefaultDashboardLayout>
@@ -239,7 +240,7 @@ export default function App() {
                 <Route
                   path="/admin-manager-create"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<EmployeeCreate />}
                     </DefaultDashboardLayout>
@@ -248,7 +249,7 @@ export default function App() {
                 <Route
                   path="/admin-manager-list"
                   element={
-                    <DefaultDashboardLayout routeType={DashboardMenuManager}>
+                    <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
                       {<ManagerPermissionList />}
                     </DefaultDashboardLayout>
