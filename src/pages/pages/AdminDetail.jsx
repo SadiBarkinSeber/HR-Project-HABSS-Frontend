@@ -53,7 +53,7 @@ function SiteManagerDetail() {
               secondSurname={siteManager.secondSurname}
               department={siteManager.department}
               imagePath={siteManager.imagePath}
-              routeUpdatePage="/sitemanager-update"
+              routeUpdatePage="/admin-update"
             />
           )}
           {siteManager && (
