@@ -382,4 +382,49 @@ export async function changePassword(email, password, repeatPassword) {
   }
 }
 
+export const fetchSiteManagers = async () => {
+  try {
+    const response = await api.get("/SiteManager/15");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching admins:", error);
+    throw error;
+  }
+};
+
+export const updateSiteManager = async (id, phoneNumber, address, photoPath) => {
+  try {
+    const response = await api.put("/SiteManager/", {
+      id: id,
+      phoneNumber: phoneNumber,
+      address: address,
+      imagePath: photoPath,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating site manager:", error);
+    throw error;
+  }
+};
+
+export const createManager = async (managerData) => {
+  try {
+    const response = await axios.post("/https://hrprojectwebapi20240311113118.azurewebsites.net/api/manager", managerData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const fetchManagers = async () => {
+  try {
+    const response = await api.get("/manager");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching managers:", error);
+    throw error;
+  }
+};
+
 export default api;

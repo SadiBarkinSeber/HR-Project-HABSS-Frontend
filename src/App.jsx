@@ -28,6 +28,11 @@ import EmployeeCreate from "./pages/pages/EmployeeCreate";
 
 import ForgetPassword from "./pages/authentication/forget-password";
 import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
+import SiteManagerList from "./pages/pages/AdminMain";
+import SiteManagerDetail from "./pages/pages/AdminDetail";
+import SiteManagerUpdate from "./pages/pages/AdminUpdate";
+import Managers from "./pages/pages/AdminManagerList";
+import ManagerCreate from "./pages/pages/ManagerCreate";
 export default function App() {
   return (
     <>
@@ -197,7 +202,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<ManagerList />}
+                      {<SiteManagerList />}
                     </DefaultDashboardLayout>
                   }
                 />
@@ -206,7 +211,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<ManagerDetail />}
+                      {<SiteManagerDetail />}
                     </DefaultDashboardLayout>
                   }
                 />
@@ -215,7 +220,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<ManagerUpdate />}
+                      {<SiteManagerUpdate />}
                     </DefaultDashboardLayout>
                   }
                 />
@@ -242,7 +247,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<EmployeeCreate />}
+                      {<ManagerCreate />}
                     </DefaultDashboardLayout>
                   }
                 />
@@ -251,7 +256,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<ManagerPermissionList />}
+                      {<ManagerEmployeeList />}
                     </DefaultDashboardLayout>
                   }
                 />
