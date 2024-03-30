@@ -395,7 +395,5 @@ async function createCompany(createObject) {
     return []; // Hata durumunda boş bir dizi döndürüyoruz
   }
 }
-
 export { createCompany};
-
 export default api;

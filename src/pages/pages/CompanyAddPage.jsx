@@ -291,7 +291,6 @@ const CompanyAddPage = () => {
     </div>
   );
 };
-
 export default CompanyAddPage;
 
 
