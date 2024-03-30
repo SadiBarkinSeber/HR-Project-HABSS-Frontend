@@ -20,6 +20,58 @@ const CompanyAddPage = () => {
     logoImagePath: ""
   });
   const [photo, setPhoto] = useState(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const uploadPhotoAndGetPath = async (file) => {
+    try {
+      const response = await fetch('upload-url', {
+        method: 'POST',
+        body: file,
+      });
+      const data = await response.json();
+      return data.path; // Dosyanın yolu
+    } catch (error) {
+      throw new Error("Fotoğraf yüklenirken bir hata oluştu.");
+    }
+  };
+
+  const validateTaxDepartment = (taxDepartment) => {
+    return taxDepartment.trim() !== "";
+  };
+
+  const validateAddress = (address) => {
+    return !/^\d+$/.test(address);
+  };
+
+  const validateMersisNo = (mersisNo) => {
+    return mersisNo.length === 16 && /^\d+$/.test(mersisNo);
+  };
+
+  const validateTaxNumber = (taxNumber) => {
+    return taxNumber.length === 10 && /^\d+$/.test(taxNumber);
+  };
+
+  const validateContractDates = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const today = new Date();
+    return end >= today && start <= end;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "employeeCount" && parseInt(value) < 0) {
+      return;
+    }
+    setCompanyData({ ...companyData, [name]: value });
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setPhoto(URL.createObjectURL(file));
+    handlePhotoChange(file);
+  };
+
   const handlePhotoChange = async (file) => {
     try {
       const allowedExtensions = ["jpg", "jpeg", "png"];
@@ -28,76 +80,42 @@ const CompanyAddPage = () => {
         alert("Sadece jpg ve png dosyaları kabul edilir!");
         return;
       }
-
       const uploadedFileResponse = await uploadPhotoAndGetPath(file);
       const fileName = uploadedFileResponse.fileName;
-      console.log("Dosya adı:", fileName);
-
       setCompanyData({ ...companyData, logoImagePath: fileName });
     } catch (error) {
       console.error("Error uploading photo:", error);
     }
   };
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Eğer gelen değer "employeeCount" alanına aitse ve bu değer negatif bir sayı ise, işlemi durdur
-    if (name === "employeeCount" && parseInt(value) < 0) {
-      return;
-    }
-
-    setCompanyData({ ...companyData, [name]: value });
-  };
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    setPhoto(URL.createObjectURL(file)); // Fotoğrafı önizleme için URL oluştur
-    handlePhotoChange(file);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-
-    // Geçerli bir telefon numarası kontrolü
     if (companyData.phoneNumber.length !== 13) {
       alert("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
-
-   
-
     if (!validateAddress(companyData.address)) {
       alert("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
     if (!validateMersisNo(companyData.mersisNo)) {
-        alert("Girdiğiniz Mersis No sadece rakamlardan oluşmalı ve 16 hane uzunluğunda olmalıdır.");
-        return;
-      }
-  
-  
-
+      alert("Girdiğiniz Mersis No sadece rakamlardan oluşmalı ve 16 hane uzunluğunda olmalıdır.");
+      return;
+    }
     if (!validateTaxNumber(companyData.taxNumber)) {
       alert("Girdiğiniz Vergi No sadece rakamlardan oluşmalı ve 10 hane uzunluğunda olmalıdır.");
       return;
     }
-
     if (!validateTaxDepartment(companyData.taxDepartment)) {
       alert("Vergi Dairesi boş bırakılamaz.");
       return;
     }
-
-    // Sözleşme tarihlerinin kontrolü
     if (!validateContractDates(companyData.dealStartDate, companyData.dealEndDate)) {
       alert("Sözleşme başlangıç tarihi sözleşme bitiş tarihinden önce veya aynı olamaz.");
       return;
     }
-
     try {
-      console.log(companyData);
       const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
       if (confirmed) {
         const response = await createCompany(companyData);
@@ -112,29 +130,9 @@ const CompanyAddPage = () => {
     }
   };
 
-  const validateAddress = (address) => {
-    // Adresin sadece rakam içerip içermediğini kontrol et
-    return !/^\d+$/.test(address);
-  };
-  const validateMersisNo = (mersisNo) => {
-    return mersisNo.length === 16 && /^\d+$/.test(mersisNo); // Mersis No'nun uzunluğunu ve rakamlardan oluştuğunu kontrol ediyoruz
-  };
-  const validateTaxNumber = (taxNumber) => {
-    return taxNumber.length === 10 && /^\d+$/.test(taxNumber); // Vergi No'nun uzunluğunu ve rakamlardan oluştuğunu kontrol ediyoruz
-  };
-  
-
- 
-  const validateContractDates = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const today = new Date();
-    return end >= today && start <= end;
-  };
-
   const resetForm = () => {
     setCompanyData({
-        Name: "",
+      Name: "",
       title: "",
       mersisNo: "",
       taxNumber: "",
@@ -146,16 +144,10 @@ const CompanyAddPage = () => {
       foundingDate: "",
       dealStartDate: "",
       dealEndDate: "",
-   
       logoImagePath: ""
     });
     setPhoto(null);
     setFormSubmitted(false);
-  };
-
-  const validateForm = () => {
-    // Tüm alanların dolu olup olmadığını kontrol et
-    return Object.values(companyData).every((value) => value !== "");
   };
 
   const handleCancel = () => {
@@ -169,7 +161,7 @@ const CompanyAddPage = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-            <div className="mb-3 d-flex align-items-center justify-content-center">
+              <div className="mb-3 d-flex align-items-center justify-content-center">
                 <div className="me-3 text-center" style={{ width: "100px", height: "100px" }}>
                   <label htmlFor="photo" className="btn btn-primary rounded-circle upload-btn" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {photo ? <img src={photo} alt="Company" className="uploaded-photo" style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "50%" }} /> : "+"}
@@ -178,7 +170,6 @@ const CompanyAddPage = () => {
                 </div>
                 <div>
                   <h5>Logo Yükleyiniz...</h5>
-                 
                 </div>
               </div>
               <div className="mb-3">
@@ -292,5 +283,7 @@ const CompanyAddPage = () => {
   );
 };
 export default CompanyAddPage;
+
+                
 
 
