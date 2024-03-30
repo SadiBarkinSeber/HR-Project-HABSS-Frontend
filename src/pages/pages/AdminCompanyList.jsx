@@ -62,7 +62,6 @@ function CompanyList() {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Logo</th>
             <th>Şirket Adı</th>
             <th>Ünvan</th>
             <th>Telefon</th>
@@ -74,9 +73,6 @@ function CompanyList() {
         <tbody>
           {filteredCompanies.map((company) => (
             <tr key={company.Id}>
-              <td>
-                <img src={company.logoImagePath} alt="Logo" />
-              </td>
               <td>{company.name}</td>
               <td>{company.title}</td>
               <td>{company.phoneNumber}</td>
