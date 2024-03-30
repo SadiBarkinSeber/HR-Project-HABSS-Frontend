@@ -28,6 +28,7 @@ import EmployeeCreate from "./pages/pages/EmployeeCreate";
 
 import ForgetPassword from "./pages/authentication/forget-password";
 import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
+import CompanyAddPage from "./pages/pages/CompanyAddPage";
 export default function App() {
   return (
     <>
@@ -224,7 +225,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<EmployeeCreate />}
+                      {<CompanyAddPage />}
                     </DefaultDashboardLayout>
                   }
                 />
