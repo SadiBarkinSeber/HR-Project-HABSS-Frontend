@@ -392,4 +392,18 @@ export async function changePassword(email, password, repeatPassword) {
   }
 }
 
+
+async function createCompany(createObject) {
+  try {
+    const response = await axios.post(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Company",
+      createObject
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching company:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+export { createCompany};
 export default api;
