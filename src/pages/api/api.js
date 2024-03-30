@@ -19,6 +19,16 @@ export const fetchEmployees = async () => {
   }
 };
 
+export const fetchCompanies = async () => {
+  try {
+    const response = await api.get("/company");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+    throw error;
+  }
+};
+
 export const updateEmployee = async (id, phoneNumber, address, photoPath) => {
   try {
     const response = await api.put("/employees/", {

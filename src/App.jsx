@@ -25,7 +25,7 @@ import ManagerUpdate from "./pages/pages/ManagerUpdate";
 import { AuthProvider } from "./components/TokenContext";
 import { EmployeeDataProvider } from "./components/EmployeeContext";
 import EmployeeCreate from "./pages/pages/EmployeeCreate";
-
+import CamponyList from "./pages/pages/AdminCompanyList";
 import ForgetPassword from "./pages/authentication/forget-password";
 import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
 export default function App() {
@@ -233,7 +233,7 @@ export default function App() {
                   element={
                     <DefaultDashboardLayout routeType={DashboardMenuAdmin}>
                       {" "}
-                      {<ManagerPermissionList />}
+                      {<CamponyList />}
                     </DefaultDashboardLayout>
                   }
                 />
