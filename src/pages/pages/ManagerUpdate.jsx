@@ -1,41 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchManager, updateManager, uploadPhotoAndGetPath } from "../api/api";
+import { useMng } from "../../components/ManagerContext";
+import { updateManager, uploadPhotoAndGetPath } from "../api/api";
 import {
   EmployeeUpdateCardLeftSide,
   EmployeePersonalUpdate,
-  EmployeeJobDetail,
 } from "../../components/Cards";
 
 function ManagerUpdate() {
-  const [manager, setManager] = useState(null);
+  const { mngData, refreshData } = useMng();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [photoPath, setPhotoPath] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchManager();
-        setManager(data);
-        setPhoneNumber(data.phoneNumber);
-        setAddress(data.address);
-        setPhotoPath(data.imagePath);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (mngData) {
+      setPhoneNumber(mngData.phoneNumber);
+      setAddress(mngData.address);
+      setPhotoPath(mngData.imagePath);
+    }
+  }, [mngData]);
 
   const handleUpdateEmployee = async () => {
     try {
       // Adres alanında en az bir harf kontrolü
       if (/[a-zA-Z]/.test(address)) {
         const updatedMng = await updateManager(
-          manager.id,
+          mngData.id,
           phoneNumber,
           address,
           photoPath
@@ -44,6 +36,7 @@ function ManagerUpdate() {
         toast.success("Yönetici başarıyla güncellendi.", {
           position: "top-right",
         });
+        refreshData(); // Veriyi yenile
       } else {
         toast.error("En az bir harf içeren bir adres girin.", {
           position: "top-right",
@@ -82,9 +75,6 @@ function ManagerUpdate() {
 
   return (
     <>
-      {/* <div className="navbar-vertical navbar">
-        <NavbarVertical />
-      </div> */}
       <div
         style={{
           display: "flex",
@@ -99,31 +89,31 @@ function ManagerUpdate() {
             justifyContent: "center",
           }}
         >
-          {manager && (
+          {mngData && (
             <EmployeeUpdateCardLeftSide
-              firstName={manager.firstName}
-              secondName={manager.secondName}
-              firstSurname={manager.firstSurname}
-              secondSurname={manager.secondSurname}
-              department={manager.department}
+              firstName={mngData.firstName}
+              secondName={mngData.secondName}
+              firstSurname={mngData.firstSurname}
+              secondSurname={mngData.secondSurname}
+              department={mngData.department}
               imagePath={photoPath}
               onPhotoChange={handlePhotoChange}
             />
           )}
-          {manager && (
+          {mngData && (
             <EmployeePersonalUpdate
-              firstName={manager.firstName}
-              secondName={manager.secondName}
-              firstSurname={manager.firstSurname}
-              secondSurname={manager.secondSurname}
-              email={manager.email}
+              firstName={mngData.firstName}
+              secondName={mngData.secondName}
+              firstSurname={mngData.firstSurname}
+              secondSurname={mngData.secondSurname}
+              email={mngData.email}
               phoneNumber={phoneNumber}
               address={address}
-              dateOfBirth={manager.dateOfBirth}
-              birthPlace={manager.birthPlace}
-              tc={manager.tc}
+              dateOfBirth={mngData.dateOfBirth}
+              birthPlace={mngData.birthPlace}
+              tc={mngData.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
-              onAddressChange={handleAddressChange} // Adres değişikliğini yönetici
+              onAddressChange={handleAddressChange}
             />
           )}
         </div>

@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchEmployees } from "./api/api";
+import { useEmp } from "../components/EmployeeContext";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../components/Cards";
 import NavbarVertical from "../layouts/navbars/NavbarVertical";
 
 function EmployeeList() {
-  const navigateTo = useNavigate();
-
-  const [employee, setEmployee] = useState(null);
+  const { empData, refreshData } = useEmp();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchEmployees();
-        setEmployee(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    refreshData();
   }, []);
 
   return (
@@ -34,22 +24,21 @@ function EmployeeList() {
           padding: "120px",
         }}
       >
-        {employee && (
+        {empData && (
           <EmployeeCardLeftSide
-            firstName={employee.firstName}
-            secondName={employee.secondName}
-            firstSurname={employee.firstSurname}
-            secondSurname={employee.secondSurname}
-            department={employee.department}
-            imagePath={employee.imagePath}
+            firstName={empData.firstName}
+            secondName={empData.secondName}
+            firstSurname={empData.firstSurname}
+            department={empData.department}
+            imagePath={empData.imagePath}
             routeUpdatePage="/emp-update"
           />
         )}
-        {employee && (
+        {empData && (
           <EmployeeSumCard
-            email={employee.email}
-            phoneNumber={employee.phoneNumber}
-            address={employee.address}
+            email={empData.email}
+            phoneNumber={empData.phoneNumber}
+            address={empData.address}
             routeDetailPage="/emp-detail"
           />
         )}

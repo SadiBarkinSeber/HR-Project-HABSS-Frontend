@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginCheck } from "../api/api";
 import { useAuth } from "../../components/TokenContext";
 import AuthLayout from "../../layouts/AuthLayout";
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -24,10 +25,10 @@ const SignIn = () => {
       setError("Lütfen tüm alanları doldurun.");
       return;
     }
-    // if (!isValidEmail(email)) {
-    //   setError("Geçerli bir Bilge Adam Boost email adresi girin.");
-    //   return;
-    // }
+    if (!isValidEmail(email)) {
+      setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+      return;
+    }
     try {
       const response = await LoginCheck(email, password);
       console.log(response.status);
@@ -36,15 +37,31 @@ const SignIn = () => {
           navigateTo(`/resetpassword?email=${email}`);
           return;
         }
-        navigateTo("/emp");
+        // navigateTo("/emp");
         const jwtoken = response.data;
         console.log(jwtoken);
         setAuthToken(jwtoken);
+
+        const decodedToken = jwtDecode(jwtoken);
+        const userRole = decodedToken.role;
+        const userIdString = decodedToken.nameid;
+        const userId = userIdString ? parseInt(userIdString) : null;
+        console.log(userRole, typeof userId);
+
+        // Kullanıcının rolüne göre yönlendirme yap
+        if (userRole === "siteManager") {
+          navigateTo(`/admin`, { state: { id: userId } });
+        } else if (userRole === "manager") {
+          navigateTo(`/mng`, { state: { id: userId } });
+        } else {
+          navigateTo(`/emp`, { state: { id: userId } });
+        }
       } else {
         setError("Mail adresi veya şifre yanlış. Lütfen tekrar deneyin.");
       }
     } catch (error) {
-      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+      console.error("Giriş yapılırken bir hata oluştu:", error);
+      setError("Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 

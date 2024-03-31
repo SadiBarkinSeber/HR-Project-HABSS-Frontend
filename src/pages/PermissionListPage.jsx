@@ -1,53 +1,66 @@
-
 import React, { useState, useEffect } from "react";
-import { fetchAllPermission } from "./api/api"; // Örnek bir downloadFile fonksiyonunu ekledim
-import { useAuth } from "../components/TokenContext";
-import { ToastContainer, toast } from 'react-toastify';
+import { fetchAllPermission } from "./api/api";
+import { ToastContainer, toast } from "react-toastify";
 import { downloadFile } from "./api/api";
 import { updatePermissionStatus } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
-import 'react-toastify/dist/ReactToastify.css';
-import "react-confirm-alert/src/react-confirm-alert.css"; 
-import { confirmAlert } from "react-confirm-alert"; 
-
-
+import "react-toastify/dist/ReactToastify.css";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { confirmAlert } from "react-confirm-alert";
+import { useEmp } from "../components/EmployeeContext";
 
 function PermissionList() {
-  const [permissions, setPermissions] = useState([]);
+  const [permissions, setPermissions] = useState([]); // Boş dizi olarak başlat
   const [sortedPermissions, setSortedPermissions] = useState([]);
-  const [filterOption, setFilterOption] = useState(""); // İzin türü filtresi
-  const { token, setAuthToken } = useAuth();
+  const [filterOption, setFilterOption] = useState("");
   const [sortDirection, setSortDirection] = useState({});
+  const { empData, refreshData } = useEmp();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const permissionsData = await fetchAllPermission(token);
-        setPermissions(permissionsData);
+        const response = await fetchAllPermission(empData.id);
+        if (
+          response &&
+          response.permissions &&
+          Array.isArray(response.permissions)
+        ) {
+          setPermissions(response.permissions); // permissions anahtarından gelen diziyi set et
+        } else {
+          console.error("Invalid data format:", response);
+        }
       } catch (error) {
         console.error("Error fetching permissions:", error);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, []);
   useEffect(() => {
     setSortedPermissions([...permissions].reverse());
   }, [permissions]);
 
-
   const handleReject = async (id) => {
-    const updateResult = await updatePermissionStatus(id, false);
-    if (updateResult.success) {
-      toast.success(updateResult.message);
-   const permissionsData = await fetchAllPermission(token);
-      setPermissions(permissionsData);
-    } else {
-      toast.error(updateResult.message);
+    try {
+      const updateResult = await updatePermissionStatus(id, false);
+      if (updateResult.success) {
+        toast.success(updateResult.message);
+        // İzin reddedildiğinde izni kaldırın ve yeniden sıralayın
+        const updatedPermissions = permissions.filter(
+          (permission) => permission.id !== id
+        );
+        setPermissions(updatedPermissions);
+        setSortedPermissions([...updatedPermissions].reverse());
+      } else {
+        toast.error(updateResult.message);
+      }
+    } catch (error) {
+      console.error("Error rejecting permission:", error);
+      toast.error("İzin reddedilirken bir hata oluştu");
     }
   };
-  
-  
+
   const sortBy = (key) => {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ [key]: direction });
@@ -79,9 +92,10 @@ function PermissionList() {
       toast.error("Dosya indirme sırasında bir hata oluştu");
     }
   };
+
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    return date.toLocaleDateString('tr-TR');
+    return date.toLocaleDateString("tr-TR");
   };
 
   const filterPermissions = (permission) => {
@@ -91,7 +105,6 @@ function PermissionList() {
       return permission.permissionType === filterOption;
     }
   };
-
 
   const confirmReject = (id) => {
     confirmAlert({
@@ -109,7 +122,6 @@ function PermissionList() {
       ],
     });
   };
-  
 
   return (
     <div className="container mt-5">
@@ -128,7 +140,12 @@ function PermissionList() {
                 if (selectedValue === "") {
                   setSortedPermissions([...permissions]); // Tüm izinleri göstermek için sıralı izinleri tüm izinlerle güncelle
                 } else {
-                  setSortedPermissions(permissions.filter(permission => permission.permissionType === selectedValue));
+                  setSortedPermissions(
+                    permissions.filter(
+                      (permission) =>
+                        permission.permissionType === selectedValue
+                    )
+                  );
                 }
               }}
             >
@@ -144,7 +161,6 @@ function PermissionList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  
                   <th onClick={() => sortBy("permissionType")}>
                     İzin Türü{" "}
                     {sortDirection["permissionType"] === "asc" ? (
@@ -190,35 +206,35 @@ function PermissionList() {
                 </tr>
               </thead>
               <tbody>
-                {sortedPermissions.filter(filterPermissions).map((permission) => (
-                  <tr key={permission.id}>
-                    <td>{permission.permissionType}</td>
-                    <td>{formatDate(permission.requestDate)}</td>
-                    <td>{formatDate(permission.startDate)}</td>
-                    <td>{formatDate(permission.endDate)}</td>
-                    <td>{permission.approvalStatus}</td>
-                    <td className="text-center">
+                {sortedPermissions
+                  .filter(filterPermissions)
+                  .map((permission) => (
+                    <tr key={permission.id}>
+                      <td>{permission.permissionType}</td>
+                      <td>{formatDate(permission.requestDate)}</td>
+                      <td>{formatDate(permission.startDate)}</td>
+                      <td>{formatDate(permission.endDate)}</td>
+                      <td>{permission.approvalStatus}</td>
+                      <td className="text-center">
                         {permission.fileName && (
                           <button
                             className="btn btn-sm btn-primary"
                             onClick={() => handleDownload(permission.fileName)}
                           >
-                          İndir
+                            İndir
                           </button>
                         )}
                       </td>
                       <td className="text-center">
-                       
                         <button
                           className="btn btn-sm btn-danger"
                           onClick={() => confirmReject(permission.id)}
                         >
-                        İptal Et
+                          İptal Et
                         </button>
                       </td>
-
-                  </tr>
-                ))}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -241,6 +257,3 @@ function PermissionList() {
 }
 
 export default PermissionList;
-
-
-

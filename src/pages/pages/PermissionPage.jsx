@@ -1,7 +1,7 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { createPermission, uploadPhotoAndGetPath } from "../api/api";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEmp } from "../../components/EmployeeContext";
 
 const Permission = () => {
@@ -16,17 +16,16 @@ const Permission = () => {
   const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
 
   const handlePermissionTypeChange = (e) => {
-
     const selectedPermissionType = e.target.value;
     const gender = empData.gender;
-  
+
     if (gender === "female" && selectedPermissionType === "Baba İzni") {
-      toast.warning('Kadınlar baba izni alamaz.', { position: "top-right" });
+      toast.warning("Kadınlar baba izni alamaz.", { position: "top-right" });
       return;
     }
-  
+
     if (gender === "male" && selectedPermissionType === "Anne İzni") {
-      toast.warning('Erkekler anne izni alamaz.', { position: "top-right" });
+      toast.warning("Erkekler anne izni alamaz.", { position: "top-right" });
       return;
     }
 
@@ -87,7 +86,7 @@ const Permission = () => {
   const calculateEndExcludingWeekends = (startDate, days) => {
     let count = 0;
     let currentDate = new Date(startDate);
-    
+
     while (count < days) {
       currentDate.setDate(currentDate.getDate() + 1);
       if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
@@ -140,16 +139,24 @@ const Permission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(empData.gender);
-    if (!permissionType || !startDate || !endDate || !numberOfDays || (permissionType !== "Yıllık İzin" && !file)) {
+    if (
+      !permissionType ||
+      !startDate ||
+      !endDate ||
+      !numberOfDays ||
+      (permissionType !== "Yıllık İzin" && !file)
+    ) {
       setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
-  
+
     if (permissionType === "Yıllık İzin" && numberOfDays > 15) {
-      toast.warning('Yıllık izin süresi 15 günden fazla olamaz.', { position: "top-right" });
+      toast.warning("Yıllık izin süresi 15 günden fazla olamaz.", {
+        position: "top-right",
+      });
       return;
     }
-  
+
     try {
       if (permissionType !== "Yıllık İzin") {
         const uploadedFileResponse = await uploadPhotoAndGetPath(file);
@@ -160,14 +167,16 @@ const Permission = () => {
           endDate: endDate,
           numberOfDays: numberOfDays,
           fileName: fileName,
-          employeeId: 1,
+          employeeId: empData.id,
         };
-  
+
         const permissionResponse = await createPermission(permissionData);
-  
+
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
-  
-        toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
+
+        toast.success("İzin talebi başarıyla oluşturuldu.", {
+          position: "top-right",
+        });
       } else {
         const permissionData = {
           permissionType: permissionType,
@@ -176,17 +185,21 @@ const Permission = () => {
           numberOfDays: numberOfDays,
           employeeId: 1,
         };
-  
+
         const permissionResponse = await createPermission(permissionData);
-  
+
         console.log("İzin talebi başarıyla oluşturuldu:", permissionResponse);
-  
-        toast.success('İzin talebi başarıyla oluşturuldu.', { position: "top-right" });
+
+        toast.success("İzin talebi başarıyla oluşturuldu.", {
+          position: "top-right",
+        });
       }
       handleClear();
     } catch (error) {
       console.error("İzin talebi oluşturulurken bir hata oluştu:", error);
-      toast.warning('Cinsiyetinizle uyumlu olan izinleri seçiniz', { position: "top-right" });
+      toast.warning("Cinsiyetinizle uyumlu olan izinleri seçiniz", {
+        position: "top-right",
+      });
     }
   };
 
@@ -204,7 +217,7 @@ const Permission = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="permissionType" className="form-label">
-                  * İzin Türü:
+                    * İzin Türü:
                   </label>
                   <select
                     id="permissionType"
@@ -220,9 +233,7 @@ const Permission = () => {
                     <option value="Evlilik İzni">Evlilik İzni</option>
                   </select>
                   {errorMessage && !permissionType && (
-                    <div className="text-danger">
-                      Lütfen izin türünü seçin.
-                    </div>
+                    <div className="text-danger">Lütfen izin türünü seçin.</div>
                   )}
                 </div>
                 <div className="mb-3">
@@ -231,7 +242,7 @@ const Permission = () => {
                   </label>
                   <input
                     type="date"
-                    id="startDate"                    
+                    id="startDate"
                     className="form-control"
                     value={startDate}
                     onChange={handleStartDateChange}

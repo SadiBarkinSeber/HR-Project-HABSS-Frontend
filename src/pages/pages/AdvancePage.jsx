@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createAdvance } from "../api/api";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEmp } from "../../components/EmployeeContext";
 
 const Advance = () => {
@@ -13,18 +13,18 @@ const Advance = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false); // Yeni state tanımı
   const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
-  
+
   // Avans türü seçenekleri
   const advanceTypeOptions = ["Bireysel", "Kurumsal"];
- 
+
   // Para birimi seçenekleri
   const currencyOptions = ["TL", "USD", "EUR"];
- 
+
   // Form gönderme işlemi
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-  
+
     if (!advanceType || !currency || !amount || !description) {
       setErrorMessage("Lütfen tüm alanları doldurunuz.");
       return;
@@ -33,7 +33,7 @@ const Advance = () => {
     let limit = 0;
     if (advanceType === "Kurumsal") {
       // Kurumsal seçildiğinde harcama limiti kontrolü
-      switch(currency) {
+      switch (currency) {
         case "TL":
           limit = 500000;
           break;
@@ -47,22 +47,38 @@ const Advance = () => {
           break;
       }
       if (parseInt(amount) > limit) {
-        toast.warning(`Girilen avans miktarı kurumsal limiti aştı. Limit: ${limit.toFixed(2)} ${currency}`);
+        toast.warning(
+          `Girilen avans miktarı kurumsal limiti aştı. Limit: ${limit.toFixed(
+            2
+          )} ${currency}`
+        );
         return;
       }
     } else {
       if (currency === "TL" && parseInt(amount) > empData.wage * 3) {
-        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz tl");
+        toast.warning(
+          "Girilen avans miktarı maaşın üç katından fazla olamaz tl"
+        );
         return;
-      } else if (currency === "USD" && parseInt(amount) > empData.wage * 3 / 32) {
-        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz d");
+      } else if (
+        currency === "USD" &&
+        parseInt(amount) > (empData.wage * 3) / 32
+      ) {
+        toast.warning(
+          "Girilen avans miktarı maaşın üç katından fazla olamaz d"
+        );
         return;
-      } else if (currency === "EUR" && parseInt(amount) > empData.wage * 3 / 34) {
-        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz e");
+      } else if (
+        currency === "EUR" &&
+        parseInt(amount) > (empData.wage * 3) / 34
+      ) {
+        toast.warning(
+          "Girilen avans miktarı maaşın üç katından fazla olamaz e"
+        );
         return;
       }
     }
-  
+
     // Form verilerini işleme
     const advanceObject = createAdvanceObject(
       advanceType,
@@ -75,13 +91,13 @@ const Advance = () => {
     // Burada API'ye isteği göndermek yerine, senkron bir şekilde advanceObject'i işleme alabilirsiniz.
     console.log(advanceObject);
     // createAdvance(advanceObject);
-  
+
     // Formu sıfırla ve hata mesajını temizle
     resetForm();
     setErrorMessage("");
     toast.success("Avans talebi başarıyla gönderildi.");
   };
- 
+
   // Formu sıfırlama işlemi
   const resetForm = () => {
     setAdvanceType("");
@@ -90,20 +106,20 @@ const Advance = () => {
     setDescription("");
     setFormSubmitted(false); // Formun tekrar sıfırlandığını belirten bayrağı sıfırla
   };
- 
+
   const createAdvanceObject = (advanceType, currency, amount, description) => {
     const advance = {
       AdvanceType: advanceType,
       Currency: currency,
       Amount: amount,
       Description: description,
-      EmployeeId: 1,
+      EmployeeId: empData.id,
       Permission: false,
       ApprovalStatus: "Requested",
     };
     return advance;
   };
- 
+
   // Hata mesajlarını sıfırlama işlemi
   const clearErrorMessage = () => {
     setErrorMessage("");
@@ -123,7 +139,10 @@ const Advance = () => {
                   <select
                     id="advanceType"
                     value={advanceType}
-                    onChange={(e) => { setAdvanceType(e.target.value); clearErrorMessage(); }}
+                    onChange={(e) => {
+                      setAdvanceType(e.target.value);
+                      clearErrorMessage();
+                    }}
                     className="form-select"
                   >
                     <option value="">Seçiniz</option>
@@ -134,7 +153,9 @@ const Advance = () => {
                     ))}
                   </select>
                   {formSubmitted && !advanceType && (
-                    <div className="text-danger">Lütfen avans türü seçiniz.</div>
+                    <div className="text-danger">
+                      Lütfen avans türü seçiniz.
+                    </div>
                   )}
                 </div>
                 <div className="mb-3">
@@ -144,7 +165,10 @@ const Advance = () => {
                   <select
                     id="currency"
                     value={currency}
-                    onChange={(e) => { setCurrency(e.target.value); clearErrorMessage(); }}
+                    onChange={(e) => {
+                      setCurrency(e.target.value);
+                      clearErrorMessage();
+                    }}
                     className="form-select"
                   >
                     <option value="">Seçiniz</option>
@@ -155,7 +179,9 @@ const Advance = () => {
                     ))}
                   </select>
                   {formSubmitted && !currency && (
-                    <div className="text-danger">Lütfen para birimi seçiniz.</div>
+                    <div className="text-danger">
+                      Lütfen para birimi seçiniz.
+                    </div>
                   )}
                 </div>
                 <div className="mb-3">
@@ -166,11 +192,16 @@ const Advance = () => {
                     type="number"
                     id="amount"
                     value={amount}
-                    onChange={(e) => { setAmount(e.target.value); clearErrorMessage(); }}
+                    onChange={(e) => {
+                      setAmount(e.target.value);
+                      clearErrorMessage();
+                    }}
                     className="form-control"
                   />
                   {formSubmitted && !amount && (
-                    <div className="text-danger">Lütfen avans tutarı giriniz.</div>
+                    <div className="text-danger">
+                      Lütfen avans tutarı giriniz.
+                    </div>
                   )}
                 </div>
                 <div className="mb-3">
@@ -180,7 +211,10 @@ const Advance = () => {
                   <textarea
                     id="description"
                     value={description}
-                    onChange={(e) => { setDescription(e.target.value); clearErrorMessage(); }}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                      clearErrorMessage();
+                    }}
                     className="form-control"
                   />
                   {formSubmitted && !description && (
@@ -222,5 +256,5 @@ const Advance = () => {
     </div>
   );
 };
- 
+
 export default Advance;

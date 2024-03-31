@@ -2,23 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchManager } from "../api/api";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../../components/Cards";
+import { useMng } from "../../components/ManagerContext";
 
 function ManagerList() {
   const navigateTo = useNavigate();
 
-  const [manager, setManager] = useState(null);
+  const { mngData, refreshData } = useMng();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchManager();
-        setManager(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    refreshData();
   }, []);
 
   return (
@@ -33,22 +25,22 @@ function ManagerList() {
           padding: "120px",
         }}
       >
-        {manager && (
+        {mngData && (
           <EmployeeCardLeftSide
-            firstName={manager.firstName}
-            secondName={manager.secondName}
-            firstSurname={manager.firstSurname}
-            secondSurname={manager.secondSurname}
-            department={manager.department}
-            imagePath={manager.imagePath}
+            firstName={mngData.firstName}
+            secondName={mngData.secondName}
+            firstSurname={mngData.firstSurname}
+            secondSurname={mngData.secondSurname}
+            department={mngData.department}
+            imagePath={mngData.imagePath}
             routeUpdatePage="/mng-update"
           />
         )}
-        {manager && (
+        {mngData && (
           <EmployeeSumCard
-            email={manager.email}
-            phoneNumber={manager.phoneNumber}
-            address={manager.address}
+            email={mngData.email}
+            phoneNumber={mngData.phoneNumber}
+            address={mngData.address}
             routeDetailPage="/mng-detail"
           />
         )}

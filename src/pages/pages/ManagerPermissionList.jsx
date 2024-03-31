@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPermission } from "../api/api";
-import { useAuth } from "../../components/TokenContext";
+import { fetchAllPermissionList } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,12 +14,11 @@ function ManagerPermissionList() {
   const [sortedPermissions, setSortedPermissions] = useState([]);
   const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // İzin türü filtresi
-  const { token, setAuthToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const permissionsData = await fetchAllPermission(token);
+        const permissionsData = await fetchAllPermissionList();
         setPermissions(permissionsData);
       } catch (error) {
         console.error("Error fetching permissions:", error);
@@ -28,7 +26,7 @@ function ManagerPermissionList() {
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     setSortedPermissions([...permissions].reverse());
@@ -38,7 +36,7 @@ function ManagerPermissionList() {
     const updateResult = await updatePermissionStatus(id, true);
     if (updateResult.success) {
       toast.success(updateResult.message);
-      const permissionsData = await fetchAllPermission(token);
+      const permissionsData = await fetchAllPermissionList();
       setPermissions(permissionsData);
     } else {
       toast.error(updateResult.message);
@@ -49,7 +47,7 @@ function ManagerPermissionList() {
     const updateResult = await updatePermissionStatus(id, false);
     if (updateResult.success) {
       toast.success(updateResult.message);
-      const permissionsData = await fetchAllPermission(token);
+      const permissionsData = await fetchAllPermissionList();
       setPermissions(permissionsData);
     } else {
       toast.error(updateResult.message);

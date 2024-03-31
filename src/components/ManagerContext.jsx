@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchEmployees } from "../pages/api/api";
+import { fetchManager } from "../pages/api/api";
 import { useAuth } from "./TokenContext";
 import { jwtDecode } from "jwt-decode";
 
-const EmployeeContext = createContext();
+const ManagerContext = createContext();
 
-export const useEmp = () => useContext(EmployeeContext);
+export const useMng = () => useContext(ManagerContext);
 
-export const EmployeeDataProvider = ({ children }) => {
+export const ManagerDataProvider = ({ children }) => {
   const { token } = useAuth();
-  const [empData, setEmpData] = useState(null);
+  const [mngData, setMngData] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -17,11 +17,11 @@ export const EmployeeDataProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
-        const data = await fetchEmployees(userId);
-        setEmpData(data);
+        const data = await fetchManager(userId);
+        setMngData(data);
       }
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error("Error fetching managers:", error);
     }
   };
 
@@ -34,8 +34,8 @@ export const EmployeeDataProvider = ({ children }) => {
   };
 
   return (
-    <EmployeeContext.Provider value={{ empData, refreshData }}>
+    <ManagerContext.Provider value={{ mngData, refreshData }}>
       {children}
-    </EmployeeContext.Provider>
+    </ManagerContext.Provider>
   );
 };
