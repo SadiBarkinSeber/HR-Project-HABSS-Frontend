@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { fetchManager } from "../api/api";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../../components/Cards";
 import { useMng } from "../../components/ManagerContext";
-
 function ManagerList() {
   const navigateTo = useNavigate();
 
   const { mngData, refreshData } = useMng();
 
   useEffect(() => {
+
     refreshData();
   }, []);
 

@@ -31,6 +31,13 @@ import { jwtDecode } from "jwt-decode";
 import ForgetPassword from "./pages/authentication/forget-password";
 import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
 import { ManagerDataProvider } from "./components/ManagerContext";
+import SiteManagerList from "./pages/pages/AdminMain";
+import SiteManagerDetail from "./pages/pages/AdminDetail";
+import SiteManagerUpdate from "./pages/pages/AdminUpdate";
+import Managers from "./pages/pages/AdminManagerList";
+import ManagerCreate from "./pages/pages/ManagerCreate";
+import CompanyAddPage from "./pages/pages/CompanyAddPage";
+import CompanyList from "./pages/pages/AdminCompanyList";
 
 const ProtectedRoute = ({ element, roles, ...rest }) => {
   const { token } = useAuth();
@@ -329,7 +336,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<EmployeeList />}
+                            {<SiteManagerList />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -345,7 +352,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<ManagerDetail />}
+                            {<SiteManagerDetail />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -361,7 +368,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<ManagerUpdate />}
+                            {<SiteManagerUpdate />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -377,7 +384,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<EmployeeCreate />}
+                            {<CompanyAddPage />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -393,7 +400,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<ManagerPermissionList />}
+                            {<CompanyList />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -409,7 +416,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<EmployeeCreate />}
+                            {<ManagerCreate />}
                           </DefaultDashboardLayout>
                         }
                       />
@@ -425,7 +432,7 @@ export default function App() {
                             routeType={DashboardMenuAdmin}
                           >
                             {" "}
-                            {<ManagerPermissionList />}
+                            {<Managers />}
                           </DefaultDashboardLayout>
                         }
                       />

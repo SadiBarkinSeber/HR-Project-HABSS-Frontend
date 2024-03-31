@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createEmployee } from "../api/api";
 import PhoneInput from "react-phone-number-input/input";
 import { uploadPhotoAndGetPath } from "../api/api";
+import { checkEmailExists } from "../api/api";
 
 const EmployeeCreate = () => {
   const [employeeData, setEmployeeData] = useState({
@@ -97,7 +98,8 @@ const EmployeeCreate = () => {
       const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
       if (confirmed) {
         const response = await createEmployee(employeeData);
-        console.log("Employee created:", response);
+        console.log("Employee created:", response, response.email);
+        checkEmailExists(response.email);
         resetForm();
         alert("Kayıt onaylandı.");
       } else {

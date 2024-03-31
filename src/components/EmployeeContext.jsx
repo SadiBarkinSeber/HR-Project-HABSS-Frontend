@@ -17,6 +17,7 @@ export const EmployeeDataProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
+        console.log(userId);
         const data = await fetchEmployees(userId);
         setEmpData(data);
       }

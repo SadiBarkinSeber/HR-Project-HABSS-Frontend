@@ -437,9 +437,10 @@ export const updateSiteManager = async (
 };
 
 export const createManager = async (managerData) => {
+  console.log(managerData);
   try {
     const response = await axios.post(
-      "/https://hrprojectwebapi20240311113118.azurewebsites.net/api/manager",
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/manager",
       managerData
     );
     return response.data;
@@ -447,6 +448,7 @@ export const createManager = async (managerData) => {
     throw error;
   }
 };
+
 export const fetchManagers = async () => {
   try {
     const response = await api.get("/manager");

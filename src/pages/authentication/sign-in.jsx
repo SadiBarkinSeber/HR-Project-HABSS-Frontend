@@ -46,7 +46,7 @@ const SignIn = () => {
         const userRole = decodedToken.role;
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
-        console.log(userRole, typeof userId);
+        console.log(userRole, typeof userId, userId);
 
         // Kullanıcının rolüne göre yönlendirme yap
         if (userRole === "siteManager") {

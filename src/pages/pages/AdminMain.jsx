@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchSiteManagers } from "../api/api";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../../components/Cards";
-
 function SiteManagerList() {
   const navigateTo = useNavigate();
 

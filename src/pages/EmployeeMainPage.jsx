@@ -4,7 +4,6 @@ import { fetchEmployees } from "./api/api";
 import { useEmp } from "../components/EmployeeContext";
 import { EmployeeSumCard, EmployeeCardLeftSide } from "../components/Cards";
 import NavbarVertical from "../layouts/navbars/NavbarVertical";
-
 function EmployeeList() {
   const { empData, refreshData } = useEmp();
 

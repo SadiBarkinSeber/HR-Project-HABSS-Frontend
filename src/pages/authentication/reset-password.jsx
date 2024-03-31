@@ -5,6 +5,7 @@ import { HiOutlineCheckCircle } from "react-icons/hi"; // React Icons'tan onay i
 import AuthLayout from "../../layouts/AuthLayout";
 import { changePassword } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/TokenContext";
 
 const ResetPassword = () => {
   // const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const ResetPassword = () => {
   const navigateTo = useNavigate();
   const queryParams = new URLSearchParams(window.location.search);
   const email = queryParams.get("email");
+  const { token, setAuthToken } = useAuth();
 
   const isValidPassword = (value) => {
     // Şifrenin en az 6 karakter uzunluğunda olup olmadığını kontrol et
@@ -79,6 +81,7 @@ const ResetPassword = () => {
       if (response.status === 200) {
         alert("Sifre basarili bir sekilde degistirildi !");
         // Başarılı bir şekilde şifre değiştirildiğinde yapılacak işlemler buraya
+        setAuthToken(null);
         navigateTo("/"); // Örneğin anasayfaya yönlendirme
       } else {
         setError(response.data.message);
