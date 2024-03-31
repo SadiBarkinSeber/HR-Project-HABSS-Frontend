@@ -15,10 +15,12 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import NotificationList from "../data/Notification";
 import useMounted from "../hooks/useMounted";
+import { useAuth } from "../components/TokenContext";
 
 const QuickMenu = (props) => {
   const hasMounted = useMounted();
   const [showLogoutModal, setShowLogoutModal] = useState(false); // State to control logout modal visibility
+  const { token, setAuthToken } = useAuth();
 
   const isDesktop = useMediaQuery({
     query: "(min-width: 1224px)",
@@ -52,8 +54,15 @@ const QuickMenu = (props) => {
 
   const QuickMenuDesktop = () => {
     const { setProfilePictureData, profilePictureData } = useProfilePicture();
+    const [showLogoutModal, setShowLogoutModal] = useState(false); // State to control logout modal visibility
+
     const handleLogout = () => {
       setShowLogoutModal(true);
+    };
+
+    const handleLogoutConfirm = () => {
+      setAuthToken(null); // Çıkış yapmak için token'i null yap
+      setShowLogoutModal(false); // Modalı gizle
     };
 
     return (
@@ -162,6 +171,7 @@ const QuickMenu = (props) => {
               variant="primary"
               style={{ backgroundColor: "dodgerblue", border: "none" }}
               className="custom-button"
+              onClick={handleLogoutConfirm} // Evet'e basıldığında çıkış yapma işlevini çağır
             >
               <Link
                 to="/"

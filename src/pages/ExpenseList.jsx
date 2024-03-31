@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { fetchAllExpenses } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,27 +8,25 @@ import { updateExpenseStatus } from "./api/api";
 import { confirmAlert } from "react-confirm-alert";
 import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
+import { useEmp } from "../components/EmployeeContext";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [sortedExpenses, setSortedExpenses] = useState([]);
   const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
+  const { empData, refreshData } = useEmp();
 
   const fetchData = async () => {
-    const data = await fetchAllExpenses();
+    const data = await fetchAllExpenses(empData.id);
     console.log(data);
     setExpenses(data);
     setSortedExpenses(data.reverse());
   };
 
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, []);
-
-
-  
 
   const handleDownload = async (fileName) => {
     const downloadResult = await downloadFile(fileName);
@@ -50,11 +47,9 @@ function ExpenseList() {
     }
   };
 
-  
-
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    return date.toLocaleDateString('tr-TR');
+    return date.toLocaleDateString("tr-TR");
   };
   const sortBy = (key) => {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
@@ -79,7 +74,6 @@ function ExpenseList() {
     });
     setSortedExpenses(sorted);
   };
-
 
   const filterExpenses = (expense) => {
     if (filterOption === "") {
@@ -106,7 +100,6 @@ function ExpenseList() {
     });
   };
 
-
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -124,7 +117,11 @@ function ExpenseList() {
                 if (selectedValue === "") {
                   setSortedExpenses([...expenses]);
                 } else {
-                  setSortedExpenses(expenses.filter(expense => expense.expenseType === selectedValue));
+                  setSortedExpenses(
+                    expenses.filter(
+                      (expense) => expense.expenseType === selectedValue
+                    )
+                  );
                 }
               }}
             >
@@ -204,8 +201,7 @@ function ExpenseList() {
                       )}
                     </td>
                     <td className="text-center">
-                      
-                       <button
+                      <button
                         className="btn btn-sm btn-danger"
                         onClick={() => confirmReject(expense.id)}
                       >
@@ -237,6 +233,3 @@ function ExpenseList() {
 }
 
 export default ExpenseList;
-
-                  
-

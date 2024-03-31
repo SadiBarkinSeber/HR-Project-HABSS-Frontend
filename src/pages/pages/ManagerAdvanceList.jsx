@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllAdvances } from "../api/api";
+import { fetchAllAdvanceList } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -19,7 +19,7 @@ function ManagerAdvanceList() {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetchAllAdvances();
+    const data = await fetchAllAdvanceList();
     setAdvances(data);
     setSortedAdvances([...data].reverse());
   };

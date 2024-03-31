@@ -1,27 +1,27 @@
-
-
 import React, { useState, useEffect } from "react";
 import { fetchAllAdvances } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { updateAdvanceStatus } from "../api/api";
 import { confirmAlert } from "react-confirm-alert";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { useEmp } from "../../components/EmployeeContext";
 
 function AdvanceList() {
   const [advances, setAdvances] = useState([]);
   const [filterOption, setFilterOption] = useState("all");
   const [sortDirection, setSortDirection] = useState({});
   const [sortedAdvances, setSortedAdvances] = useState([]);
+  const { empData, refreshData } = useEmp();
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const data = await fetchAllAdvances();
+    const data = await fetchAllAdvances(empData.id);
     setAdvances([...data].reverse()); // Yeni eklenenler en üste gelecek şekilde ters sırala
     setSortedAdvances([...data].reverse());
   };
@@ -45,12 +45,11 @@ function AdvanceList() {
         },
         {
           label: "Hayır",
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
   };
-
 
   const formatDate = (dateTimeString) => {
     const date = new Date(dateTimeString);
@@ -73,17 +72,21 @@ function AdvanceList() {
     const direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ ...sortDirection, [key]: direction });
     const sorted = [...advances].sort((a, b) => {
-      if (key === "advanceType" || key === "requestDate" || key === "currency" || key === "approvalStatus") {
-
-        return direction === "asc" ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+      if (
+        key === "advanceType" ||
+        key === "requestDate" ||
+        key === "currency" ||
+        key === "approvalStatus"
+      ) {
+        return direction === "asc"
+          ? a[key].localeCompare(b[key])
+          : b[key].localeCompare(a[key]);
       } else {
-
         return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
       }
     });
     setAdvances(sorted);
   };
-
 
   return (
     <div className="container mt-5">
@@ -101,13 +104,11 @@ function AdvanceList() {
                 <option value="all">Hepsi</option>
                 <option value="individual">Bireysel</option>
                 <option value="corporate">Kurumsal</option>
-
               </select>
             </div>
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-
                   <th onClick={() => sortBy("advanceType")}>
                     Avans Türü{" "}
                     {sortDirection["advanceType"] === "asc" ? (
@@ -169,7 +170,6 @@ function AdvanceList() {
                         İptal Et
                       </button>
                     </td>
-
                   </tr>
                 ))}
               </tbody>
@@ -178,20 +178,19 @@ function AdvanceList() {
         </div>
       </div>
       <ToastContainer
-       position="top-right"
+        position="top-right"
         autoClose={2500}
-         hideProgressBar={false}
-         newestOnTop={false}
-         closeOnClick
-         rtl={false}
-         pauseOnFocusLoss
-       draggable
-         pauseOnHover={false}
-         theme="colored"
-       />
-     </div>
-   );
- }
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
+    </div>
+  );
+}
 
- export default AdvanceList;
-
+export default AdvanceList;

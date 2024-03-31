@@ -1,48 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  fetchEmployees,
-  updateEmployee,
-  uploadPhotoAndGetPath,
-} from "./api/api";
-
+import { updateEmployee, uploadPhotoAndGetPath } from "./api/api";
 import {
   EmployeeUpdateCardLeftSide,
   EmployeePersonalUpdate,
-  EmployeeJobDetail,
 } from "../components/Cards";
-
 import NavbarVertical from "../layouts/navbars/NavbarVertical";
+import { useEmp } from "../components/EmployeeContext";
 
 function EmployeeUpdate() {
-  const [employee, setEmployee] = useState(null);
+  const { empData, refreshData } = useEmp();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [photoPath, setPhotoPath] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchEmployees();
-        setEmployee(data);
-        setPhoneNumber(data.phoneNumber);
-        setAddress(data.address);
-        setPhotoPath(data.imagePath);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (empData) {
+      setPhoneNumber(empData.phoneNumber);
+      setAddress(empData.address);
+      setPhotoPath(empData.imagePath);
+    }
+  }, [empData]);
 
   const handleUpdateEmployee = async () => {
     try {
       // Adres alanında en az bir harf kontrolü
       if (/[a-zA-Z]/.test(address)) {
         const updatedEmp = await updateEmployee(
-          employee.id,
+          empData.id,
           phoneNumber,
           address,
           photoPath
@@ -52,6 +38,7 @@ function EmployeeUpdate() {
         toast.success("Çalışan başarıyla güncellendi.", {
           position: "top-right",
         });
+        refreshData(); // Verileri güncellemek için refreshData işlevini çağırın
       } else {
         toast.error("En az bir harf içeren bir adres girin.", {
           position: "top-right",
@@ -103,29 +90,29 @@ function EmployeeUpdate() {
             justifyContent: "center",
           }}
         >
-          {employee && (
+          {empData && (
             <EmployeeUpdateCardLeftSide
-              firstName={employee.firstName}
-              secondName={employee.secondName}
-              firstSurname={employee.firstSurname}
-              secondSurname={employee.secondSurname}
-              department={employee.department}
+              firstName={empData.firstName}
+              secondName={empData.secondName}
+              firstSurname={empData.firstSurname}
+              secondSurname={empData.secondSurname}
+              department={empData.department}
               imagePath={photoPath}
               onPhotoChange={handlePhotoChange}
             />
           )}
-          {employee && (
+          {empData && (
             <EmployeePersonalUpdate
-              firstName={employee.firstName}
-              secondName={employee.secondName}
-              firstSurname={employee.firstSurname}
-              secondSurname={employee.secondSurname}
-              email={employee.email}
+              firstName={empData.firstName}
+              secondName={empData.secondName}
+              firstSurname={empData.firstSurname}
+              secondSurname={empData.secondSurname}
+              email={empData.email}
               phoneNumber={phoneNumber}
               address={address}
-              dateOfBirth={employee.dateOfBirth}
-              birthPlace={employee.birthPlace}
-              tc={employee.tc}
+              dateOfBirth={empData.dateOfBirth}
+              birthPlace={empData.birthPlace}
+              tc={empData.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
               onAddressChange={(e) => setAddress(e.target.value)}
             />

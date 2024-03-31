@@ -20,10 +20,10 @@ const ForgetPassword = () => {
       setError("Lütfen email adresinizi giriniz.");
       return;
     }
-    // if (!isValidEmail(email)) {
-    //   setError("Geçerli bir Bilge Adam Boost email adresi girin.");
-    //   return;
-    // }
+    if (!isValidEmail(email)) {
+      setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+      return;
+    }
 
     try {
       const exists = await checkEmailExists(email);

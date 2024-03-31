@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllExpenses } from "../api/api";
+import { fetchAllExpenseList } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,7 +17,7 @@ function ManagerExpenseList() {
 
   // fetchData fonksiyonu burada tanımlandı
   const fetchData = async () => {
-    const data = await fetchAllExpenses();
+    const data = await fetchAllExpenseList();
     console.log(data);
     setExpenses(data);
     setSortedExpenses(data.reverse());

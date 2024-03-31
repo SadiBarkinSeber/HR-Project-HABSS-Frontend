@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchEmployees } from "./api/api";
+import { useEmp } from "../components/EmployeeContext";
 import {
   EmployeeCardLeftSide,
   EmployeePersonalDetail,
@@ -10,25 +9,10 @@ import {
 import NavbarVertical from "../layouts/navbars/NavbarVertical";
 
 function EmployeeDetail() {
-  const navigateTo = useNavigate();
-
-  const handleBackButton = () => {
-    navigateTo("/");
-  };
-
-  const [employee, setEmployee] = useState(null);
+  const { empData, refreshData } = useEmp();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchEmployees();
-        setEmployee(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    refreshData();
   }, []);
 
   return (
@@ -50,40 +34,40 @@ function EmployeeDetail() {
             justifyContent: "center",
           }}
         >
-          {employee && (
+          {empData && (
             <EmployeeCardLeftSide
-              firstName={employee.firstName}
-              secondName={employee.secondName}
-              firstSurname={employee.firstSurname}
-              secondSurname={employee.secondSurname}
-              department={employee.department}
-              imagePath={employee.imagePath}
+              firstName={empData.firstName}
+              secondName={empData.secondName}
+              firstSurname={empData.firstSurname}
+              secondSurname={empData.secondSurname}
+              department={empData.department}
+              imagePath={empData.imagePath}
               routeUpdatePage="/emp-update"
             />
           )}
-          {employee && (
+          {empData && (
             <EmployeePersonalDetail
-              firstName={employee.firstName}
-              secondName={employee.secondName}
-              firstSurname={employee.firstSurname}
-              secondSurname={employee.secondSurname}
-              email={employee.email}
-              phoneNumber={employee.phoneNumber}
-              address={employee.address}
-              dateOfBirth={employee.dateOfBirth}
-              birthPlace={employee.birthPlace}
-              tc={employee.tc}
+              firstName={empData.firstName}
+              secondName={empData.secondName}
+              firstSurname={empData.firstSurname}
+              secondSurname={empData.secondSurname}
+              email={empData.email}
+              phoneNumber={empData.phoneNumber}
+              address={empData.address}
+              dateOfBirth={empData.dateOfBirth}
+              birthPlace={empData.birthPlace}
+              tc={empData.tc}
             />
           )}
-          {employee && (
+          {empData && (
             <EmployeeJobDetail
-              startDate={employee.startDate}
-              endDate={employee.endDate}
-              isActive={employee.isActive ? "Aktif" : "Pasif"}
-              position={employee.position}
-              department={employee.department}
-              company={employee.company}
-              wage={employee.wage + " TL"}
+              startDate={empData.startDate}
+              endDate={empData.endDate}
+              isActive={empData.isActive ? "Aktif" : "Pasif"}
+              position={empData.position}
+              department={empData.department}
+              company={empData.company}
+              wage={empData.wage + " TL"}
             />
           )}
         </div>

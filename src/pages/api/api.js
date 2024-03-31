@@ -9,12 +9,22 @@ const api = axios.create({
   },
 });
 
-export const fetchEmployees = async () => {
+export const fetchEmployees = async (id) => {
   try {
-    const response = await api.get("/employees/1");
+    const response = await api.get(`/employees/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching employees:", error);
+    throw error;
+  }
+};
+
+export const fetchCompanies = async () => {
+  try {
+    const response = await api.get("/company");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching companies:", error);
     throw error;
   }
 };
@@ -227,10 +237,10 @@ async function createEmployee(createObject) {
 
 export { createEmployee };
 
-async function fetchAllPermission() {
+async function fetchAllPermission(id) {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission"
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/${id}/byEmployee`
     );
     return response.data;
   } catch (error) {
@@ -241,10 +251,10 @@ async function fetchAllPermission() {
 
 export { fetchAllPermission };
 
-async function fetchAllAdvances() {
+async function fetchAllAdvances(id) {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances/${id}/byEmployee`
     );
     return response.data;
   } catch (error) {
@@ -255,10 +265,10 @@ async function fetchAllAdvances() {
 
 export { fetchAllAdvances };
 
-async function fetchAllExpenses() {
+async function fetchAllExpenses(id) {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses/${id}/byEmployee`
     );
     return response.data;
   } catch (error) {
@@ -269,9 +279,9 @@ async function fetchAllExpenses() {
 
 export { fetchAllExpenses };
 
-export const fetchManager = async () => {
+export const fetchManager = async (id) => {
   try {
-    const response = await api.get("/manager/3");
+    const response = await api.get(`/manager/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching manager:", error);
@@ -381,5 +391,112 @@ export async function changePassword(email, password, repeatPassword) {
     return { success: false, message: error.message };
   }
 }
+
+async function createCompany(createObject) {
+  try {
+    const response = await axios.post(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Company",
+      createObject
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching company:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+export { createCompany };
+
+export const fetchSiteManagers = async () => {
+  try {
+    const response = await api.get("/SiteManager/15");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching admins:", error);
+    throw error;
+  }
+};
+
+export const updateSiteManager = async (
+  id,
+  phoneNumber,
+  address,
+  photoPath
+) => {
+  try {
+    const response = await api.put("/SiteManager/", {
+      id: id,
+      phoneNumber: phoneNumber,
+      address: address,
+      imagePath: photoPath,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating site manager:", error);
+    throw error;
+  }
+};
+
+export const createManager = async (managerData) => {
+  try {
+    const response = await axios.post(
+      "/https://hrprojectwebapi20240311113118.azurewebsites.net/api/manager",
+      managerData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const fetchManagers = async () => {
+  try {
+    const response = await api.get("/manager");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching managers:", error);
+    throw error;
+  }
+};
+
+async function fetchAllPermissionList() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching permission:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAllPermissionList };
+
+async function fetchAllExpenseList() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAllExpenseList };
+
+async function fetchAllAdvanceList() {
+  try {
+    const response = await axios.get(
+      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching advances:", error);
+    return []; // Hata durumunda boş bir dizi döndürüyoruz
+  }
+}
+
+export { fetchAllAdvanceList };
 
 export default api;

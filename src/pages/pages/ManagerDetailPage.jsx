@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchManager } from "../api/api";
+import { useMng } from "../../components/ManagerContext";
 import {
   EmployeeCardLeftSide,
   EmployeePersonalDetail,
@@ -9,31 +9,18 @@ import {
 
 function ManagerDetail() {
   const navigateTo = useNavigate();
+  const { mngData, refreshData } = useMng();
+
+  useEffect(() => {
+    refreshData(); // Veriyi yenile
+  }, []); // Sayfa yüklendiğinde bir kere çağrılacak
 
   const handleBackButton = () => {
     navigateTo("/");
   };
 
-  const [manager, setManager] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchManager();
-        setManager(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <>
-      {/* <div className="navbar-vertical navbar">
-        <NavbarVertical />
-      </div> */}
       <div
         style={{
           display: "flex",
@@ -48,40 +35,40 @@ function ManagerDetail() {
             justifyContent: "center",
           }}
         >
-          {manager && (
+          {mngData && (
             <EmployeeCardLeftSide
-              firstName={manager.firstName}
-              secondName={manager.secondName}
-              firstSurname={manager.firstSurname}
-              secondSurname={manager.secondSurname}
-              department={manager.department}
-              imagePath={manager.imagePath}
+              firstName={mngData.firstName}
+              secondName={mngData.secondName}
+              firstSurname={mngData.firstSurname}
+              secondSurname={mngData.secondSurname}
+              department={mngData.department}
+              imagePath={mngData.imagePath}
               routeUpdatePage="/mng-update"
             />
           )}
-          {manager && (
+          {mngData && (
             <EmployeePersonalDetail
-              firstName={manager.firstName}
-              secondName={manager.secondName}
-              firstSurname={manager.firstSurname}
-              secondSurname={manager.secondSurname}
-              email={manager.email}
-              phoneNumber={manager.phoneNumber}
-              address={manager.address}
-              dateOfBirth={manager.dateOfBirth}
-              birthPlace={manager.birthPlace}
-              tc={manager.tc}
+              firstName={mngData.firstName}
+              secondName={mngData.secondName}
+              firstSurname={mngData.firstSurname}
+              secondSurname={mngData.secondSurname}
+              email={mngData.email}
+              phoneNumber={mngData.phoneNumber}
+              address={mngData.address}
+              dateOfBirth={mngData.dateOfBirth}
+              birthPlace={mngData.birthPlace}
+              tc={mngData.tc}
             />
           )}
-          {manager && (
+          {mngData && (
             <EmployeeJobDetail
-              startDate={manager.startDate}
-              endDate={manager.endDate}
-              isActive={manager.isActive ? "Aktif" : "Pasif"}
-              position={manager.position}
-              department={manager.department}
-              company={manager.company}
-              wage={manager.wage + " TL"}
+              startDate={mngData.startDate}
+              endDate={mngData.endDate}
+              isActive={mngData.isActive ? "Aktif" : "Pasif"}
+              position={mngData.position}
+              department={mngData.department}
+              company={mngData.company}
+              wage={mngData.wage + " TL"}
             />
           )}
         </div>
