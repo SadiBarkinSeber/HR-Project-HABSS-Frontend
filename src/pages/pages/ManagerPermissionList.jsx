@@ -113,7 +113,7 @@ function ManagerPermissionList() {
         },
         {
           label: "Hayır",
-          onClick: () => {}
+          onClick: () => {},
         },
       ],
     });
@@ -126,9 +126,10 @@ function ManagerPermissionList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => {handleReject(id);
-          toast.error("İzin talebi reddedildi.");
-        }
+          onClick: () => {
+            handleReject(id);
+            toast.error("İzin talebi reddedildi.");
+          },
         },
         {
           label: "Hayır",
@@ -275,11 +276,7 @@ function ManagerPermissionList() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }

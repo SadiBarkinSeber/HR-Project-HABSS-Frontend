@@ -9,7 +9,7 @@ function Managers() {
     async function fetchData() {
       try {
         const data = await fetchManagers();
-        setManagers(data);
+        setManagers(data.reverse()); // Veriyi ters çevirerek set et
       } catch (error) {
         console.error("Error fetching managers:", error);
       }
@@ -19,7 +19,8 @@ function Managers() {
 
   // Yöneticileri filtreleme fonksiyonu
   const filteredManagers = managers.filter((manager) => {
-    const fullName = `${manager.firstName} ${manager.lastName}`.toLowerCase();
+    const fullName =
+      `${manager.firstName} ${manager.firstSurname}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase());
   });
 
@@ -48,7 +49,7 @@ function Managers() {
           {filteredManagers.map((manager) => (
             <tr key={manager.id}>
               <td>{manager.firstName}</td>
-              <td>{manager.lastName}</td>
+              <td>{manager.firstSurname}</td>
               <td>{manager.phoneNumber}</td>
               <td>{manager.email}</td>
               <td>{manager.address}</td>
