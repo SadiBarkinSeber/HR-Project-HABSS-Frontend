@@ -57,7 +57,7 @@ function EmployeeUpdate() {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       const fileExtension = file.name.split(".").pop().toLowerCase();
       if (!allowedExtensions.includes(fileExtension)) {
-        alert("Sadece jpg ve png dosyaları kabul edilir!");
+        toast.warning("Sadece jpg ve png dosyaları kabul edilir!");
         return;
       }
 
@@ -131,14 +131,6 @@ function EmployeeUpdate() {
       <ToastContainer
         position="top-right"
         autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition="Bounce"
         theme="colored"
       />
     </>

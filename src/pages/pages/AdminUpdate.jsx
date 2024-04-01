@@ -40,17 +40,17 @@ function SiteManagerUpdate() {
           photoPath
         );
         console.log("Updated Site Manager:", updatedSiteManager);
-        toast.success("Site Manager successfully updated.", {
+        toast.success("Site Yöneticisi başarıyla güncellendi.", {
           position: "top-right",
         });
       } else {
-        toast.error("Please enter an address containing at least one letter.", {
+        toast.error("Lütfen en az bir harf içeren bir adres girin.", {
           position: "top-right",
         });
       }
     } catch (error) {
       console.error("Error updating site manager:", error);
-      toast.error("Site Manager could not be updated: " + error.message, {
+      toast.error("Site Yöneticisi güncellenemedi: " + error.message, {
         position: "top-right",
       });
     }
@@ -61,7 +61,9 @@ function SiteManagerUpdate() {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       const fileExtension = file.name.split(".").pop().toLowerCase();
       if (!allowedExtensions.includes(fileExtension)) {
-        alert("Only jpg and png files are accepted!");
+        toast.error("Sadece jpg ve png formatında kabul edilir!", {
+          position: "top-right",
+        });
         return;
       }
 
@@ -136,14 +138,6 @@ function SiteManagerUpdate() {
       <ToastContainer
         position="top-right"
         autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition="Bounce"
         theme="colored"
       />
     </>

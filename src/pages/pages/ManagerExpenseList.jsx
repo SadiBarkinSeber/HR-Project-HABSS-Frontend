@@ -100,7 +100,9 @@ function ManagerExpenseList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => approveExpense(id),
+          onClick: () => {approveExpense(id);
+            toast.success("İzin talebi onaylandı.");
+          }
         },
         {
           label: "Hayır",
@@ -117,7 +119,9 @@ function ManagerExpenseList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => rejectExpense(id),
+          onClick: () => {rejectExpense(id);
+            toast.error("İzin talebi reddedildi.");
+          }
         },
         {
           label: "Hayır",
@@ -264,16 +268,8 @@ function ManagerExpenseList() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
+        autoClose={2000}
         theme="colored"
-        transition="bounce"
       />
     </div>
   );

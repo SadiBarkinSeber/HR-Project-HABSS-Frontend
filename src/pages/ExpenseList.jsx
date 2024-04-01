@@ -90,13 +90,16 @@ function ExpenseList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => rejectExpense(id),
+          onClick: () => {
+            rejectExpense(id);
+            toast.success("Harcama talebi başarıyla iptal edildi.");
+          }
         },
         {
           label: "Hayır",
-          onClick: () => {},
-        },
-      ],
+          onClick: () => {}
+        }
+      ]
     });
   };
 
@@ -217,16 +220,8 @@ function ExpenseList() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
+        autoClose={2000}
         theme="colored"
-        transition="bounce"
       />
     </div>
   );

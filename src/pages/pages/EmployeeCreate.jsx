@@ -3,6 +3,8 @@ import { createEmployee } from "../api/api";
 import PhoneInput from "react-phone-number-input/input";
 import { uploadPhotoAndGetPath } from "../api/api";
 import { checkEmailExists } from "../api/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeCreate = () => {
   const [employeeData, setEmployeeData] = useState({
@@ -45,7 +47,7 @@ const EmployeeCreate = () => {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       const fileExtension = file.name.split(".").pop().toLowerCase();
       if (!allowedExtensions.includes(fileExtension)) {
-        alert("Sadece jpg ve png dosyaları kabul edilir!");
+        toast.warning("Sadece jpg ve png dosyaları kabul edilir!");
         return;
       }
 
@@ -54,8 +56,10 @@ const EmployeeCreate = () => {
       console.log("Dosya adı:", fileName);
 
       setEmployeeData({ ...employeeData, imagePath: fileName });
+      toast.success("Fotoğraf başarıyla yüklendi"); // Başarılı yükleme bildirimi
     } catch (error) {
       console.error("Error uploading photo:", error);
+      toast.error("Fotoğraf yüklenirken bir hata oluştu."); // Hata bildirimi
     }
   };
 
@@ -65,31 +69,26 @@ const EmployeeCreate = () => {
 
     // Geçerli bir telefon numarası kontrolü
     if (employeeData.phoneNumber.length !== 13) {
-      alert("Lütfen geçerli bir telefon numarası giriniz.");
+      toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
 
     // TC kimlik numarası doğrulama işlemi
     const tcValidationResult = validateTcNumber(employeeData.tc);
     if (!tcValidationResult.valid) {
-      alert(tcValidationResult.message);
+      toast.warning(tcValidationResult.message);
       return;
     }
 
     // Diğer alanların kontrolü
-    if (!validateForm()) {
-      alert("Lütfen tüm alanları doldurunuz.");
-      return;
-    }
-
     if (!validateAddress(employeeData.address)) {
-      alert("Adres en az bir harf ve bir rakam içermelidir.");
+      toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
 
     const minWage = 17002; // Asgari ücret tutarı
     if (parseInt(employeeData.wage) < minWage) {
-      alert("Maaş asgari ücretin altında olamaz.");
+      toast.warning("Maaş asgari ücretin altında olamaz.");
       return;
     }
 
@@ -101,12 +100,14 @@ const EmployeeCreate = () => {
         console.log("Employee created:", response, response.email);
         checkEmailExists(response.email);
         resetForm();
-        alert("Kayıt onaylandı.");
+        toast.success("Kayıt onaylandı.");
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
+        toast.warning("Kaydetme işlemi iptal edildi.");
       }
     } catch (error) {
       console.error("Error creating employee:", error);
+      toast.error("Kaydetme işlemi başarısız oldu.");
     }
   };
 
@@ -204,13 +205,13 @@ const EmployeeCreate = () => {
       .split("T")[0];
 
     if (selectedDate > minDate) {
-      alert("Yaşınız 18'den küçük olamaz.");
+      toast.warning("Yaşınız 18'den küçük olamaz.");
       return;
     }
 
     setEmployeeData({ ...employeeData, dateOfBirth: selectedDate });
   };
-
+  
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Çalışan Ekle</h2>
@@ -497,8 +498,20 @@ const EmployeeCreate = () => {
           onClick={handleSubmit}
         >
           Kaydet
+        </button>{" "}
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={resetForm}
+        >
+          Temizle
         </button>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="colored"
+      />
     </div>
   );
 };

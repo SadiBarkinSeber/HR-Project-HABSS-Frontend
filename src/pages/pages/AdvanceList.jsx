@@ -36,18 +36,18 @@ function AdvanceList() {
           onClick: async () => {
             const updateResult = await updateAdvanceStatus(id, false);
             if (updateResult.success) {
-              toast.success(updateResult.message);
+              toast.success("Avans Talebiniz iptal edilmiştir.");
               fetchData();
             } else {
-              toast.error(updateResult.message);
+              toast.error("Avans Talebiniz iptal edilirken bir sorun ile karşılaşıldı.");
             }
           },
         },
         {
           label: "Hayır",
-          onClick: () => {},
-        },
-      ],
+          onClick: () => {}
+        }
+      ]
     });
   };
 
@@ -179,14 +179,7 @@ function AdvanceList() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
+        autoClose={2000}
         theme="colored"
       />
     </div>

@@ -113,13 +113,16 @@ function PermissionList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => handleReject(id), // handleReject fonksiyonunu çağır
+          onClick: () => {
+            handleReject(id);
+            toast.success("İzin başarıyla iptal edildi.");
+          }
         },
         {
           label: "Hayır",
-          onClick: () => {}, // Hiçbir şey yapma
-        },
-      ],
+          onClick: () => {} // Hiçbir şey yapma
+        }
+      ]
     });
   };
 
@@ -242,14 +245,7 @@ function PermissionList() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
+        autoClose={2000}
         theme="colored"
       />
     </div>
