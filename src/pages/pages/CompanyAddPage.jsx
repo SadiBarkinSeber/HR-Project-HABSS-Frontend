@@ -1,7 +1,8 @@
-
 import React, { useState } from "react";
 import { createCompany } from "../api/api";
 import PhoneInput from "react-phone-number-input/input";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CompanyAddPage = () => {
   const [companyData, setCompanyData] = useState({
@@ -27,7 +28,9 @@ const CompanyAddPage = () => {
       const response = await fetch('upload-url', {
         method: 'POST',
         body: file,
+
       });
+      toast.success("Fotoğraf başarıyla yüklendi");
       const data = await response.json();
       return data.path; // Dosyanın yolu
     } catch (error) {
@@ -77,7 +80,7 @@ const CompanyAddPage = () => {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       const fileExtension = file.name.split(".").pop().toLowerCase();
       if (!allowedExtensions.includes(fileExtension)) {
-        alert("Sadece jpg ve png dosyaları kabul edilir!");
+        toast.warning("Sadece jpg ve png dosyaları kabul edilir!");
         return;
       }
       const uploadedFileResponse = await uploadPhotoAndGetPath(file);
@@ -91,28 +94,31 @@ const CompanyAddPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
+
+    
+
     if (companyData.phoneNumber.length !== 13) {
-      alert("Lütfen geçerli bir telefon numarası giriniz.");
+      toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
     if (!validateAddress(companyData.address)) {
-      alert("Adres en az bir harf ve bir rakam içermelidir.");
+      toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
     if (!validateMersisNo(companyData.mersisNo)) {
-      alert("Girdiğiniz Mersis No sadece rakamlardan oluşmalı ve 16 hane uzunluğunda olmalıdır.");
+      toast.warning("Girdiğiniz Mersis No sadece rakamlardan oluşmalı ve 16 hane uzunluğunda olmalıdır.");
       return;
     }
     if (!validateTaxNumber(companyData.taxNumber)) {
-      alert("Girdiğiniz Vergi No sadece rakamlardan oluşmalı ve 10 hane uzunluğunda olmalıdır.");
+      toast.warning("Girdiğiniz Vergi No sadece rakamlardan oluşmalı ve 10 hane uzunluğunda olmalıdır.");
       return;
     }
     if (!validateTaxDepartment(companyData.taxDepartment)) {
-      alert("Vergi Dairesi boş bırakılamaz.");
+      toast.warning("Vergi Dairesi boş bırakılamaz.");
       return;
     }
     if (!validateContractDates(companyData.dealStartDate, companyData.dealEndDate)) {
-      alert("Sözleşme başlangıç tarihi sözleşme bitiş tarihinden önce veya aynı olamaz.");
+      toast.warning("Sözleşme başlangıç tarihi sözleşme bitiş tarihinden önce veya aynı olamaz.");
       return;
     }
     try {
@@ -121,12 +127,14 @@ const CompanyAddPage = () => {
         const response = await createCompany(companyData);
         console.log("Company created:", response);
         resetForm();
-        alert("Kayıt onaylandı.");
+        toast.success("Şirket başarıyla kaydedildi."); // Başarılı kayıt bildirimi
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
+        toast.error("Kaydetme işlemi iptal edildi.");
       }
     } catch (error) {
       console.error("Error creating company:", error);
+      toast.error("Şirket Kaydı onaylanırken bir sorun ile karşılaşıldı.");
     }
   };
 
@@ -279,11 +287,16 @@ const CompanyAddPage = () => {
         <button type="submit" className="btn btn-primary me-2" onClick={handleSubmit}>Kaydet</button>
         <button type="button" className="btn btn-secondary" onClick={handleCancel}>Vazgeç</button>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="colored"
+      />
     </div>
   );
 };
 export default CompanyAddPage;
 
-                
+
 
 

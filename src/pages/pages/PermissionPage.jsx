@@ -146,7 +146,7 @@ const Permission = () => {
       !numberOfDays ||
       (permissionType !== "Yıllık İzin" && !file)
     ) {
-      setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
+      toast.warning("Lütfen tüm alanları doldurun ve bir dosya seçin. ( Yıllık izinde dosya yükleme zorunluluğu yoktur. )");
       return;
     }
 
@@ -217,7 +217,7 @@ const Permission = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="permissionType" className="form-label">
-                    * İzin Türü:
+                    İzin Türü:
                   </label>
                   <select
                     id="permissionType"
@@ -238,7 +238,8 @@ const Permission = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="startDate" className="form-label">
-                    * İzin Başlangıç Tarihi:
+                    İzin Başlangıç Tarihi:
+                    
                   </label>
                   <input
                     type="date"
@@ -334,15 +335,7 @@ const Permission = () => {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        transition="Bounce"
+        autoClose={3000}
         theme="colored"
       />
     </div>

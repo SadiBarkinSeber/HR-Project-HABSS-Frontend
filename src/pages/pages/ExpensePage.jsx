@@ -244,16 +244,8 @@ function Expense() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
+        autoClose={2000}
         theme="colored"
-        transition="Bounce"
       />
     </div>
   );

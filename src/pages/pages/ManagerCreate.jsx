@@ -3,6 +3,8 @@ import { createManager } from "../api/api";
 import PhoneInput from "react-phone-number-input/input";
 import { uploadPhotoAndGetPath } from "../api/api";
 import { checkEmailExists } from "../api/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManagerCreate = () => {
   const [managerData, setManagerData] = useState({
@@ -54,8 +56,10 @@ const ManagerCreate = () => {
       console.log("Dosya adı:", fileName);
 
       setManagerData({ ...managerData, imagePath: fileName });
+      toast.success("Fotoğraf başarıyla yüklendi"); // Başarılı yükleme bildirimi
     } catch (error) {
       console.error("Error uploading photo:", error);
+      toast.error("Fotoğraf yüklenirken bir hata oluştu."); // Hata bildirimi
     }
   };
 
@@ -65,31 +69,31 @@ const ManagerCreate = () => {
 
     // Geçerli bir telefon numarası kontrolü
     if (managerData.phoneNumber.length !== 13) {
-      alert("Lütfen geçerli bir telefon numarası giriniz.");
+      toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
 
     // TC kimlik numarası doğrulama işlemi
     const tcValidationResult = validateTcNumber(managerData.tc);
     if (!tcValidationResult.valid) {
-      alert(tcValidationResult.message);
+      toast.warning(tcValidationResult.message);
       return;
     }
 
     // Diğer alanların kontrolü
     if (!validateForm()) {
-      alert("Lütfen tüm alanları doldurunuz.");
+      toast.warning("Lütfen tüm alanları doldurunuz.");
       return;
     }
 
     if (!validateAddress(managerData.address)) {
-      alert("Adres en az bir harf ve bir rakam içermelidir.");
+      toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
 
     const minWage = 17002; // Asgari ücret tutarı
     if (parseInt(managerData.wage) < minWage) {
-      alert("Maaş asgari ücretin altında olamaz.");
+      toast.warning("Maaş asgari ücretin altında olamaz.");
       return;
     }
 
@@ -101,12 +105,14 @@ const ManagerCreate = () => {
         console.log("Employee created:", response, response.email);
         checkEmailExists(response.email);
         resetForm();
-        alert("Kayıt onaylandı.");
+        toast.success("Kayıt onaylandı.");
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
+        toast.warning("Kaydetme işlemi iptal edildi.");
       }
     } catch (error) {
       console.error("Error creating employee:", error);
+      toast.error("Kaydetme işlemi başarısız oldu.");
     }
   };
 
@@ -204,16 +210,17 @@ const ManagerCreate = () => {
       .split("T")[0];
 
     if (selectedDate > minDate) {
-      alert("Yaşınız 18'den küçük olamaz.");
+      toast.warning("Yaşınız 18'den küçük olamaz.");
       return;
     }
 
     setManagerData({ ...managerData, dateOfBirth: selectedDate });
   };
+  
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">Çalışan Ekle</h2>
+      <h2 className="text-center mb-4">Yönetici Ekle</h2>
       <div className="row justify-content-center align-items-start">
         <div className="col-md-6">
           <div className="card">
@@ -499,6 +506,7 @@ const ManagerCreate = () => {
           Kaydet
         </button>
       </div>
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 };
