@@ -191,7 +191,7 @@ const QuickMenu = (props) => {
             <div className="avatar avatar-md avatar-indicators avatar-online">
               <Image
                 alt="avatar"
-                src="/images/avatar/avatar-1.jpg"
+                src="/Images/avatar/avatar-1.jpg"
                 className="rounded-circle"
               />
             </div>

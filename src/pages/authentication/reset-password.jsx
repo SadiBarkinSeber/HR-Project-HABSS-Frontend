@@ -95,7 +95,7 @@ const ResetPassword = () => {
     <Row
       className="align-items-center justify-content-center g-0 min-vh-100"
       style={{
-        backgroundImage: `url('../../../dist/images/background/login-background6.jpg')`,
+        backgroundImage: `url('/Images/background/login-background6.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -106,7 +106,7 @@ const ResetPassword = () => {
             <div className="mb-4">
               <Link to="/">
                 <Image
-                  src="../../../dist/images/brand/logo/habss-logo-small1.png"
+                  src="/Images/brand/logo/habss-logo-small1.png"
                   className="mb-2"
                   alt=""
                 />

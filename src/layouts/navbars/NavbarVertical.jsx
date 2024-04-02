@@ -96,7 +96,7 @@ const NavbarVertical = (props) => {
         <div className="nav-scroller">
           <Link to={props.routeType[0].link} className="navbar-brand">
             <Image
-              src="../../../dist/images/brand/logo/logo_transparent.png"
+              src="/Images/brand/logo/logo_transparent.png"
               alt=""
               style={{ width: "200px", height: "80px" }}
             />
