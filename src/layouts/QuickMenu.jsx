@@ -13,9 +13,11 @@ import { useMediaQuery } from "react-responsive";
 import { useProfilePicture } from "../components/ProfilePictureContext";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
-import NotificationList from "../data/Notification";
 import useMounted from "../hooks/useMounted";
 import { useAuth } from "../components/TokenContext";
+import { useEmp } from "../components/EmployeeContext";
+import { useMng } from "../components/ManagerContext";
+import { useSiteMng } from "../components/AdminContext";
 
 const QuickMenu = (props) => {
   const hasMounted = useMounted();
@@ -26,35 +28,13 @@ const QuickMenu = (props) => {
     query: "(min-width: 1224px)",
   });
 
-  const Notifications = () => {
-    return (
-      <SimpleBar style={{ maxHeight: "300px" }}>
-        <ListGroup variant="flush">
-          {NotificationList.map(function (item, index) {
-            return (
-              <ListGroup.Item
-                className={index === 0 ? "bg-light" : ""}
-                key={index}
-              >
-                <Row>
-                  <Col>
-                    <Link to="#" className="text-muted">
-                      <h5 className=" mb-1">{item.sender}</h5>
-                      <p className="mb-0"> {item.message}</p>
-                    </Link>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
-      </SimpleBar>
-    );
-  };
-
   const QuickMenuDesktop = () => {
     const { setProfilePictureData, profilePictureData } = useProfilePicture();
     const [showLogoutModal, setShowLogoutModal] = useState(false); // State to control logout modal visibility
+    const { empData } = useEmp();
+    const { mngData } = useMng();
+    const { siteMngData } = useSiteMng();
+    const { userRole } = useAuth(); // userRole değerini al
 
     const handleLogout = () => {
       setShowLogoutModal(true);
@@ -63,6 +43,47 @@ const QuickMenu = (props) => {
     const handleLogoutConfirm = () => {
       setAuthToken(null); // Çıkış yapmak için token'i null yap
       setShowLogoutModal(false); // Modalı gizle
+    };
+
+    // Kullanıcı rolüne göre uygun verileri görüntüle
+    const renderUserData = () => {
+      if (userRole === "employee") {
+        return (
+          <>
+            {empData && (
+              <h5 className="mb-1">
+                {`${empData.firstName || ""} ${empData.secondName || ""} ${
+                  empData.firstSurname || ""
+                }`}
+              </h5>
+            )}
+          </>
+        );
+      } else if (userRole === "manager") {
+        return (
+          <>
+            {mngData && (
+              <h5 className="mb-1">
+                {`${mngData.firstName || ""} ${mngData.secondName || ""} ${
+                  mngData.firstSurname || ""
+                }`}
+              </h5>
+            )}
+          </>
+        );
+      } else {
+        return (
+          <>
+            {siteMngData && (
+              <h5 className="mb-1">
+                {`${siteMngData.firstName || ""} ${
+                  siteMngData.secondName || ""
+                } ${siteMngData.firstSurname || ""}`}
+              </h5>
+            )}
+          </>
+        );
+      }
     };
 
     return (
@@ -94,7 +115,7 @@ const QuickMenu = (props) => {
           >
             <Dropdown.Item as="div" className="px-4 pb-0 pt-2" bsPrefix=" ">
               <div className="lh-3 ">
-                <h5 className="mb-1">John Doe</h5>
+                {renderUserData()} {/* Kullanıcı verilerini görüntüle */}
               </div>
               <div className=" dropdown-divider mt-3 mb-2"></div>
             </Dropdown.Item>
@@ -158,50 +179,6 @@ const QuickMenu = (props) => {
         bsPrefix="navbar-nav"
         className="navbar-right-wrap ms-auto d-flex nav-top-wrap"
       >
-        <Dropdown as="li" className="stopevent">
-          <Dropdown.Toggle
-            as="a"
-            bsPrefix=" "
-            id="dropdownNotification"
-            className="btn btn-light btn-icon rounded-circle indicator indicator-primary text-muted"
-          >
-            <i className="fe fe-bell"></i>
-          </Dropdown.Toggle>
-          <Dropdown.Menu
-            className="dashboard-dropdown notifications-dropdown dropdown-menu-lg dropdown-menu-end py-0"
-            aria-labelledby="dropdownNotification"
-            align="end"
-          >
-            <Dropdown.Item className="mt-3" bsPrefix=" " as="div">
-              <div className="border-bottom px-3 pt-0 pb-3 d-flex justify-content-between align-items-end">
-                <span className="h4 mb-0">Notifications</span>
-                <Link to="/" className="text-muted">
-                  <span className="align-middle">
-                    <i className="fe fe-settings me-1"></i>
-                  </span>
-                </Link>
-              </div>
-              <Notifications />
-              <div className="border-top px-3 pt-3 pb-3">
-                <span className="h4 mb-0">Notifications</span>
-                <Link to="/" className="text-muted">
-                  <span className="align-middle">
-                    <i className="fe fe-settings me-1"></i>
-                  </span>
-                </Link>
-              </div>
-              <Notifications />
-              <div className="border-top px-3 pt-3 pb-3">
-                <Link
-                  to="/dashboard/notification-history"
-                  className="text-link fw-semi-bold"
-                >
-                  See all Notifications
-                </Link>
-              </div>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
         <Dropdown as="li" className="ms-2">
           <Dropdown.Toggle
             as="a"

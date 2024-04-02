@@ -445,9 +445,9 @@ async function createCompany(createObject) {
 }
 export { createCompany };
 
-export const fetchSiteManagers = async () => {
+export const fetchSiteManagers = async (id) => {
   try {
-    const response = await api.get("/SiteManager/15");
+    const response = await api.get(`/siteManager/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching admins:", error);

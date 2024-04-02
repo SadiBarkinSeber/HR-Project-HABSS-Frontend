@@ -31,6 +31,7 @@ import { jwtDecode } from "jwt-decode";
 import ForgetPassword from "./pages/authentication/forget-password";
 import ManagerEmployeeList from "./pages/pages/ManagerEmployeeList";
 import { ManagerDataProvider } from "./components/ManagerContext";
+import { SiteManagerDataProvider } from "./components/AdminContext";
 import SiteManagerList from "./pages/pages/AdminMain";
 import SiteManagerDetail from "./pages/pages/AdminDetail";
 import SiteManagerUpdate from "./pages/pages/AdminUpdate";
@@ -65,383 +66,388 @@ export default function App() {
     <>
       <main>
         <AuthProvider>
-          <ManagerDataProvider>
-            <EmployeeDataProvider>
-              <ProfilePictureProvider>
-                <Routes>
-                  <Route path="/" element={<SignIn />} />
-                  <Route path="/forgetpassword" element={<ForgetPassword />} />
-                  <Route path="/resetpassword" element={<ResetPassword />} />
-                  <Route
-                    path="/emp"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<EmployeeList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-detail"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<EmployeeDetail />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-update"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<EmployeeUpdate />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-permission"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<Permission />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-permission-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<EmployeePermissions />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-advance"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<Advance />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-advance-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<AdvanceList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-expense"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<Expense />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/emp-expense-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["employee"]}
-                        element={
-                          <DefaultDashboardLayout routeType={DashboardMenu}>
-                            {" "}
-                            {<ExpenseList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-detail"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerDetail />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-update"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerUpdate />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-employee-create"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<EmployeeCreate />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-permission-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerPermissionList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-advance-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerAdvanceList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-expense-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerExpenseList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/mng-employee-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["manager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuManager}
-                          >
-                            {" "}
-                            {<ManagerEmployeeList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<SiteManagerList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-detail"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<SiteManagerDetail />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-update"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<SiteManagerUpdate />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-company-create"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<CompanyAddPage />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-company-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<CompanyList />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-manager-create"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<ManagerCreate />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                  <Route
-                    path="/admin-manager-list"
-                    element={
-                      <ProtectedRoute
-                        roles={["siteManager"]}
-                        element={
-                          <DefaultDashboardLayout
-                            routeType={DashboardMenuAdmin}
-                          >
-                            {" "}
-                            {<Managers />}
-                          </DefaultDashboardLayout>
-                        }
-                      />
-                    }
-                  />
-                </Routes>
-              </ProfilePictureProvider>
-            </EmployeeDataProvider>
-          </ManagerDataProvider>
+          <SiteManagerDataProvider>
+            <ManagerDataProvider>
+              <EmployeeDataProvider>
+                <ProfilePictureProvider>
+                  <Routes>
+                    <Route path="/" element={<SignIn />} />
+                    <Route
+                      path="/forgetpassword"
+                      element={<ForgetPassword />}
+                    />
+                    <Route path="/resetpassword" element={<ResetPassword />} />
+                    <Route
+                      path="/emp"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<EmployeeList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-detail"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<EmployeeDetail />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-update"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<EmployeeUpdate />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-permission"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<Permission />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-permission-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<EmployeePermissions />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-advance"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<Advance />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-advance-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<AdvanceList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-expense"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<Expense />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/emp-expense-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["employee"]}
+                          element={
+                            <DefaultDashboardLayout routeType={DashboardMenu}>
+                              {" "}
+                              {<ExpenseList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-detail"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerDetail />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-update"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerUpdate />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-employee-create"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<EmployeeCreate />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-permission-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerPermissionList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-advance-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerAdvanceList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-expense-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerExpenseList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/mng-employee-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["manager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuManager}
+                            >
+                              {" "}
+                              {<ManagerEmployeeList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<SiteManagerList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-detail"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<SiteManagerDetail />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-update"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<SiteManagerUpdate />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-company-create"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<CompanyAddPage />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-company-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<CompanyList />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-manager-create"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<ManagerCreate />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                    <Route
+                      path="/admin-manager-list"
+                      element={
+                        <ProtectedRoute
+                          roles={["siteManager"]}
+                          element={
+                            <DefaultDashboardLayout
+                              routeType={DashboardMenuAdmin}
+                            >
+                              {" "}
+                              {<Managers />}
+                            </DefaultDashboardLayout>
+                          }
+                        />
+                      }
+                    />
+                  </Routes>
+                </ProfilePictureProvider>
+              </EmployeeDataProvider>
+            </ManagerDataProvider>
+          </SiteManagerDataProvider>
         </AuthProvider>
       </main>
     </>

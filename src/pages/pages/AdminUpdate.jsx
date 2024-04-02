@@ -1,40 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchSiteManagers, updateSiteManager, uploadPhotoAndGetPath } from "../api/api";
+import { updateSiteManager, uploadPhotoAndGetPath } from "../api/api";
 import {
   EmployeeUpdateCardLeftSide,
   EmployeePersonalUpdate,
-  EmployeeJobDetail,
 } from "../../components/Cards";
+import { useSiteMng } from "../../components/AdminContext";
 
 function SiteManagerUpdate() {
-  const [siteManager, setSiteManager] = useState(null);
+  const { siteMngData, refreshData } = useSiteMng(); // Site yöneticisi verilerini al ve refreshData fonksiyonunu al
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [photoPath, setPhotoPath] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchSiteManagers();
-        setSiteManager(data);
-        setPhoneNumber(data.phoneNumber);
-        setAddress(data.address);
-        setPhotoPath(data.imagePath);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (siteMngData) {
+      setPhoneNumber(siteMngData.phoneNumber);
+      setAddress(siteMngData.address);
+      setPhotoPath(siteMngData.imagePath);
+    }
+  }, [siteMngData]);
 
   const handleUpdateSiteManager = async () => {
     try {
       if (/[a-zA-Z]/.test(address)) {
         const updatedSiteManager = await updateSiteManager(
-          siteManager.id,
+          siteMngData.id,
           phoneNumber,
           address,
           photoPath
@@ -43,6 +36,7 @@ function SiteManagerUpdate() {
         toast.success("Site Yöneticisi başarıyla güncellendi.", {
           position: "top-right",
         });
+        refreshData(); // Verileri yenile
       } else {
         toast.error("Lütfen en az bir harf içeren bir adres girin.", {
           position: "top-right",
@@ -97,29 +91,29 @@ function SiteManagerUpdate() {
             justifyContent: "center",
           }}
         >
-          {siteManager && (
+          {siteMngData && (
             <EmployeeUpdateCardLeftSide
-              firstName={siteManager.firstName}
-              secondName={siteManager.secondName}
-              firstSurname={siteManager.firstSurname}
-              secondSurname={siteManager.secondSurname}
-              department={siteManager.department}
+              firstName={siteMngData.firstName}
+              secondName={siteMngData.secondName}
+              firstSurname={siteMngData.firstSurname}
+              secondSurname={siteMngData.secondSurname}
+              department={siteMngData.department}
               imagePath={photoPath}
               onPhotoChange={handlePhotoChange}
             />
           )}
-          {siteManager && (
+          {siteMngData && (
             <EmployeePersonalUpdate
-              firstName={siteManager.firstName}
-              secondName={siteManager.secondName}
-              firstSurname={siteManager.firstSurname}
-              secondSurname={siteManager.secondSurname}
-              email={siteManager.email}
+              firstName={siteMngData.firstName}
+              secondName={siteMngData.secondName}
+              firstSurname={siteMngData.firstSurname}
+              secondSurname={siteMngData.secondSurname}
+              email={siteMngData.email}
               phoneNumber={phoneNumber}
               address={address}
-              dateOfBirth={siteManager.dateOfBirth}
-              birthPlace={siteManager.birthPlace}
-              tc={siteManager.tc}
+              dateOfBirth={siteMngData.dateOfBirth}
+              birthPlace={siteMngData.birthPlace}
+              tc={siteMngData.tc}
               onPhoneChange={(value) => setPhoneNumber(value)}
               onAddressChange={handleAddressChange}
             />
@@ -135,11 +129,7 @@ function SiteManagerUpdate() {
           </button>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </>
   );
 }
