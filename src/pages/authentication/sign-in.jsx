@@ -14,6 +14,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigateTo = useNavigate();
   const { token, setAuthToken } = useAuth();
+  const { setUserRole } = useAuth();
 
   const isValidEmail = (value) => {
     const emailRegex = /^[^\s@]+@bilgeadamboost\.com$/;
@@ -47,7 +48,7 @@ const SignIn = () => {
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
         console.log(userRole, typeof userId, userId);
-
+        setUserRole(userRole);
         // Kullanıcının rolüne göre yönlendirme yap
         if (userRole === "siteManager") {
           navigateTo(`/admin`, { state: { id: userId } });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchSiteManagers } from "../api/api";
+import { useSiteMng } from "../../components/AdminContext";
 import {
   EmployeeCardLeftSide,
   EmployeePersonalDetail,
@@ -9,25 +9,11 @@ import {
 
 function SiteManagerDetail() {
   const navigateTo = useNavigate();
+  const { siteMngData } = useSiteMng(); // Site yöneticisi verilerini al
 
   const handleBackButton = () => {
     navigateTo("/");
   };
-
-  const [siteManager, setSiteManager] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchSiteManagers();
-        setSiteManager(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <>
@@ -45,40 +31,40 @@ function SiteManagerDetail() {
             justifyContent: "center",
           }}
         >
-          {siteManager && (
+          {siteMngData && (
             <EmployeeCardLeftSide
-              firstName={siteManager.firstName}
-              secondName={siteManager.secondName}
-              firstSurname={siteManager.firstSurname}
-              secondSurname={siteManager.secondSurname}
-              department={siteManager.department}
-              imagePath={siteManager.imagePath}
+              firstName={siteMngData.firstName}
+              secondName={siteMngData.secondName}
+              firstSurname={siteMngData.firstSurname}
+              secondSurname={siteMngData.secondSurname}
+              department={siteMngData.department}
+              imagePath={siteMngData.imagePath}
               routeUpdatePage="/admin-update"
             />
           )}
-          {siteManager && (
+          {siteMngData && (
             <EmployeePersonalDetail
-              firstName={siteManager.firstName}
-              secondName={siteManager.secondName}
-              firstSurname={siteManager.firstSurname}
-              secondSurname={siteManager.secondSurname}
-              email={siteManager.email}
-              phoneNumber={siteManager.phoneNumber}
-              address={siteManager.address}
-              dateOfBirth={siteManager.dateOfBirth}
-              birthPlace={siteManager.birthPlace}
-              tc={siteManager.tc}
+              firstName={siteMngData.firstName}
+              secondName={siteMngData.secondName}
+              firstSurname={siteMngData.firstSurname}
+              secondSurname={siteMngData.secondSurname}
+              email={siteMngData.email}
+              phoneNumber={siteMngData.phoneNumber}
+              address={siteMngData.address}
+              dateOfBirth={siteMngData.dateOfBirth}
+              birthPlace={siteMngData.birthPlace}
+              tc={siteMngData.tc}
             />
           )}
-          {siteManager && (
+          {siteMngData && (
             <EmployeeJobDetail
-              startDate={siteManager.startDate}
-              endDate={siteManager.endDate}
-              isActive={siteManager.isActive ? "Aktif" : "Pasif"}
-              position={siteManager.position}
-              department={siteManager.department}
-              company={siteManager.company}
-              wage={siteManager.wage + " TL"}
+              startDate={siteMngData.startDate}
+              endDate={siteMngData.endDate}
+              isActive={siteMngData.isActive ? "Aktif" : "Pasif"}
+              position={siteMngData.position}
+              department={siteMngData.department}
+              company={siteMngData.company}
+              wage={siteMngData.wage + " TL"}
             />
           )}
         </div>
