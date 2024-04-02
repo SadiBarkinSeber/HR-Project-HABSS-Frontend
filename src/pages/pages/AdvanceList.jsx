@@ -20,8 +20,10 @@ function AdvanceList() {
     fetchData();
   }, []);
 
+  const employeeId = localStorage.getItem("empId");
+
   const fetchData = async () => {
-    const data = await fetchAllAdvances(empData.id);
+    const data = await fetchAllAdvances(employeeId);
     setAdvances([...data].reverse()); // Yeni eklenenler en üste gelecek şekilde ters sırala
     setSortedAdvances([...data].reverse());
   };

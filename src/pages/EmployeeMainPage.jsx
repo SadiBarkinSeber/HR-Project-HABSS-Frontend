@@ -11,6 +11,8 @@ function EmployeeList() {
     refreshData();
   }, []);
 
+  localStorage.setItem("empId", empData.id);
+
   return (
     <>
       {/* <div className="navbar-vertical navbar">
