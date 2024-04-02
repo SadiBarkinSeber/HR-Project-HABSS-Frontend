@@ -340,11 +340,11 @@ export async function downloadFile(fileName) {
   }
 }
 
-export async function updateAdvanceStatus(id, permission) {
+export async function updateAdvanceStatus(id, isApproved) {
   try {
     const response = await axios.put(
       `https://hrprojectwebapi20240311113118.azurewebsites.net/api/advances/manager`,
-      { id, permission }
+      { id, isApproved }
     );
     return { success: true, message: response.data.message };
   } catch (error) {
@@ -353,11 +353,11 @@ export async function updateAdvanceStatus(id, permission) {
   }
 }
 
-export async function updateExpenseStatus(id, permission) {
+export async function updateExpenseStatus(id, isApproved) {
   try {
     const response = await axios.put(
       `https://hrprojectwebapi20240311113118.azurewebsites.net/api/expenses/manager`,
-      { id, permission }
+      { id, isApproved }
     );
     return { success: true, message: response.data.message };
   } catch (error) {
@@ -366,11 +366,11 @@ export async function updateExpenseStatus(id, permission) {
   }
 }
 
-export async function updatePermissionStatus(id, permission) {
+export async function updatePermissionStatus(id, isApproved) {
   try {
     const response = await axios.put(
       `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/manager`,
-      { id, permission }
+      { id, isApproved }
     );
     return { success: true, message: response.data.message };
   } catch (error) {
