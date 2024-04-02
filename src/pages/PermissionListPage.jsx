@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPermission, updatePermissionStatusForEmployee } from "./api/api";
+import {
+  fetchAllPermission,
+  updatePermissionStatusForEmployee,
+} from "./api/api";
 import { ToastContainer, toast } from "react-toastify";
 import { downloadFile } from "./api/api";
 import { updatePermissionStatus } from "./api/api";
@@ -104,6 +107,10 @@ function PermissionList() {
     } else {
       return permission.permissionType === filterOption;
     }
+  };
+
+  const isCancelEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
   };
 
   const confirmReject = (id) => {
@@ -232,6 +239,7 @@ function PermissionList() {
                         <button
                           className="btn btn-sm btn-danger"
                           onClick={() => confirmReject(permission.id)}
+                          disabled={!isCancelEnabled(permission.approvalStatus)}
                         >
                           İptal Et
                         </button>
