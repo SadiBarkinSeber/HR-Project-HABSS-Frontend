@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPermission } from "./api/api";
+import { fetchAllPermission, updatePermissionStatusForEmployee } from "./api/api";
 import { ToastContainer, toast } from "react-toastify";
 import { downloadFile } from "./api/api";
 import { updatePermissionStatus } from "./api/api";
@@ -43,7 +43,7 @@ function PermissionList() {
 
   const handleReject = async (id) => {
     try {
-      const updateResult = await updatePermissionStatus(id, false);
+      const updateResult = await updatePermissionStatusForEmployee(id, false);
       if (updateResult.success) {
         toast.success(updateResult.message);
         // İzin reddedildiğinde izni kaldırın ve yeniden sıralayın

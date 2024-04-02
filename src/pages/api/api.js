@@ -353,6 +353,19 @@ export async function updateAdvanceStatus(id, isApproved) {
   }
 }
 
+export async function updateAdvanceStatusForEmployee(id, isCancelled) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/advances/employee`,
+      { id, isCancelled }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Avans durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
 export async function updateExpenseStatus(id, isApproved) {
   try {
     const response = await axios.put(
@@ -366,11 +379,37 @@ export async function updateExpenseStatus(id, isApproved) {
   }
 }
 
+export async function updateExpenseStatusForEmployee(id, isCancelled) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/expenses/employee`,
+      { id, isCancelled }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Harcama durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
 export async function updatePermissionStatus(id, isApproved) {
   try {
     const response = await axios.put(
       `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/manager`,
       { id, isApproved }
+    );
+    return { success: true, message: response.data.message };
+  } catch (error) {
+    console.error("Izin durumu güncelleme hatası:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+export async function updatePermissionStatusForEmployee(id, isCancelled) {
+  try {
+    const response = await axios.put(
+      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/employee`,
+      { id, isCancelled }
     );
     return { success: true, message: response.data.message };
   } catch (error) {

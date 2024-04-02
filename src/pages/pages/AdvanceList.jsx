@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllAdvances } from "../api/api";
+import { fetchAllAdvances, updateAdvanceStatusForEmployee } from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -34,7 +34,7 @@ function AdvanceList() {
         {
           label: "Evet",
           onClick: async () => {
-            const updateResult = await updateAdvanceStatus(id, false);
+            const updateResult = await updateAdvanceStatusForEmployee(id, false);
             if (updateResult.success) {
               toast.success("Avans Talebiniz iptal edilmiştir.");
               fetchData();

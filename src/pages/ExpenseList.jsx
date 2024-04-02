@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllExpenses } from "./api/api";
+import { fetchAllExpenses, updateExpenseStatusForEmployee } from "./api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
@@ -38,7 +38,7 @@ function ExpenseList() {
   };
 
   const rejectExpense = async (id) => {
-    const updateResult = await updateExpenseStatus(id, false);
+    const updateResult = await updateExpenseStatusForEmployee(id, false);
     if (updateResult.success) {
       toast.success(updateResult.message);
       fetchData(); // fetchData fonksiyonu burada çağrıldı
