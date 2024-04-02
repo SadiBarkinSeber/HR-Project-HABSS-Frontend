@@ -83,6 +83,10 @@ function ExpenseList() {
     }
   };
 
+  const isCancelEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
+  };
+
   const confirmReject = (id) => {
     confirmAlert({
       title: "Harcama İptali",
@@ -93,13 +97,13 @@ function ExpenseList() {
           onClick: () => {
             rejectExpense(id);
             toast.success("Harcama talebi başarıyla iptal edildi.");
-          }
+          },
         },
         {
           label: "Hayır",
-          onClick: () => {}
-        }
-      ]
+          onClick: () => {},
+        },
+      ],
     });
   };
 
@@ -207,6 +211,7 @@ function ExpenseList() {
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => confirmReject(expense.id)}
+                        disabled={!isCancelEnabled(expense.approvalStatus)}
                       >
                         İptal Et
                       </button>
@@ -218,11 +223,7 @@ function ExpenseList() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }
