@@ -20,6 +20,7 @@ export const EmployeeDataProvider = ({ children }) => {
         const userId = userIdString ? parseInt(userIdString) : null;
         console.log(userId);
         const data = await fetchEmployees(userId);
+        localStorage.setItem("empId", data.id);
         setEmpData(data);
       }
     } catch (error) {

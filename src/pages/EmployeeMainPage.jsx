@@ -11,7 +11,6 @@ function EmployeeList() {
     refreshData();
   }, []);
 
-  localStorage.setItem("empId", empData.id);
 
   return (
     <>
