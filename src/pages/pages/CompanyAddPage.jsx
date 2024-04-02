@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { createCompany } from "../api/api";
+import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-number-input/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CompanyAddPage = () => {
+  const navigate = useNavigate(); 
   const [companyData, setCompanyData] = useState({
     Name: "",
     title: "",
@@ -95,8 +97,6 @@ const CompanyAddPage = () => {
     e.preventDefault();
     setFormSubmitted(true);
 
-    
-
     if (companyData.phoneNumber.length !== 13) {
       toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
@@ -127,7 +127,9 @@ const CompanyAddPage = () => {
         const response = await createCompany(companyData);
         console.log("Company created:", response);
         resetForm();
-        toast.success("Şirket başarıyla kaydedildi."); // Başarılı kayıt bildirimi
+        toast.success("Şirket başarıyla kaydedildi.");
+        navigate("/admin-company-list");
+        // Başarılı kayıt bildirimi
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
         toast.error("Kaydetme işlemi iptal edildi.");
@@ -177,46 +179,46 @@ const CompanyAddPage = () => {
                   <input type="file" id="photo" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
                 </div>
                 <div>
-                  <h5>Logo Yükleyiniz...</h5>
+                  <h5>Logo Yükleyiniz...<span className="text-danger">*</span></h5>
                 </div>
               </div>
               <div className="mb-3">
-                <label htmlFor="Name">Ad:</label>
+                <label htmlFor="Name">Ad: <span className="text-danger">*</span></label>
                 <input type="text" id="Name" name="Name" value={companyData.Name} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.Name && (
                   <div className="text-danger">Adı boş bırakamazsınız.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="title">Ünvan:</label>
+                <label htmlFor="title">Ünvan: <span className="text-danger">*</span></label>
                 <input type="text" id="title" name="title" value={companyData.title} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.title && (
                   <div className="text-danger">Ünvanı boş bırakamazsınız.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="mersisNo">Mersis No:</label>
+                <label htmlFor="mersisNo">Mersis No: <span className="text-danger">*</span></label>
                 <input type="text" id="mersisNo" name="mersisNo" value={companyData.mersisNo} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.mersisNo && (
                   <div className="text-danger">Mersis No boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="taxNumber">Vergi No:</label>
+                <label htmlFor="taxNumber">Vergi No: <span className="text-danger">*</span></label>
                 <input type="text" id="taxNumber" name="taxNumber" value={companyData.taxNumber} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.taxNumber && (
                   <div className="text-danger">Vergi No boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="taxDepartment">Vergi Dairesi:</label>
+                <label htmlFor="taxDepartment">Vergi Dairesi: <span className="text-danger">*</span></label>
                 <input type="text" id="taxDepartment" name="taxDepartment" value={companyData.taxDepartment} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.taxDepartment && (
                   <div className="text-danger">Vergi Dairesi boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="phoneNumber">Telefon Numarası:</label>
+                <label htmlFor="phoneNumber">Telefon Numarası: <span className="text-danger">*</span></label>
                 <PhoneInput
                   country="TR"
                   value={companyData.phoneNumber}
@@ -235,42 +237,42 @@ const CompanyAddPage = () => {
           <div className="card">
             <div className="card-body">
               <div className="mb-3">
-                <label htmlFor="address">Adres:</label>
+                <label htmlFor="address">Adres: <span className="text-danger">*</span></label>
                 <input type="text" id="address" name="address" value={companyData.address} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.address && (
                   <div className="text-danger">Adres boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email">Email: <span className="text-danger">*</span></label>
                 <input type="email" id="email" name="email" value={companyData.email} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.email && (
                   <div className="text-danger">Email boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="employeeCount">Çalışan Sayısı:</label>
+                <label htmlFor="employeeCount">Çalışan Sayısı: <span className="text-danger">*</span></label>
                 <input type="number" id="employeeCount" name="employeeCount" value={companyData.employeeCount} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.employeeCount && (
                   <div className="text-danger">Çalışan Sayısı bilgisi boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="foundingDate">Kuruluş Tarihi:</label>
+                <label htmlFor="foundingDate">Kuruluş Tarihi: <span className="text-danger">*</span></label>
                 <input type="date" id="foundingDate" name="foundingDate" value={companyData.foundingDate} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.foundingDate && (
                   <div className="text-danger">Kuruluş Tarihi boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="dealStartDate">Sözleşme Başlangıç Tarihi:</label>
+                <label htmlFor="dealStartDate">Sözleşme Başlangıç Tarihi: <span className="text-danger">*</span></label>
                 <input type="date" id="dealStartDate" name="dealStartDate" value={companyData.dealStartDate} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.dealStartDate && (
                   <div className="text-danger">Sözleşme Başlangıç Tarihi boş bırakılamaz.</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="dealEndDate">Sözleşme Bitiş Tarihi:</label>
+                <label htmlFor="dealEndDate">Sözleşme Bitiş Tarihi: <span className="text-danger">*</span></label>
                 <input type="date" id="dealEndDate" name="dealEndDate" value={companyData.dealEndDate} onChange={handleInputChange} className="form-control mb-2" />
                 {formSubmitted && !companyData.dealEndDate && (
                   <div className="text-danger">Sözleşme Bitiş Tarihi boş bırakılamaz.</div>
@@ -287,6 +289,7 @@ const CompanyAddPage = () => {
         <button type="submit" className="btn btn-primary me-2" onClick={handleSubmit}>Kaydet</button>
         <button type="button" className="btn btn-secondary" onClick={handleCancel}>Vazgeç</button>
       </div>
+      
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -296,7 +299,3 @@ const CompanyAddPage = () => {
   );
 };
 export default CompanyAddPage;
-
-
-
-
