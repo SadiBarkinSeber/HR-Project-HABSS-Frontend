@@ -354,11 +354,11 @@ const EmployeeCreate = () => {
               { <div className="mb-3">
                 <label>Cinsiyet:</label>
                 <div className="form-check">
-                  <input type="radio" id="male" name="gender" value="male" checked={employeeData.gender === "male"} onChange={handleInputChange} className="form-check-input" />
+                  <input type="radio" id="male" name="gender" value="Male" checked={employeeData.gender === "Male"} onChange={handleInputChange} className="form-check-input" />
                   <label htmlFor="male" className="form-check-label">Erkek</label>
                 </div>
                 <div className="form-check">
-                  <input type="radio" id="female" name="gender" value="female" checked={employeeData.gender === "female"} onChange={handleInputChange} className="form-check-input" />
+                  <input type="radio" id="female" name="gender" value="Female" checked={employeeData.gender === "Female"} onChange={handleInputChange} className="form-check-input" />
                   <label htmlFor="female" className="form-check-label">Kadın</label>
                 </div>
                 {formSubmitted && !employeeData.gender && (

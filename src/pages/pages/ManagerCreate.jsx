@@ -27,7 +27,7 @@ const ManagerCreate = () => {
     department: "",
     email: "deneme@bilgeadam.com",
     imagePath: "",
-    gender: "Male",
+    gender: "",
   });
 
   const [photo, setPhoto] = useState(null);
@@ -100,7 +100,7 @@ const ManagerCreate = () => {
     }
 
     try {
-      // console.log(managerData);
+      console.log(managerData);
       const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
       if (confirmed) {
         const response = await createManager(managerData);
@@ -356,6 +356,21 @@ const ManagerCreate = () => {
                   </div>
                 )}
               </div>
+              { <div className="mb-3">
+                <label>Cinsiyet:</label>
+                <div className="form-check">
+                  <input type="radio" id="male" name="gender" value="Male" checked={managerData.gender === "Male"} onChange={handleInputChange} className="form-check-input" />
+                  <label htmlFor="male" className="form-check-label">Erkek</label>
+                </div>
+                <div className="form-check">
+                  <input type="radio" id="female" name="gender" value="Female" checked={managerData.gender === "Female"} onChange={handleInputChange} className="form-check-input" />
+                  <label htmlFor="female" className="form-check-label">Kadın</label>
+                </div>
+                {formSubmitted && !managerData.gender && (
+                  <div className="text-danger">Cinsiyet seçimi yapmalısınız.</div>
+                )}
+              </div> }
+
             </div>
           </div>
         </div>
