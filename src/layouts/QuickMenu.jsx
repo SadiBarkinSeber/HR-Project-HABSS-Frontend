@@ -35,6 +35,7 @@ const QuickMenu = (props) => {
     const { mngData } = useMng();
     const { siteMngData } = useSiteMng();
     const { userRole } = useAuth(); // userRole değerini al
+    const roleOfUser = localStorage.getItem("roleOfUser");
 
     const handleLogout = () => {
       setShowLogoutModal(true);
@@ -42,12 +43,13 @@ const QuickMenu = (props) => {
 
     const handleLogoutConfirm = () => {
       setAuthToken(null); // Çıkış yapmak için token'i null yap
+      localStorage.removeItem("token");
       setShowLogoutModal(false); // Modalı gizle
     };
 
     // Kullanıcı rolüne göre uygun verileri görüntüle
     const renderUserData = () => {
-      if (userRole === "employee") {
+      if (roleOfUser === "employee") {
         return (
           <>
             {empData && (
@@ -59,7 +61,7 @@ const QuickMenu = (props) => {
             )}
           </>
         );
-      } else if (userRole === "manager") {
+      } else if (roleOfUser === "manager") {
         return (
           <>
             {mngData && (

@@ -41,13 +41,13 @@ import CompanyAddPage from "./pages/pages/CompanyAddPage";
 import CompanyList from "./pages/pages/AdminCompanyList";
 
 const ProtectedRoute = ({ element, roles, ...rest }) => {
-  const { token } = useAuth();
+  const storedToken = localStorage.getItem("token");
 
-  if (!token) {
+  if (!storedToken) {
     return <Navigate to="/" replace />;
   }
 
-  const decodedToken = jwtDecode(token);
+  const decodedToken = jwtDecode(storedToken);
 
   if (!roles || !decodedToken.role) {
     // Roller belirtilmemiş veya kullanıcının rolü belirtilmemişse ana sayfaya yönlendir
