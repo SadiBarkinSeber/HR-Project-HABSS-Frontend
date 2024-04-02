@@ -10,11 +10,12 @@ export const useSiteMng = () => useContext(SiteManagerContext);
 export const SiteManagerDataProvider = ({ children }) => {
   const { token } = useAuth();
   const [siteMngData, setSiteMngDataData] = useState(null);
+  const storedToken = localStorage.getItem("token");
 
   const fetchData = async () => {
     try {
-      if (token) {
-        const decodedToken = jwtDecode(token);
+      if (storedToken) {
+        const decodedToken = jwtDecode(storedToken);
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
         const data = await fetchSiteManagers(userId);

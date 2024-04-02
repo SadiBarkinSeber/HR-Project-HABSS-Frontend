@@ -10,11 +10,12 @@ export const useMng = () => useContext(ManagerContext);
 export const ManagerDataProvider = ({ children }) => {
   const { token } = useAuth();
   const [mngData, setMngData] = useState(null);
+  const storedToken = localStorage.getItem("token");
 
   const fetchData = async () => {
     try {
-      if (token) {
-        const decodedToken = jwtDecode(token);
+      if (storedToken) {
+        const decodedToken = jwtDecode(storedToken);
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
         const data = await fetchManager(userId);

@@ -10,11 +10,12 @@ export const useEmp = () => useContext(EmployeeContext);
 export const EmployeeDataProvider = ({ children }) => {
   const { token } = useAuth();
   const [empData, setEmpData] = useState(null);
+  const storedToken = localStorage.getItem("token");
 
   const fetchData = async () => {
     try {
-      if (token) {
-        const decodedToken = jwtDecode(token);
+      if (storedToken) {
+        const decodedToken = jwtDecode(storedToken);
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
         console.log(userId);

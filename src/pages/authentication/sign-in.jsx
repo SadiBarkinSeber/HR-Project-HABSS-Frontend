@@ -13,8 +13,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigateTo = useNavigate();
-  const { token, setAuthToken } = useAuth();
-  const { setUserRole } = useAuth();
+  const { setAuthToken, setUserRole } = useAuth();
 
   const isValidEmail = (value) => {
     const emailRegex = /^[^\s@]+@bilgeadamboost\.com$/;
@@ -38,9 +37,7 @@ const SignIn = () => {
           navigateTo(`/resetpassword?email=${email}`);
           return;
         }
-        // navigateTo("/emp");
         const jwtoken = response.data;
-        console.log(jwtoken);
         setAuthToken(jwtoken);
 
         const decodedToken = jwtDecode(jwtoken);
@@ -48,7 +45,13 @@ const SignIn = () => {
         const userIdString = decodedToken.nameid;
         const userId = userIdString ? parseInt(userIdString) : null;
         console.log(userRole, typeof userId, userId);
+        localStorage.setItem("roleOfUser", userRole);
+
         setUserRole(userRole);
+
+        // Token'i localStorage'a kaydet
+        localStorage.setItem("token", jwtoken);
+
         // Kullanıcının rolüne göre yönlendirme yap
         if (userRole === "siteManager") {
           navigateTo(`/admin`, { state: { id: userId } });
