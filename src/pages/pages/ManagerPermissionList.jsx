@@ -99,6 +99,10 @@ function ManagerPermissionList() {
     }
   };
 
+  const isActionEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
+  };
+
   const confirmApprove = (id) => {
     confirmAlert({
       title: "İzin Onayı",
@@ -259,12 +263,14 @@ function ManagerPermissionList() {
                         <button
                           className="btn btn-sm btn-success"
                           onClick={() => confirmApprove(permission.id)}
+                          disabled={!isActionEnabled(permission.approvalStatus)}
                         >
                           Onayla
                         </button>
                         <button
                           className="btn btn-sm btn-danger"
                           onClick={() => confirmReject(permission.id)}
+                          disabled={!isActionEnabled(permission.approvalStatus)}
                         >
                           Reddet
                         </button>

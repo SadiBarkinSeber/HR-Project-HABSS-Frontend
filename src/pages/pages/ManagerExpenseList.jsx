@@ -93,6 +93,10 @@ function ManagerExpenseList() {
     }
   };
 
+  const isActionEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
+  };
+
   const confirmApprove = (id) => {
     confirmAlert({
       title: "Onayla",
@@ -100,9 +104,10 @@ function ManagerExpenseList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => {approveExpense(id);
+          onClick: () => {
+            approveExpense(id);
             toast.success("İzin talebi onaylandı.");
-          }
+          },
         },
         {
           label: "Hayır",
@@ -119,9 +124,10 @@ function ManagerExpenseList() {
       buttons: [
         {
           label: "Evet",
-          onClick: () => {rejectExpense(id);
+          onClick: () => {
+            rejectExpense(id);
             toast.error("İzin talebi reddedildi.");
-          }
+          },
         },
         {
           label: "Hayır",
@@ -249,12 +255,14 @@ function ManagerExpenseList() {
                       <button
                         className="btn btn-sm btn-success"
                         onClick={() => confirmApprove(expense.id)}
+                        disabled={!isActionEnabled(expense.approvalStatus)}
                       >
                         Onayla
                       </button>
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => confirmReject(expense.id)}
+                        disabled={!isActionEnabled(expense.approvalStatus)}
                       >
                         Reddet
                       </button>
@@ -266,11 +274,7 @@ function ManagerExpenseList() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }

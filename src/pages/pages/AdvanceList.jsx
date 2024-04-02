@@ -34,20 +34,25 @@ function AdvanceList() {
         {
           label: "Evet",
           onClick: async () => {
-            const updateResult = await updateAdvanceStatusForEmployee(id, false);
+            const updateResult = await updateAdvanceStatusForEmployee(
+              id,
+              false
+            );
             if (updateResult.success) {
               toast.success("Avans Talebiniz iptal edilmiştir.");
               fetchData();
             } else {
-              toast.error("Avans Talebiniz iptal edilirken bir sorun ile karşılaşıldı.");
+              toast.error(
+                "Avans Talebiniz iptal edilirken bir sorun ile karşılaşıldı."
+              );
             }
           },
         },
         {
           label: "Hayır",
-          onClick: () => {}
-        }
-      ]
+          onClick: () => {},
+        },
+      ],
     });
   };
 
@@ -86,6 +91,10 @@ function AdvanceList() {
       }
     });
     setAdvances(sorted);
+  };
+
+  const isCancelEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
   };
 
   return (
@@ -166,6 +175,7 @@ function AdvanceList() {
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => handleReject(advance.id)}
+                        disabled={!isCancelEnabled(advance.approvalStatus)}
                       >
                         İptal Et
                       </button>
@@ -177,11 +187,7 @@ function AdvanceList() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }

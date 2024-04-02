@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createEmployee } from "../api/api";
+import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-number-input/input";
 import { uploadPhotoAndGetPath } from "../api/api";
 import { checkEmailExists } from "../api/api";
@@ -7,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeCreate = () => {
+  const navigate = useNavigate(); 
   const [employeeData, setEmployeeData] = useState({
     firstName: "",
     secondName: "",
@@ -25,7 +27,7 @@ const EmployeeCreate = () => {
     department: "",
     email: "deneme@bilgeadam.com",
     imagePath: "",
-    gender: "Male",
+    gender: "",
   });
 
   const [photo, setPhoto] = useState(null);
@@ -101,6 +103,7 @@ const EmployeeCreate = () => {
         checkEmailExists(response.email);
         resetForm();
         toast.success("Kayıt onaylandı.");
+        navigate("/mng-employee-list");
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
         toast.warning("Kaydetme işlemi iptal edildi.");
@@ -213,7 +216,7 @@ const EmployeeCreate = () => {
   };
   
   return (
-    <div className="container mt-5">
+    <div className="container mt-5" >
       <h2 className="text-center mb-4">Çalışan Ekle</h2>
       <div className="row justify-content-center align-items-start">
         <div className="col-md-6">
@@ -260,11 +263,11 @@ const EmployeeCreate = () => {
                 </div>
                 <div>
                   <h5>Fotoğraf Seç</h5>
-                  <p>Fotoğraf ekleyin veya değiştirin</p>
+                  <p>Fotoğraf ekleyin veya değiştirin <span className="text-danger">*</span></p>
                 </div>
               </div>
               <div className="mb-3">
-                <label htmlFor="firstName">Ad:</label>
+                <label htmlFor="firstName">Ad: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="firstName"
@@ -289,7 +292,7 @@ const EmployeeCreate = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="firstSurname">Soyad:</label>
+                <label htmlFor="firstSurname">Soyad: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="firstSurname"
@@ -314,7 +317,7 @@ const EmployeeCreate = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="phoneNumber">Telefon Numarası:</label>
+                <label htmlFor="phoneNumber">Telefon Numarası: <span className="text-danger">*</span></label>
                 <PhoneInput
                   country="TR"
                   value={employeeData.phoneNumber}
@@ -331,7 +334,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="dateOfBirth">Doğum Tarihi:</label>
+                <label htmlFor="dateOfBirth">Doğum Tarihi: <span className="text-danger">*</span></label>
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -348,20 +351,20 @@ const EmployeeCreate = () => {
                 )}
               </div>
 
-              {/* <div className="mb-3">
+              { <div className="mb-3">
                 <label>Cinsiyet:</label>
                 <div className="form-check">
-                  <input type="radio" id="male" name="gender" value="male" checked={employeeData.gender === "male"} onChange={handleInputChange} className="form-check-input" />
+                  <input type="radio" id="male" name="gender" value="Male" checked={employeeData.gender === "Male"} onChange={handleInputChange} className="form-check-input" />
                   <label htmlFor="male" className="form-check-label">Erkek</label>
                 </div>
                 <div className="form-check">
-                  <input type="radio" id="female" name="gender" value="female" checked={employeeData.gender === "female"} onChange={handleInputChange} className="form-check-input" />
+                  <input type="radio" id="female" name="gender" value="Female" checked={employeeData.gender === "Female"} onChange={handleInputChange} className="form-check-input" />
                   <label htmlFor="female" className="form-check-label">Kadın</label>
                 </div>
                 {formSubmitted && !employeeData.gender && (
                   <div className="text-danger">Cinsiyet seçimi yapmalısınız.</div>
                 )}
-              </div> */}
+              </div> }
             </div>
           </div>
         </div>
@@ -369,7 +372,7 @@ const EmployeeCreate = () => {
           <div className="card">
             <div className="card-body">
               <div className="mb-3">
-                <label htmlFor="birthPlace">Doğum Yeri:</label>
+                <label htmlFor="birthPlace">Doğum Yeri: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="birthPlace"
@@ -383,7 +386,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="tc">TC Kimlik No:</label>
+                <label htmlFor="tc">TC Kimlik No: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="tc"
@@ -399,7 +402,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="address">Adres:</label>
+                <label htmlFor="address">Adres: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="address"
@@ -413,7 +416,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="company">Şirket Adı:</label>
+                <label htmlFor="company">Şirket Adı: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="company"
@@ -423,11 +426,11 @@ const EmployeeCreate = () => {
                   className="form-control mb-2"
                 />
                 {formSubmitted && !employeeData.company && (
-                  <div className="text-danger">Şirket adı boş bırakılamaz.</div>
+                  <div className="text-danger">Şirket adı boş bırakılamaz. </div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="position">Pozisyon:</label>
+                <label htmlFor="position">Pozisyon: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="position"
@@ -437,11 +440,11 @@ const EmployeeCreate = () => {
                   className="form-control mb-2"
                 />
                 {formSubmitted && !employeeData.position && (
-                  <div className="text-danger">Pozisyon boş bırakılamaz.</div>
+                  <div className="text-danger">Pozisyon boş bırakılamaz. </div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="department">Departman:</label>
+                <label htmlFor="department">Departman: <span className="text-danger">*</span></label>
                 <input
                   type="text"
                   id="department"
@@ -455,7 +458,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="startDate">İşe Giriş Tarihi:</label>
+                <label htmlFor="startDate">İşe Giriş Tarihi: <span className="text-danger">*</span></label>
                 <input
                   type="date"
                   id="startDate"
@@ -472,7 +475,7 @@ const EmployeeCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="wage">Maaş:</label>
+                <label htmlFor="wage">Maaş: <span className="text-danger">*</span> </label>
                 <input
                   type="number"
                   id="wage"
@@ -494,14 +497,14 @@ const EmployeeCreate = () => {
       <div className="text-center mt-3">
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary btn-lg me-3"
           onClick={handleSubmit}
         >
           Kaydet
         </button>{" "}
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-secondary btn-lg"
           onClick={resetForm}
         >
           Temizle

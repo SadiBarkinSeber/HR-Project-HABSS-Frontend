@@ -24,6 +24,10 @@ function ManagerAdvanceList() {
     setSortedAdvances([...data].reverse());
   };
 
+  const isActionEnabled = (approvalStatus) => {
+    return approvalStatus === "Talep Edildi";
+  };
+
   const handleApprove = async (id) => {
     confirmAlert({
       title: "Avans Talebini Onayla",
@@ -205,12 +209,14 @@ function ManagerAdvanceList() {
                       <button
                         className="btn btn-sm btn-success"
                         onClick={() => handleApprove(advance.id)}
+                        disabled={!isActionEnabled(advance.approvalStatus)}
                       >
                         Onayla
                       </button>
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => handleReject(advance.id)}
+                        disabled={!isActionEnabled(advance.approvalStatus)}
                       >
                         Reddet
                       </button>
@@ -222,11 +228,7 @@ function ManagerAdvanceList() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }
