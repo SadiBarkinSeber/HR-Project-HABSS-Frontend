@@ -17,8 +17,10 @@ function ExpenseList() {
   const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
   const { empData, refreshData } = useEmp();
 
+  const employeeId = localStorage.getItem("empId");
+
   const fetchData = async () => {
-    const data = await fetchAllExpenses(empData.id);
+    const data = await fetchAllExpenses(employeeId);
     console.log(data);
     setExpenses(data);
     setSortedExpenses(data.reverse());

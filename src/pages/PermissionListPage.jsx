@@ -20,10 +20,12 @@ function PermissionList() {
   const [sortDirection, setSortDirection] = useState({});
   const { empData, refreshData } = useEmp();
 
+  const employeeId = localStorage.getItem("empId");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchAllPermission(empData.id);
+        const response = await fetchAllPermission(employeeId);
         if (
           response &&
           response.permissions &&
