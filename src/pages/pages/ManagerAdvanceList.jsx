@@ -133,7 +133,7 @@ function ManagerAdvanceList() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-10">
+        <div className="col-md-15">
           <h1 className="text-center mb-4">Avans Talebi Listesi</h1>
           <div className="table-responsive">
             <div className="mb-3">
@@ -151,7 +151,10 @@ function ManagerAdvanceList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("employeeName")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("employeeName")}
+                  >
                     Çalışan Ad Soyad
                     {sortDirection["employeeName"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -159,7 +162,10 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("advanceType")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("advanceType")}
+                  >
                     Avans Türü{" "}
                     {sortDirection["advanceType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -167,7 +173,10 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("requestDate")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("requestDate")}
+                  >
                     Talep Tarihi
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -175,8 +184,11 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Açıklama</th>
-                  <th onClick={() => sortBy("amount")}>
+                  <th className="text-center text-nowrap">Açıklama</th>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("amount")}
+                  >
                     Miktar{" "}
                     {sortDirection["amount"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -184,7 +196,10 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("currency")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("currency")}
+                  >
                     Para Birimi{" "}
                     {sortDirection["currency"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -192,7 +207,10 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("approvalStatus")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("approvalStatus")}
+                  >
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -200,39 +218,42 @@ function ManagerAdvanceList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>İşlem</th>
+                  <th className="text-center text-nowrap">İşlem</th>
                 </tr>
               </thead>
               <tbody>
                 {currentAdvances.map((advance) => (
                   <tr key={advance.id}>
-                    <td>
-                      {advance.employeeFirstName}
-                      {advance.employeeSecondName}
-                      {advance.employeeLastName}
+                    <td className="text-center">
+                      {advance.employeeFirstName} {advance.employeeSecondName}{" "}
+                      {advance.employeeLastName}{" "}
                       {advance.employeeSecondLastName}
                     </td>
-                    <td>{advance.advanceType}</td>
-                    <td>{formatDate(advance.requestDate)}</td>
-                    <td>{advance.description}</td>
-                    <td>{advance.amount}</td>
-                    <td>{advance.currency}</td>
-                    <td>{advance.approvalStatus}</td>
+                    <td className="text-center">{advance.advanceType}</td>
                     <td className="text-center">
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => handleApprove(advance.id)}
-                        disabled={!isActionEnabled(advance.approvalStatus)}
-                      >
-                        Onayla
-                      </button>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => handleReject(advance.id)}
-                        disabled={!isActionEnabled(advance.approvalStatus)}
-                      >
-                        Reddet
-                      </button>
+                      {formatDate(advance.requestDate)}
+                    </td>
+                    <td className="text-center">{advance.description}</td>
+                    <td className="text-center">{advance.amount}</td>
+                    <td className="text-center">{advance.currency}</td>
+                    <td className="text-center">{advance.approvalStatus}</td>
+                    <td className="text-center">
+                      <div className="btn-group">
+                        <button
+                          className="btn btn-sm btn-success me-1"
+                          onClick={() => handleApprove(advance.id)}
+                          disabled={!isActionEnabled(advance.approvalStatus)}
+                        >
+                          Onayla
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => handleReject(advance.id)}
+                          disabled={!isActionEnabled(advance.approvalStatus)}
+                        >
+                          Reddet
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
