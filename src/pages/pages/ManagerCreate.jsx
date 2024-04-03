@@ -6,9 +6,10 @@ import { uploadPhotoAndGetPath } from "../api/api";
 import { checkEmailExists } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchManagers } from "../api/api";
 
 const ManagerCreate = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [managerData, setManagerData] = useState({
     firstName: "",
     secondName: "",
@@ -100,6 +101,18 @@ const ManagerCreate = () => {
     }
 
     try {
+      // Yönetici listesini kontrol et
+      const managersList = await fetchManagers(); // Bu fonksiyonun gerçek implementasyonunu kullanmalısınız
+      const existingManager = managersList.find(
+        (manager) =>
+          manager.firstName === managerData.firstName &&
+          manager.firstSurname === managerData.firstSurname
+      );
+      if (existingManager) {
+        toast.warning("Bu isim ve soyisimde bir yönetici zaten mevcut.");
+        return;
+      }
+
       console.log(managerData);
       const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
       if (confirmed) {
@@ -108,9 +121,7 @@ const ManagerCreate = () => {
         checkEmailExists(response.email);
         resetForm();
         toast.success("Kayıt onaylandı.");
-        setTimeout(() => {
-          navigate("/admin-manager-list");
-        }, 2000);
+        navigate("/admin-manager-list");
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
         toast.warning("Kaydetme işlemi iptal edildi.");
@@ -221,7 +232,6 @@ const ManagerCreate = () => {
 
     setManagerData({ ...managerData, dateOfBirth: selectedDate });
   };
-  
 
   return (
     <div className="container mt-5">
@@ -271,11 +281,16 @@ const ManagerCreate = () => {
                 </div>
                 <div>
                   <h5>Fotoğraf Seç</h5>
-                  <p>Fotoğraf ekleyin veya değiştirin <span className="text-danger">*</span></p>
+                  <p>
+                    Fotoğraf ekleyin veya değiştirin{" "}
+                    <span className="text-danger">*</span>
+                  </p>
                 </div>
               </div>
               <div className="mb-3">
-                <label htmlFor="firstName">Ad: <span className="text-danger">*</span></label>
+                <label htmlFor="firstName">
+                  Ad: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="firstName"
@@ -300,7 +315,9 @@ const ManagerCreate = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="firstSurname">Soyad: <span className="text-danger">*</span></label>
+                <label htmlFor="firstSurname">
+                  Soyad: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="firstSurname"
@@ -325,7 +342,9 @@ const ManagerCreate = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="phoneNumber">Telefon Numarası: <span className="text-danger">*</span></label>
+                <label htmlFor="phoneNumber">
+                  Telefon Numarası: <span className="text-danger">*</span>
+                </label>
                 <PhoneInput
                   country="TR"
                   value={managerData.phoneNumber}
@@ -342,7 +361,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="dateOfBirth">Doğum Tarihi: <span className="text-danger">*</span></label>
+                <label htmlFor="dateOfBirth">
+                  Doğum Tarihi: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -358,21 +379,44 @@ const ManagerCreate = () => {
                   </div>
                 )}
               </div>
-              { <div className="mb-3">
-                <label>Cinsiyet:</label>
-                <div className="form-check">
-                  <input type="radio" id="male" name="gender" value="Male" checked={managerData.gender === "Male"} onChange={handleInputChange} className="form-check-input" />
-                  <label htmlFor="male" className="form-check-label">Erkek</label>
+              {
+                <div className="mb-3">
+                  <label>Cinsiyet:</label>
+                  <div className="form-check">
+                    <input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      value="Male"
+                      checked={managerData.gender === "Male"}
+                      onChange={handleInputChange}
+                      className="form-check-input"
+                    />
+                    <label htmlFor="male" className="form-check-label">
+                      Erkek
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      value="Female"
+                      checked={managerData.gender === "Female"}
+                      onChange={handleInputChange}
+                      className="form-check-input"
+                    />
+                    <label htmlFor="female" className="form-check-label">
+                      Kadın
+                    </label>
+                  </div>
+                  {formSubmitted && !managerData.gender && (
+                    <div className="text-danger">
+                      Cinsiyet seçimi yapmalısınız.
+                    </div>
+                  )}
                 </div>
-                <div className="form-check">
-                  <input type="radio" id="female" name="gender" value="Female" checked={managerData.gender === "Female"} onChange={handleInputChange} className="form-check-input" />
-                  <label htmlFor="female" className="form-check-label">Kadın</label>
-                </div>
-                {formSubmitted && !managerData.gender && (
-                  <div className="text-danger">Cinsiyet seçimi yapmalısınız.</div>
-                )}
-              </div> }
-
+              }
             </div>
           </div>
         </div>
@@ -380,7 +424,9 @@ const ManagerCreate = () => {
           <div className="card">
             <div className="card-body">
               <div className="mb-3">
-                <label htmlFor="birthPlace">Doğum Yeri: <span className="text-danger">*</span></label>
+                <label htmlFor="birthPlace">
+                  Doğum Yeri: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="birthPlace"
@@ -394,7 +440,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="tc">TC Kimlik No: <span className="text-danger">*</span></label>
+                <label htmlFor="tc">
+                  TC Kimlik No: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="tc"
@@ -410,7 +458,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="address">Adres: <span className="text-danger">*</span></label>
+                <label htmlFor="address">
+                  Adres: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="address"
@@ -424,7 +474,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="company">Şirket Adı: <span className="text-danger">*</span></label>
+                <label htmlFor="company">
+                  Şirket Adı: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="company"
@@ -438,7 +490,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="position">Pozisyon: <span className="text-danger">*</span></label>
+                <label htmlFor="position">
+                  Pozisyon: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="position"
@@ -452,7 +506,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="department">Departman: <span className="text-danger">*</span></label>
+                <label htmlFor="department">
+                  Departman: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   id="department"
@@ -466,7 +522,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="startDate">İşe Giriş Tarihi: <span className="text-danger">*</span></label>
+                <label htmlFor="startDate">
+                  İşe Giriş Tarihi: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="date"
                   id="startDate"
@@ -483,7 +541,9 @@ const ManagerCreate = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="wage">Maaş: <span className="text-danger">*</span></label>
+                <label htmlFor="wage">
+                  Maaş: <span className="text-danger">*</span>
+                </label>
                 <input
                   type="number"
                   id="wage"

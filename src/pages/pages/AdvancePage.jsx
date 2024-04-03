@@ -58,25 +58,19 @@ const Advance = () => {
       }
     } else {
       if (currency === "TL" && parseInt(amount) > empData.wage * 3) {
-        toast.warning(
-          "Girilen avans miktarı maaşın üç katından fazla olamaz tl"
-        );
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz.");
         return;
       } else if (
         currency === "USD" &&
         parseInt(amount) > (empData.wage * 3) / 32
       ) {
-        toast.warning(
-          "Girilen avans miktarı maaşın üç katından fazla olamaz d"
-        );
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz.");
         return;
       } else if (
         currency === "EUR" &&
         parseInt(amount) > (empData.wage * 3) / 34
       ) {
-        toast.warning(
-          "Girilen avans miktarı maaşın üç katından fazla olamaz e"
-        );
+        toast.warning("Girilen avans miktarı maaşın üç katından fazla olamaz.");
         return;
       }
     }
@@ -139,7 +133,7 @@ const Advance = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="advanceType" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Avans Türü:
+                    <span style={{ color: "red" }}>*</span> Avans Türü:
                   </label>
                   <select
                     id="advanceType"
@@ -165,7 +159,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="currency" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Para Birimi:
+                    <span style={{ color: "red" }}>*</span> Para Birimi:
                   </label>
                   <select
                     id="currency"
@@ -191,7 +185,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="amount" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Tutar:
+                    <span style={{ color: "red" }}>*</span> Tutar:
                   </label>
                   <input
                     type="number"
@@ -211,7 +205,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="description" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Açıklama:
+                    <span style={{ color: "red" }}>*</span> Açıklama:
                   </label>
                   <textarea
                     id="description"
@@ -246,11 +240,7 @@ const Advance = () => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 };

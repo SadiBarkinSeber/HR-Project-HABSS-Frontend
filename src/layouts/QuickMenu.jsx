@@ -231,11 +231,7 @@ const QuickMenu = (props) => {
     );
   };
 
-  return (
-    <Fragment>
-      {hasMounted && isDesktop ? <QuickMenuDesktop /> : <QuickMenuMobile />}
-    </Fragment>
-  );
+  return <Fragment>{hasMounted && <QuickMenuDesktop />}</Fragment>;
 };
 
 export default QuickMenu;

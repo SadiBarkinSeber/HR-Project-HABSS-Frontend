@@ -35,6 +35,7 @@ function PermissionList() {
           Array.isArray(response.permissions)
         ) {
           setPermissions(response.permissions);
+          setSortedPermissions(response.permissions.slice().reverse());
         } else {
           console.error("Invalid data format:", response);
         }
@@ -44,22 +45,25 @@ function PermissionList() {
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    setSortedPermissions([...permissions].reverse());
-  }, [permissions]);
+  }, [employeeId]); // useEffect'i employeeId bağımlılığı ile kullanarak, employeeId değiştiğinde tekrar çağrılmasını sağlıyoruz
 
   const handleReject = async (id) => {
     try {
       const updateResult = await updatePermissionStatusForEmployee(id, false);
       if (updateResult.success) {
         toast.success(updateResult.message);
-        const updatedPermissions = permissions.filter(
-          (permission) => permission.id !== id
-        );
-        setPermissions(updatedPermissions);
-        setSortedPermissions([...updatedPermissions].reverse());
+        // Güncel verileri tekrar çekerek state'lere atama
+        const response = await fetchAllPermission(employeeId);
+        if (
+          response &&
+          response.permissions &&
+          Array.isArray(response.permissions)
+        ) {
+          setPermissions(response.permissions);
+          setSortedPermissions(response.permissions.slice().reverse());
+        } else {
+          console.error("Invalid data format:", response);
+        }
       } else {
         toast.error(updateResult.message);
       }
@@ -73,7 +77,7 @@ function PermissionList() {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ [key]: direction });
 
-    const sorted = [...sortedPermissions].sort((a, b) => {
+    const sorted = [...permissions].sort((a, b) => {
       if (key === "permissionType") {
         return direction === "asc"
           ? a[key].localeCompare(b[key])
@@ -160,16 +164,6 @@ function PermissionList() {
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 setFilterOption(selectedValue);
-                if (selectedValue === "") {
-                  setSortedPermissions([...permissions]);
-                } else {
-                  setSortedPermissions(
-                    permissions.filter(
-                      (permission) =>
-                        permission.permissionType === selectedValue
-                    )
-                  );
-                }
               }}
             >
               <option value="">Hepsi</option>
@@ -287,7 +281,7 @@ function PermissionList() {
               {[
                 ...Array(
                   Math.ceil(
-                    sortedPermissions.filter(filterPermissions).length /
+                    permissions.filter(filterPermissions).length /
                       permissionsPerPage
                   )
                 ).keys(),
@@ -305,7 +299,7 @@ function PermissionList() {
                 disabled={
                   currentPage ===
                   Math.ceil(
-                    sortedPermissions.filter(filterPermissions).length /
+                    permissions.filter(filterPermissions).length /
                       permissionsPerPage
                   )
                 }

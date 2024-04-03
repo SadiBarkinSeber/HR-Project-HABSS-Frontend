@@ -32,7 +32,8 @@ const DefaultDashboardLayout = (props) => {
           />
         </div>
         <div className="main-context">{props.children}</div>
-        <div className="footer">{/* <Footer /> */}</div>
+        <div className="footer"></div>
+        <Footer />
       </div>
     </div>
   );

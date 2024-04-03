@@ -125,7 +125,7 @@ function SiteManagerUpdate() {
             style={{ marginLeft: "264px" }}
             onClick={handleUpdateSiteManager}
           >
-            Save
+            Kaydet
           </button>
         </div>
       </div>
