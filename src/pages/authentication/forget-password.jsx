@@ -30,8 +30,11 @@ const ForgetPassword = () => {
     try {
       const exists = await checkEmailExists(email);
       if (exists) {
-        toast.success("Email adresinize tek kullanimlik sifre gonderildi !");
-        navigateTo("/"); // navigateTo kullanarak yönlendirme yapın
+        toast.success("Email adresinize tek kullanimlik sifre gonderildi!");
+        toast.warning("Emaillerinizi kontrol ediniz.")
+        setTimeout(() => {
+          navigateTo("/"); 
+        }, 3000);
       } else {
         toast.warning("Girilen email adresi sistemde bulunamadı.");
       }
@@ -74,7 +77,7 @@ const ForgetPassword = () => {
             </div>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email:</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"

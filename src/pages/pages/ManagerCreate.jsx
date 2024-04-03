@@ -280,16 +280,15 @@ const ManagerCreate = () => {
                   />
                 </div>
                 <div>
-                  <h5>Fotoğraf Seç</h5>
-                  <p>
+                  <h5><span style={{ color: "red" }}>*</span> Fotoğraf Seç</h5>
+                  <p> 
                     Fotoğraf ekleyin veya değiştirin{" "}
-                    <span className="text-danger">*</span>
                   </p>
                 </div>
               </div>
               <div className="mb-3">
                 <label htmlFor="firstName">
-                  Ad: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Ad:
                 </label>
                 <input
                   type="text"
@@ -316,7 +315,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="firstSurname">
-                  Soyad: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Soyad:
                 </label>
                 <input
                   type="text"
@@ -343,7 +342,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="phoneNumber">
-                  Telefon Numarası: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Telefon Numarası: 
                 </label>
                 <PhoneInput
                   country="TR"
@@ -362,7 +361,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="dateOfBirth">
-                  Doğum Tarihi: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Doğum Tarihi:
                 </label>
                 <input
                   type="date"
@@ -381,7 +380,7 @@ const ManagerCreate = () => {
               </div>
               {
                 <div className="mb-3">
-                  <label>Cinsiyet:</label>
+                  <label><span className="text-danger">*</span> Cinsiyet:</label>
                   <div className="form-check">
                     <input
                       type="radio"
@@ -425,7 +424,7 @@ const ManagerCreate = () => {
             <div className="card-body">
               <div className="mb-3">
                 <label htmlFor="birthPlace">
-                  Doğum Yeri: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Doğum Yeri:
                 </label>
                 <input
                   type="text"
@@ -441,7 +440,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="tc">
-                  TC Kimlik No: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> TC Kimlik No:
                 </label>
                 <input
                   type="text"
@@ -459,7 +458,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="address">
-                  Adres: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Adres:
                 </label>
                 <input
                   type="text"
@@ -475,7 +474,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="company">
-                  Şirket Adı: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Şirket Adı:
                 </label>
                 <input
                   type="text"
@@ -491,7 +490,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="position">
-                  Pozisyon: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Pozisyon:
                 </label>
                 <input
                   type="text"
@@ -507,7 +506,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="department">
-                  Departman: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Departman:
                 </label>
                 <input
                   type="text"
@@ -523,7 +522,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="startDate">
-                  İşe Giriş Tarihi: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> İşe Giriş Tarihi:
                 </label>
                 <input
                   type="date"
@@ -542,7 +541,7 @@ const ManagerCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="wage">
-                  Maaş: <span className="text-danger">*</span>
+                <span className="text-danger">*</span> Maaş:
                 </label>
                 <input
                   type="number"
