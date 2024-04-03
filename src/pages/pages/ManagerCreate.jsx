@@ -108,7 +108,9 @@ const ManagerCreate = () => {
         checkEmailExists(response.email);
         resetForm();
         toast.success("Kayıt onaylandı.");
-        navigate("/admin-manager-list");
+        setTimeout(() => {
+          navigate("/admin-manager-list");
+        }, 2000);
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
         toast.warning("Kaydetme işlemi iptal edildi.");

@@ -128,7 +128,9 @@ const CompanyAddPage = () => {
         console.log("Company created:", response);
         resetForm();
         toast.success("Şirket başarıyla kaydedildi.");
-        navigate("/admin-company-list");
+        setTimeout(() => {
+          navigate("/admin-company-list");
+        }, 2000);
         // Başarılı kayıt bildirimi
       } else {
         console.log("Kaydetme işlemi iptal edildi.");

@@ -3,6 +3,7 @@ import { createAdvance } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEmp } from "../../components/EmployeeContext";
+import { useNavigate } from "react-router-dom";
 
 const Advance = () => {
   // State tanımlamaları
@@ -13,6 +14,7 @@ const Advance = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false); // Yeni state tanımı
   const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
+  const navigate = useNavigate();
 
   // Avans türü seçenekleri
   const advanceTypeOptions = ["Bireysel", "Kurumsal"];
@@ -96,6 +98,9 @@ const Advance = () => {
     resetForm();
     setErrorMessage("");
     toast.success("Avans talebi başarıyla gönderildi.");
+    setTimeout(() => {
+      navigate("/emp-advance-list");
+    }, 2000);
   };
 
   // Formu sıfırlama işlemi

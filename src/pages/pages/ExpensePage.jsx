@@ -3,6 +3,7 @@ import { sendFormData, uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEmp } from "../../components/EmployeeContext";
+import { useNavigate } from "react-router-dom";
 
 function Expense() {
   const [expenseType, setExpenseType] = useState("");
@@ -13,6 +14,7 @@ function Expense() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const fileInputRef = useRef(null);
   const { empData, refreshData } = useEmp();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +50,10 @@ function Expense() {
       }
 
       notifySuccess();
+      resetForm();
+      setTimeout(() => {
+        navigate("/emp-permission-list");
+      }, 2000);
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
       notifyError();
