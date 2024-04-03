@@ -7,12 +7,15 @@ import { updateAdvanceStatus } from "../api/api";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "react-toastify/dist/ReactToastify.css";
+import Pagination from "react-bootstrap/Pagination";
 
 function ManagerAdvanceList() {
   const [advances, setAdvances] = useState([]);
-  const [filterOption, setFilterOption] = useState("all");
-  const [sortDirection, setSortDirection] = useState({});
   const [sortedAdvances, setSortedAdvances] = useState([]);
+  const [sortDirection, setSortDirection] = useState({});
+  const [filterOption, setFilterOption] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [advancesPerPage] = useState(10);
 
   useEffect(() => {
     fetchData();
@@ -83,18 +86,6 @@ function ManagerAdvanceList() {
     return date.toLocaleDateString("tr-TR");
   };
 
-  const filterAdvances = (advance) => {
-    if (filterOption === "all") {
-      return true;
-    } else if (filterOption === "individual") {
-      return advance.advanceType === "Bireysel";
-    } else if (filterOption === "corporate") {
-      return advance.advanceType === "Kurumsal";
-    } else {
-      return advance.permission === filterOption;
-    }
-  };
-
   const sortBy = (key) => {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ [key]: direction });
@@ -116,6 +107,28 @@ function ManagerAdvanceList() {
     });
     setSortedAdvances(sorted);
   };
+
+  const filterAdvances = (advance) => {
+    if (filterOption === "all") {
+      return true;
+    } else if (filterOption === "individual") {
+      return advance.advanceType === "Bireysel";
+    } else if (filterOption === "corporate") {
+      return advance.advanceType === "Kurumsal";
+    } else {
+      return advance.permission === filterOption;
+    }
+  };
+
+  // Pagination calculations
+  const indexOfLastAdvance = currentPage * advancesPerPage;
+  const indexOfFirstAdvance = indexOfLastAdvance - advancesPerPage;
+  const currentAdvances = sortedAdvances
+    .filter(filterAdvances)
+    .slice(indexOfFirstAdvance, indexOfLastAdvance);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container mt-5">
@@ -191,7 +204,7 @@ function ManagerAdvanceList() {
                 </tr>
               </thead>
               <tbody>
-                {sortedAdvances.filter(filterAdvances).map((advance) => (
+                {currentAdvances.map((advance) => (
                   <tr key={advance.id}>
                     <td>
                       {advance.employeeFirstName}
@@ -225,6 +238,41 @@ function ManagerAdvanceList() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Pagination */}
+          <div className="d-flex justify-content-center">
+            <Pagination>
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[
+                ...Array(
+                  Math.ceil(
+                    sortedAdvances.filter(filterAdvances).length /
+                      advancesPerPage
+                  )
+                ).keys(),
+              ].map((number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(
+                    sortedAdvances.filter(filterAdvances).length /
+                      advancesPerPage
+                  )
+                }
+              />
+            </Pagination>
           </div>
         </div>
       </div>

@@ -12,12 +12,15 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { confirmAlert } from "react-confirm-alert";
 import { useEmp } from "../components/EmployeeContext";
+import Pagination from "react-bootstrap/Pagination";
 
 function PermissionList() {
-  const [permissions, setPermissions] = useState([]); // Boş dizi olarak başlat
+  const [permissions, setPermissions] = useState([]);
   const [sortedPermissions, setSortedPermissions] = useState([]);
   const [filterOption, setFilterOption] = useState("");
   const [sortDirection, setSortDirection] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [permissionsPerPage] = useState(10);
   const { empData, refreshData } = useEmp();
 
   const employeeId = localStorage.getItem("empId");
@@ -31,7 +34,7 @@ function PermissionList() {
           response.permissions &&
           Array.isArray(response.permissions)
         ) {
-          setPermissions(response.permissions); // permissions anahtarından gelen diziyi set et
+          setPermissions(response.permissions);
         } else {
           console.error("Invalid data format:", response);
         }
@@ -42,6 +45,7 @@ function PermissionList() {
 
     fetchData();
   }, []);
+
   useEffect(() => {
     setSortedPermissions([...permissions].reverse());
   }, [permissions]);
@@ -51,7 +55,6 @@ function PermissionList() {
       const updateResult = await updatePermissionStatusForEmployee(id, false);
       if (updateResult.success) {
         toast.success(updateResult.message);
-        // İzin reddedildiğinde izni kaldırın ve yeniden sıralayın
         const updatedPermissions = permissions.filter(
           (permission) => permission.id !== id
         );
@@ -90,7 +93,7 @@ function PermissionList() {
 
   const handleDownload = async (fileName) => {
     try {
-      await downloadFile(fileName); // Örnek indirme fonksiyonu çağrısı
+      await downloadFile(fileName);
       toast.success("Dosya başarıyla indirildi");
     } catch (error) {
       console.error("Error downloading file:", error);
@@ -129,11 +132,19 @@ function PermissionList() {
         },
         {
           label: "Hayır",
-          onClick: () => {}, // Hiçbir şey yapma
+          onClick: () => {},
         },
       ],
     });
   };
+
+  const indexOfLastPermission = currentPage * permissionsPerPage;
+  const indexOfFirstPermission = indexOfLastPermission - permissionsPerPage;
+  const currentPermissions = sortedPermissions
+    .filter(filterPermissions)
+    .slice(indexOfFirstPermission, indexOfLastPermission);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container mt-5">
@@ -150,7 +161,7 @@ function PermissionList() {
                 const selectedValue = e.target.value;
                 setFilterOption(selectedValue);
                 if (selectedValue === "") {
-                  setSortedPermissions([...permissions]); // Tüm izinleri göstermek için sıralı izinleri tüm izinlerle güncelle
+                  setSortedPermissions([...permissions]);
                 } else {
                   setSortedPermissions(
                     permissions.filter(
@@ -173,7 +184,10 @@ function PermissionList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("permissionType")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("permissionType")}
+                  >
                     İzin Türü{" "}
                     {sortDirection["permissionType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -181,7 +195,10 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("requestDate")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("requestDate")}
+                  >
                     Talep Tarihi
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -189,7 +206,10 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("startDate")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("startDate")}
+                  >
                     Başlangıç Tarihi{" "}
                     {sortDirection["startDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -197,7 +217,7 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("endDate")}>
+                  <th className="text-center" onClick={() => sortBy("endDate")}>
                     Bitiş Tarihi{" "}
                     {sortDirection["endDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -205,7 +225,10 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("approvalStatus")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("approvalStatus")}
+                  >
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -213,43 +236,81 @@ function PermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Döküman</th>
-                  <th>İşlem</th>
+                  <th className="text-center">Döküman</th>
+                  <th className="text-center">İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedPermissions
-                  .filter(filterPermissions)
-                  .map((permission) => (
-                    <tr key={permission.id}>
-                      <td>{permission.permissionType}</td>
-                      <td>{formatDate(permission.requestDate)}</td>
-                      <td>{formatDate(permission.startDate)}</td>
-                      <td>{formatDate(permission.endDate)}</td>
-                      <td>{permission.approvalStatus}</td>
-                      <td className="text-center">
-                        {permission.fileName && (
-                          <button
-                            className="btn btn-sm btn-primary"
-                            onClick={() => handleDownload(permission.fileName)}
-                          >
-                            İndir
-                          </button>
-                        )}
-                      </td>
-                      <td className="text-center">
+                {currentPermissions.map((permission) => (
+                  <tr key={permission.id}>
+                    <td className="text-center">{permission.permissionType}</td>
+                    <td className="text-center">
+                      {formatDate(permission.requestDate)}
+                    </td>
+                    <td className="text-center">
+                      {formatDate(permission.startDate)}
+                    </td>
+                    <td className="text-center">
+                      {formatDate(permission.endDate)}
+                    </td>
+                    <td className="text-center">{permission.approvalStatus}</td>
+                    <td className="text-center">
+                      {permission.fileName && (
                         <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => confirmReject(permission.id)}
-                          disabled={!isCancelEnabled(permission.approvalStatus)}
+                          className="btn btn-sm btn-primary"
+                          onClick={() => handleDownload(permission.fileName)}
                         >
-                          İptal Et
+                          İndir
                         </button>
-                      </td>
-                    </tr>
-                  ))}
+                      )}
+                    </td>
+                    <td className="text-center">
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => confirmReject(permission.id)}
+                        disabled={!isCancelEnabled(permission.approvalStatus)}
+                      >
+                        İptal Et
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+          </div>
+          <div className="d-flex justify-content-center">
+            <Pagination>
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[
+                ...Array(
+                  Math.ceil(
+                    sortedPermissions.filter(filterPermissions).length /
+                      permissionsPerPage
+                  )
+                ).keys(),
+              ].map((number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(
+                    sortedPermissions.filter(filterPermissions).length /
+                      permissionsPerPage
+                  )
+                }
+              />
+            </Pagination>
           </div>
         </div>
       </div>

@@ -9,19 +9,21 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useEmp } from "../components/EmployeeContext";
+import Pagination from "react-bootstrap/Pagination";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [sortedExpenses, setSortedExpenses] = useState([]);
   const [sortDirection, setSortDirection] = useState({});
   const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expensesPerPage] = useState(10);
   const { empData, refreshData } = useEmp();
 
   const employeeId = localStorage.getItem("empId");
 
   const fetchData = async () => {
     const data = await fetchAllExpenses(employeeId);
-    console.log(data);
     setExpenses(data);
     setSortedExpenses(data.reverse());
   };
@@ -53,6 +55,7 @@ function ExpenseList() {
     const date = new Date(dateTimeString);
     return date.toLocaleDateString("tr-TR");
   };
+
   const sortBy = (key) => {
     let direction = sortDirection[key] === "asc" ? "desc" : "asc";
     setSortDirection({ [key]: direction });
@@ -109,6 +112,14 @@ function ExpenseList() {
     });
   };
 
+  const indexOfLastExpense = currentPage * expensesPerPage;
+  const indexOfFirstExpense = indexOfLastExpense - expensesPerPage;
+  const currentExpenses = sortedExpenses
+    .filter(filterExpenses)
+    .slice(indexOfFirstExpense, indexOfLastExpense);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -147,7 +158,10 @@ function ExpenseList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("expenseType")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("expenseType")}
+                  >
                     Harcama türü
                     {sortDirection["expenseType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -155,7 +169,10 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("requestDate")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("requestDate")}
+                  >
                     Talep Tarihi
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -163,7 +180,7 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("amount")}>
+                  <th className="text-center" onClick={() => sortBy("amount")}>
                     Miktar
                     {sortDirection["amount"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -171,7 +188,10 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("currency")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("currency")}
+                  >
                     Para Birimi
                     {sortDirection["currency"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -179,7 +199,10 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("approvalStatus")}>
+                  <th
+                    className="text-center"
+                    onClick={() => sortBy("approvalStatus")}
+                  >
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -187,18 +210,20 @@ function ExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Döküman</th>
-                  <th>İşlem</th>
+                  <th className="text-center">Döküman</th>
+                  <th className="text-center">İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedExpenses.filter(filterExpenses).map((expense) => (
+                {currentExpenses.map((expense) => (
                   <tr key={expense.id}>
-                    <td>{expense.expenseType}</td>
-                    <td>{formatDate(expense.requestDate)}</td>
-                    <td>{expense.amount}</td>
-                    <td>{expense.currency}</td>
-                    <td>{expense.approvalStatus}</td>
+                    <td className="text-center">{expense.expenseType}</td>
+                    <td className="text-center">
+                      {formatDate(expense.requestDate)}
+                    </td>
+                    <td className="text-center">{expense.amount}</td>
+                    <td className="text-center">{expense.currency}</td>
+                    <td className="text-center">{expense.approvalStatus}</td>
                     <td className="text-center">
                       {expense.fileName && (
                         <button
@@ -222,6 +247,40 @@ function ExpenseList() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="d-flex justify-content-center">
+            <Pagination>
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[
+                ...Array(
+                  Math.ceil(
+                    sortedExpenses.filter(filterExpenses).length /
+                      expensesPerPage
+                  )
+                ).keys(),
+              ].map((number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(
+                    sortedExpenses.filter(filterExpenses).length /
+                      expensesPerPage
+                  )
+                }
+              />
+            </Pagination>
           </div>
         </div>
       </div>

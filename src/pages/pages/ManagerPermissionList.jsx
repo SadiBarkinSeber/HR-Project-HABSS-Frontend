@@ -5,15 +5,18 @@ import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import { downloadFile } from "../api/api";
 import { updatePermissionStatus } from "../api/api";
-import { confirmAlert } from "react-confirm-alert"; // react-confirm-alert paketini ekledik
+import { confirmAlert } from "react-confirm-alert";
 import "react-toastify/dist/ReactToastify.css";
-import "react-confirm-alert/src/react-confirm-alert.css"; // react-confirm-alert için CSS dosyasını ekledik
+import "react-confirm-alert/src/react-confirm-alert.css";
+import Pagination from "react-bootstrap/Pagination";
 
 function ManagerPermissionList() {
   const [permissions, setPermissions] = useState([]);
   const [sortedPermissions, setSortedPermissions] = useState([]);
   const [sortDirection, setSortDirection] = useState({});
-  const [filterOption, setFilterOption] = useState(""); // İzin türü filtresi
+  const [filterOption, setFilterOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [permissionsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,6 +146,14 @@ function ManagerPermissionList() {
     });
   };
 
+  const indexOfLastPermission = currentPage * permissionsPerPage;
+  const indexOfFirstPermission = indexOfLastPermission - permissionsPerPage;
+  const currentPermissions = sortedPermissions
+    .filter(filterPermissions)
+    .slice(indexOfFirstPermission, indexOfLastPermission);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -234,51 +245,83 @@ function ManagerPermissionList() {
                 </tr>
               </thead>
               <tbody>
-                {sortedPermissions
-                  .filter(filterPermissions)
-                  .map((permission) => (
-                    <tr key={permission.id}>
-                      <td>
-                        {permission.employeeFirstName}
-                        {permission.employeeSecondName}
-                        {permission.employeeLastName}
-                        {permission.employeeSecondLastName}
-                      </td>
-                      <td>{permission.permissionType}</td>
-                      <td>{formatDate(permission.requestDate)}</td>
-                      <td>{formatDate(permission.startDate)}</td>
-                      <td>{formatDate(permission.endDate)}</td>
-                      <td>{permission.approvalStatus}</td>
-                      <td className="text-center">
-                        {permission.fileName && (
-                          <button
-                            className="btn btn-sm btn-primary"
-                            onClick={() => handleDownload(permission.fileName)}
-                          >
-                            İndir
-                          </button>
-                        )}
-                      </td>
-                      <td className="text-center">
+                {currentPermissions.map((permission) => (
+                  <tr key={permission.id}>
+                    <td>
+                      {permission.employeeFirstName}
+                      {permission.employeeSecondName}
+                      {permission.employeeLastName}
+                      {permission.employeeSecondLastName}
+                    </td>
+                    <td>{permission.permissionType}</td>
+                    <td>{formatDate(permission.requestDate)}</td>
+                    <td>{formatDate(permission.startDate)}</td>
+                    <td>{formatDate(permission.endDate)}</td>
+                    <td>{permission.approvalStatus}</td>
+                    <td className="text-center">
+                      {permission.fileName && (
                         <button
-                          className="btn btn-sm btn-success"
-                          onClick={() => confirmApprove(permission.id)}
-                          disabled={!isActionEnabled(permission.approvalStatus)}
+                          className="btn btn-sm btn-primary"
+                          onClick={() => handleDownload(permission.fileName)}
                         >
-                          Onayla
+                          İndir
                         </button>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => confirmReject(permission.id)}
-                          disabled={!isActionEnabled(permission.approvalStatus)}
-                        >
-                          Reddet
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                      )}
+                    </td>
+                    <td className="text-center">
+                      <button
+                        className="btn btn-sm btn-success"
+                        onClick={() => confirmApprove(permission.id)}
+                        disabled={!isActionEnabled(permission.approvalStatus)}
+                      >
+                        Onayla
+                      </button>
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => confirmReject(permission.id)}
+                        disabled={!isActionEnabled(permission.approvalStatus)}
+                      >
+                        Reddet
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+          </div>
+          <div className="d-flex justify-content-center">
+            <Pagination>
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[
+                ...Array(
+                  Math.ceil(
+                    sortedPermissions.filter(filterPermissions).length /
+                      permissionsPerPage
+                  )
+                ).keys(),
+              ].map((number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(
+                    sortedPermissions.filter(filterPermissions).length /
+                      permissionsPerPage
+                  )
+                }
+              />
+            </Pagination>
           </div>
         </div>
       </div>
