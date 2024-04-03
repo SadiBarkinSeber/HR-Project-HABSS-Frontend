@@ -16,7 +16,7 @@ function CompanyList() {
     async function fetchData() {
       try {
         const data = await fetchCompanies();
-        setCompanies(data.reverse());
+        setCompanies(data);
         setFilteredCompanies(data.reverse());
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -134,19 +134,8 @@ function CompanyList() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Şirket Bilgileri</h5>
-                <button
-                  type="button"
-                  className="close"
-                  onClick={handleCloseModal}
-                >
-                  <span>&times;</span>
-                </button>
               </div>
               <div className="modal-body">
-                <p>
-                  <strong>Logo:</strong>{" "}
-                  <img src={selectedCompany.logoImagePath} alt="Logo" />
-                </p>
                 <p>
                   <strong>Şirket Adı:</strong> {selectedCompany.name}
                 </p>

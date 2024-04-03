@@ -52,7 +52,7 @@ function Expense() {
       notifySuccess();
       resetForm();
       setTimeout(() => {
-        navigate("/emp-permission-list");
+        navigate("/emp-expense-list");
       }, 2000);
     } catch (error) {
       console.error("API isteği başarısız oldu:", error);
@@ -148,7 +148,7 @@ function Expense() {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="type" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Harcama Türü:
+                    <span style={{ color: "red" }}>*</span> Harcama Türü:
                   </label>
                   <select
                     id="type"
@@ -178,7 +178,7 @@ function Expense() {
 
                 <div className="mb-3">
                   <label htmlFor="currency" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Para Birimi:
+                    <span style={{ color: "red" }}>*</span> Para Birimi:
                   </label>
                   <select
                     id="currency"
@@ -201,7 +201,7 @@ function Expense() {
 
                 <div className="mb-3">
                   <label htmlFor="amount" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Tutar:
+                    <span style={{ color: "red" }}>*</span> Tutar:
                   </label>
                   <input
                     type="number"
@@ -218,7 +218,7 @@ function Expense() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="formFileLg" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> Dosya Seç:
+                    <span style={{ color: "red" }}>*</span> Dosya Seç:
                   </label>
                   <input
                     ref={fileInputRef}
@@ -248,11 +248,7 @@ function Expense() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </div>
   );
 }

@@ -128,11 +128,7 @@ function EmployeeUpdate() {
           </button>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </>
   );
 }

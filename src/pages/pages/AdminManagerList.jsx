@@ -14,7 +14,7 @@ function Managers() {
     async function fetchData() {
       try {
         const data = await fetchManagers();
-        setManagers(data.reverse());
+        setManagers(data);
         setFilteredManagers(data.reverse());
       } catch (error) {
         console.error("Error fetching managers:", error);
@@ -134,13 +134,6 @@ function Managers() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Yönetici Detayları</h5>
-                <button
-                  type="button"
-                  className="close"
-                  onClick={handleCloseModal}
-                >
-                  <span>&times;</span>
-                </button>
               </div>
               <div className="modal-body">
                 <p>

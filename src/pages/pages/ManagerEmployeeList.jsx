@@ -16,7 +16,7 @@ function ManagerEmployeeList() {
     async function fetchData() {
       try {
         const data = await fetchEmployees2();
-        setEmployees(data.reverse());
+        setEmployees(data);
         setFilteredEmployees(data.reverse());
       } catch (error) {
         console.error("Error fetching employees:", error);
