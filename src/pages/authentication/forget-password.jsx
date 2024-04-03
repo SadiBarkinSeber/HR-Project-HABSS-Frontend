@@ -30,7 +30,7 @@ const ForgetPassword = () => {
     try {
       const exists = await checkEmailExists(email);
       if (exists) {
-        toast.warning("Email adresinize tek kullanimlik sifre gonderildi !");
+        toast.success("Email adresinize tek kullanimlik sifre gonderildi !");
         navigateTo("/"); // navigateTo kullanarak yönlendirme yapın
       } else {
         toast.warning("Girilen email adresi sistemde bulunamadı.");

@@ -5,6 +5,7 @@ import { useState } from "react";
 import NavbarVertical from "./navbars/NavbarVertical";
 import NavbarTop from "./navbars/NavbarTop";
 import { Row, Col } from "react-bootstrap";
+import Footer from "./navbars/Footer";
 
 const DefaultDashboardLayout = (props) => {
   const [showMenu, setShowMenu] = useState(true);
@@ -30,20 +31,11 @@ const DefaultDashboardLayout = (props) => {
             }}
           />
         </div>
-        {props.children}
-        <div className="px-6 border-top py-3 mt-5">
-          <Row>
-            <Col sm={6} className="text-center text-sm-start mb-2 mb-sm-0">
-              <p className="m-0">
-                Made by <b>HBASS</b>
-              </p>
-            </Col>
-            <Col sm={6} className="text-center text-sm-end ">
-              <p className="m-0">
-                Destributed by <b>BilgeAdam</b>
-              </p>
-            </Col>
-          </Row>
+        <div className="main-context">
+          {props.children}
+        </div>
+        <div className="footer">
+          <Footer />
         </div>
       </div>
     </div>

@@ -26,7 +26,7 @@ const Advance = () => {
     setFormSubmitted(true);
 
     if (!advanceType || !currency || !amount || !description) {
-      setErrorMessage("Lütfen tüm alanları doldurunuz.");
+      toast.warning("Lütfen tüm alanları doldurunuz.");
       return;
     }
 
@@ -134,7 +134,7 @@ const Advance = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="advanceType" className="form-label">
-                    Avans Türü:
+                  <span style={{ color: 'red' }}>*</span> Avans Türü:
                   </label>
                   <select
                     id="advanceType"
@@ -160,7 +160,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="currency" className="form-label">
-                    Para Birimi:
+                  <span style={{ color: 'red' }}>*</span> Para Birimi:
                   </label>
                   <select
                     id="currency"
@@ -186,7 +186,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="amount" className="form-label">
-                    Tutar:
+                  <span style={{ color: 'red' }}>*</span> Tutar:
                   </label>
                   <input
                     type="number"
@@ -206,7 +206,7 @@ const Advance = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="description" className="form-label">
-                    Açıklama:
+                  <span style={{ color: 'red' }}>*</span> Açıklama:
                   </label>
                   <textarea
                     id="description"

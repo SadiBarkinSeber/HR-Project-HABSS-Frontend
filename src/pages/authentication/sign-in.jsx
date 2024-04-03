@@ -28,7 +28,7 @@ const SignIn = () => {
       return;
     }
     if (!isValidEmail(email)) {
-      toast.warning("Geçerli bir Bilge Adam Boost email adresi girin.");
+      toast.warning("Geçerli bir Bilge Adam email adresi girin. Örn: isim@bilgeadamboost.com");
       return;
     }
     try {
@@ -75,7 +75,7 @@ const SignIn = () => {
     <div>
       <ToastContainer
         position="top-right"
-        autoClose={2000}
+        autoClose={3000}
         theme="colored"
       />
     <Row
