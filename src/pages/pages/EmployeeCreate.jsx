@@ -247,7 +247,7 @@ const EmployeeCreate = () => {
                 >
                   <label
                     htmlFor="photo"
-                    className="btn btn-primary rounded-circle upload-btn"
+                    className="btn btn-light rounded-circle upload-btn"
                     style={{
                       width: "100%",
                       height: "100%",

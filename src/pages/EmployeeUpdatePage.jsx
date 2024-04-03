@@ -26,12 +26,12 @@ function EmployeeUpdate() {
   const handleUpdateEmployee = async () => {
     try {
       // Telefon numarasının boş olup olmadığını kontrol et
-    if (!phoneNumber) {
-      toast.error("Telefon numarası boş bırakılamaz.", {
-        position: "top-right",
-      });
-      return;
-    }
+      if (!phoneNumber) {
+        toast.error("Telefon numarası boş bırakılamaz.", {
+          position: "top-right",
+        });
+        return;
+      }
       // Adres alanında en az bir harf kontrolü
       if (/[a-zA-Z]/.test(address)) {
         const updatedEmp = await updateEmployee(
@@ -109,8 +109,9 @@ function EmployeeUpdate() {
                 onPhotoChange={handlePhotoChange}
               />
               <button
-                style={{ marginTop: "20px", marginRight:"120px" }}
+                style={{ marginTop: "20px", marginRight: "120px" }}
                 onClick={handleUpdateEmployee}
+                className="btn btn-primary"
               >
                 Güncelle
               </button>

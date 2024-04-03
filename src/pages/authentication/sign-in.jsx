@@ -28,7 +28,9 @@ const SignIn = () => {
       return;
     }
     if (!isValidEmail(email)) {
-      toast.warning("Geçerli bir Bilge Adam email adresi girin. Örn: isim@bilgeadamboost.com");
+      toast.warning(
+        "Geçerli bir Bilge Adam email adresi girin. Örn: isim@bilgeadamboost.com"
+      );
       return;
     }
     try {
@@ -73,84 +75,80 @@ const SignIn = () => {
 
   return (
     <div>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        theme="colored"
-      />
-    <Row
-      className="align-items-center justify-content-center g-0 min-vh-100"
-      style={{
-        backgroundImage: `url('/Images/background/login-background6.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <Col xxl={4} lg={6} md={8} xs={12} className="py-8 py-xl-0">
-        <Card className="smooth-shadow-md">
-          <Card.Body className="p-6">
-            <div className="mb-4">
-              <Link to="/">
-                <Image
-                  src="/Images/brand/logo/habss-logo-small1.png"
-                  className="mb-2"
-                  alt=""
-                />
-              </Link>
-              <p className="mb-6">Lütfen bilgilerinizi eksiksiz giriniz</p>
-            </div>
-            <Form>
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email:</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  placeholder="Email adresinizi giriniz"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label>Şifre:</Form.Label>
-                <div className="input-group">
-                  <Form.Control
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="**************"
-                    required=""
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
+      <Row
+        className="align-items-center justify-content-center g-0 min-vh-100"
+        style={{
+          backgroundImage: `url('/Images/background/login-background6.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <Col xxl={4} lg={6} md={8} xs={12} className="py-8 py-xl-0">
+          <Card className="smooth-shadow-md">
+            <Card.Body className="p-6">
+              <div className="mb-4">
+                <Link to="/">
+                  <Image
+                    src="/Images/brand/logo/logo-habss-hd.png"
+                    className="mb-2"
+                    alt=""
                   />
-                  <Button
-                    variant="light"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? "Gizle" : "Göster"}
-                  </Button>
-                </div>
-              </Form.Group>
+                </Link>
+                <p className="mb-6">Lütfen bilgilerinizi eksiksiz giriniz</p>
+              </div>
+              <Form>
+                <Form.Group className="mb-3" controlId="email">
+                  <Form.Label>Email:</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="Email adresinizi giriniz"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="password">
+                  <Form.Label>Şifre:</Form.Label>
+                  <div className="input-group">
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      placeholder="**************"
+                      required=""
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button
+                      variant="light"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "Gizle" : "Göster"}
+                    </Button>
+                  </div>
+                </Form.Group>
 
-              {error && <Alert variant="danger">{error}</Alert>}
-              <div>
-                <div className="d-grid">
-                  <Button variant="primary" onClick={handleLogin}>
-                    Giriş Yap
-                  </Button>
-                </div>
-                <div className="d-md-flex justify-content-between mt-4">
-                  <div>
-                    <Link to="/forgetpassword" className="text-inherit fs-5">
-                      Şifremi Unuttum
-                    </Link>
+                {error && <Alert variant="danger">{error}</Alert>}
+                <div>
+                  <div className="d-grid">
+                    <Button variant="primary" onClick={handleLogin}>
+                      Giriş Yap
+                    </Button>
+                  </div>
+                  <div className="d-md-flex justify-content-between mt-4">
+                    <div>
+                      <Link to="/forgetpassword" className="text-inherit fs-5">
+                        Şifremi Unuttum
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };
