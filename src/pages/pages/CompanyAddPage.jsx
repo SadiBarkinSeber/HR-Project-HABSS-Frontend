@@ -229,6 +229,8 @@ const CompanyAddPage = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="foundingDate"><span style={{ color: "red" }}>*</span> Kuruluş Tarihi: </label>
+                
+
                 {/* <input type="date" id="foundingDate" name="foundingDate" value={companyData.foundingDate} onChange={handleInputChange} className="form-control mb-2" /> */}
                 <input
   type="date"
@@ -239,6 +241,17 @@ const CompanyAddPage = () => {
   className="form-control mb-2"
   max={(new Date().getFullYear()) + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2)}
 />
+
+                <input
+  type="date"
+  id="foundingDate"
+  name="foundingDate"
+  value={companyData.foundingDate}
+  onChange={handleInputChange}
+  className="form-control mb-2"
+  max={(new Date().getFullYear()) + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2)}
+/>
+ 
 
                 {formSubmitted && !companyData.foundingDate && (
                   <div className="text-danger">Kuruluş Tarihi boş bırakılamaz.</div>
