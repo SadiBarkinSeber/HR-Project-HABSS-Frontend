@@ -136,7 +136,12 @@ export const EmployeeUpdateCardLeftSide = (props) => {
     props;
 
   return (
+    
     <div className={styles.leftCard}>
+      <div className={`${styles.overlayText} font-italic`}>
+          Fotoğrafı değiştirmek için fotoğrafın üzerine tıklayınız
+        </div>
+        <br />
       <div className={styles.picture} onClick={handleFileClick}>
         <img src={profilePictureData} alt="" />
         <input
@@ -148,6 +153,7 @@ export const EmployeeUpdateCardLeftSide = (props) => {
         />
       </div>
       <br />
+      
       <div>
         {firstName} {secondName} {firstSurname} {secondSurname}
       </div>

@@ -5,8 +5,8 @@ const footerStyle = {
   width: "100%",
   height: "auto",
   backgroundColor: "#f8f9fa",
-  marginTop: "5%",
-  position: "sticky",
+  marginTop: "15%",
+  bottom: 0, // Alt kenara sabitleme
 };
 
 const Footer = () => {
