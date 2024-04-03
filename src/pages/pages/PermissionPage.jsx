@@ -159,7 +159,7 @@ const Permission = () => {
     }
 
     try {
-      if (permissionType !== "Yıllık İzin") {
+      if (permissionType === "Yıllık İzin") {
         const uploadedFileResponse = await uploadPhotoAndGetPath(file);
         const fileName = uploadedFileResponse.fileName;
         const permissionData = {
