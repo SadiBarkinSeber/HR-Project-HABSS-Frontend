@@ -131,65 +131,6 @@ const EmployeeCreate = () => {
     }
   };
   
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setFormSubmitted(true);
-
-  //   // Geçerli bir telefon numarası kontrolü
-  //   if (employeeData.phoneNumber.length !== 13) {
-  //     toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
-  //     return;
-  //   }
-
-  //   // TC kimlik numarası doğrulama işlemi
-  //   const tcValidationResult = validateTcNumber(employeeData.tc);
-  //   if (!tcValidationResult.valid) {
-  //     toast.warning(tcValidationResult.message);
-  //     return;
-  //   }
-
-  //   // Diğer alanların kontrolü
-  //   if (!validateAddress(employeeData.address)) {
-  //     toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
-  //     return;
-  //   }
-
-  //   const minWage = 17002; // Asgari ücret tutarı
-  //   if (parseInt(employeeData.wage) < minWage) {
-  //     toast.warning("Maaş asgari ücretin altında olamaz.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const employeeList = await fetchEmployees2(); // Bu fonksiyonun gerçek implementasyonunu kullanmalısınız
-  //     const existingManager = employeeList.find(
-  //       (employee) =>
-  //         employee.firstName === employeeData.firstName &&
-  //         employee.firstSurname === employeeData.firstSurname
-  //     );
-  //     if (existingManager) {
-  //       toast.warning("Bu isim ve soyisimde bir çalışan zaten mevcut.");
-  //       return;
-  //     }
-
-  //     console.log(employeeData);
-  //     const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
-  //     if (confirmed) {
-  //       const response = await createEmployee(employeeData);
-  //       console.log("Employee created:", response, response.email);
-  //       checkEmailExists(response.email);
-  //       resetForm();
-  //       toast.success("Kayıt onaylandı.");
-  //       navigate("/mng-employee-list");
-  //     } else {
-  //       console.log("Kaydetme işlemi iptal edildi.");
-  //       toast.warning("Kaydetme işlemi iptal edildi.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating employee:", error);
-  //     toast.error("Kaydetme işlemi başarısız oldu.");
-  //   }
-  // };
 
   const validateAddress = (address) => {
     // Adresin sadece rakam içerip içermediğini kontrol et
