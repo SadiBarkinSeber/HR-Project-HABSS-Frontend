@@ -217,7 +217,7 @@ const Permission = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="permissionType" className="form-label">
-                    İzin Türü:
+                  <span style={{ color: 'red' }}>*</span> İzin Türü:
                   </label>
                   <select
                     id="permissionType"
@@ -238,8 +238,7 @@ const Permission = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="startDate" className="form-label">
-                    İzin Başlangıç Tarihi:
-                    
+                  <span style={{ color: 'red' }}>*</span> İzin Başlangıç Tarihi:
                   </label>
                   <input
                     type="date"
@@ -295,7 +294,7 @@ const Permission = () => {
                 {showFileUpload && (
                   <div className="mb-3">
                     <label htmlFor="file" className="form-label">
-                      Dosya Yükle:
+                    <span style={{ color: 'red' }}>*</span> Dosya Yükle:
                     </label>
                     <input
                       ref={fileInputRef} // Step 4: Attach the ref to file input

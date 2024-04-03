@@ -19,7 +19,7 @@ function Expense() {
     setFormSubmitted(true);
 
     if (!expenseType || !currency || !amount || !file) {
-      setErrorMessage("Lütfen tüm alanları doldurun ve bir dosya seçin.");
+      toast.warning("Lütfen tüm alanları doldurun ve bir dosya seçin.");
       return;
     }
 
@@ -142,7 +142,7 @@ function Expense() {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="type" className="form-label">
-                    Harcama Türü:
+                  <span style={{ color: 'red' }}>*</span> Harcama Türü:
                   </label>
                   <select
                     id="type"
@@ -172,7 +172,7 @@ function Expense() {
 
                 <div className="mb-3">
                   <label htmlFor="currency" className="form-label">
-                    Para Birimi:
+                  <span style={{ color: 'red' }}>*</span> Para Birimi:
                   </label>
                   <select
                     id="currency"
@@ -195,7 +195,7 @@ function Expense() {
 
                 <div className="mb-3">
                   <label htmlFor="amount" className="form-label">
-                    Tutar:
+                  <span style={{ color: 'red' }}>*</span> Tutar:
                   </label>
                   <input
                     type="number"
@@ -212,7 +212,7 @@ function Expense() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="formFileLg" className="form-label">
-                    Dosya Seç:
+                  <span style={{ color: 'red' }}>*</span> Dosya Seç:
                   </label>
                   <input
                     ref={fileInputRef}

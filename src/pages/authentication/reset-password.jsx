@@ -65,7 +65,7 @@ const ResetPassword = () => {
     }
 
     if (password !== repeatPassword) {
-      toast.warning("Şifreler eşleşmiyor.");
+      toast.error("Şifreler eşleşmiyor.");
       return;
     }
 
@@ -81,7 +81,7 @@ const ResetPassword = () => {
     try {
       const response = await changePassword(email, password, repeatPassword);
       if (response.status === 200) {
-        toast.warning("Sifre basarili bir sekilde degistirildi !");
+        toast.success("Sifre basarili bir sekilde degistirildi !");
         // Başarılı bir şekilde şifre değiştirildiğinde yapılacak işlemler buraya
         setAuthToken(null);
         navigateTo("/"); // Örneğin anasayfaya yönlendirme
