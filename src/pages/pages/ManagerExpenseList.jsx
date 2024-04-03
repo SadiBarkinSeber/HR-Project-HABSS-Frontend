@@ -8,14 +8,16 @@ import { updateExpenseStatus } from "../api/api";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "react-toastify/dist/ReactToastify.css";
+import Pagination from "react-bootstrap/Pagination";
 
 function ManagerExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [sortedExpenses, setSortedExpenses] = useState([]);
   const [sortDirection, setSortDirection] = useState({});
-  const [filterOption, setFilterOption] = useState(""); // Harcama türü filtresi
+  const [filterOption, setFilterOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expensesPerPage] = useState(10);
 
-  // fetchData fonksiyonu burada tanımlandı
   const fetchData = async () => {
     const data = await fetchAllExpenseList();
     console.log(data);
@@ -24,7 +26,7 @@ function ManagerExpenseList() {
   };
 
   useEffect(() => {
-    fetchData(); // useEffect içinde fetchData çağrıldı
+    fetchData();
   }, []);
 
   const handleDownload = async (fileName) => {
@@ -40,7 +42,7 @@ function ManagerExpenseList() {
     const updateResult = await updateExpenseStatus(id, true);
     if (updateResult.success) {
       toast.success(updateResult.message);
-      fetchData(); // fetchData fonksiyonu burada çağrıldı
+      fetchData();
     } else {
       toast.error(updateResult.message);
     }
@@ -50,7 +52,7 @@ function ManagerExpenseList() {
     const updateResult = await updateExpenseStatus(id, false);
     if (updateResult.success) {
       toast.success(updateResult.message);
-      fetchData(); // fetchData fonksiyonu burada çağrıldı
+      fetchData();
     } else {
       toast.error(updateResult.message);
     }
@@ -67,12 +69,10 @@ function ManagerExpenseList() {
 
     const sorted = [...sortedExpenses].sort((a, b) => {
       if (key === "expenseType") {
-        // Harcama türü kolonu için alfabetik sıralama yapılıyor
         return direction === "asc"
           ? a[key].localeCompare(b[key])
           : b[key].localeCompare(a[key]);
       } else {
-        // Diğer kolonlar için varsayılan sıralama yapılıyor
         return direction === "asc"
           ? a[key] > b[key]
             ? 1
@@ -137,6 +137,14 @@ function ManagerExpenseList() {
     });
   };
 
+  const indexOfLastExpense = currentPage * expensesPerPage;
+  const indexOfFirstExpense = indexOfLastExpense - expensesPerPage;
+  const currentExpenses = sortedExpenses
+    .filter(filterExpenses)
+    .slice(indexOfFirstExpense, indexOfLastExpense);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -152,7 +160,7 @@ function ManagerExpenseList() {
                 const selectedValue = e.target.value;
                 setFilterOption(selectedValue);
                 if (selectedValue === "") {
-                  setSortedExpenses([...expenses]); // Tüm harcamaları göstermek için sıralı harcamaları tüm harcamalarla güncelle
+                  setSortedExpenses([...expenses]);
                 } else {
                   setSortedExpenses(
                     expenses.filter(
@@ -228,7 +236,7 @@ function ManagerExpenseList() {
                 </tr>
               </thead>
               <tbody>
-                {sortedExpenses.filter(filterExpenses).map((expense) => (
+                {currentExpenses.map((expense) => (
                   <tr key={expense.id}>
                     <td>
                       {expense.employeeFirstName}
@@ -271,6 +279,40 @@ function ManagerExpenseList() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="d-flex justify-content-center">
+            <Pagination>
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[
+                ...Array(
+                  Math.ceil(
+                    sortedExpenses.filter(filterExpenses).length /
+                      expensesPerPage
+                  )
+                ).keys(),
+              ].map((number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(
+                    sortedExpenses.filter(filterExpenses).length /
+                      expensesPerPage
+                  )
+                }
+              />
+            </Pagination>
           </div>
         </div>
       </div>
