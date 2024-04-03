@@ -280,10 +280,9 @@ const EmployeeCreate = () => {
                   />
                 </div>
                 <div>
-                  <h5>Fotoğraf Seç</h5>
+                  <h5><span className="text-danger">*</span> Fotoğraf Seç</h5>
                   <p>
                     Fotoğraf ekleyin veya değiştirin{" "}
-                    <span className="text-danger">*</span>
                   </p>
                 </div>
               </div>
