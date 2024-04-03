@@ -22,7 +22,7 @@ function ManagerUpdate() {
     }
   }, [mngData]);
 
-  const handleUpdateEmployee = async () => {
+  const handleUpdateManager = async () => {
     try {
       if (!phoneNumber) {
         toast.error("Telefon numarası boş bırakılamaz.", {
@@ -107,10 +107,11 @@ function ManagerUpdate() {
                 onPhotoChange={handlePhotoChange}
               />
               <button
-                style={{ marginTop: "20px" , marginRight:"120px" }}
-                onClick={handleUpdateEmployee}
+                style={{ marginTop: "20px", marginRight: "120px" }}
+                className="btn btn-primary"
+                onClick={handleUpdateManager}
               >
-                Kaydet
+                Güncelle
               </button>
             </div>
           )}
@@ -132,11 +133,7 @@ function ManagerUpdate() {
           )}
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
     </>
   );
 }

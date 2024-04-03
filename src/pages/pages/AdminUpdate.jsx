@@ -109,10 +109,11 @@ function SiteManagerUpdate() {
                 onPhotoChange={handlePhotoChange}
               />
               <button
-                style={{ marginTop: "20px" , marginRight:"120px"}}
+                style={{ marginTop: "20px", marginRight: "120px" }}
+                className="btn btn-primary"
                 onClick={handleUpdateSiteManager}
               >
-                Kaydet
+                Güncelle
               </button>
             </div>
           )}

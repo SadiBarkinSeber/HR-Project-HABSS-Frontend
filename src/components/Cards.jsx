@@ -15,7 +15,6 @@ export const EmployeeSumCard = (props) => {
   const handleDetailButton = () => {
     navigateTo(routeDetailPage);
   };
-
   return (
     <>
       <div className={styles.employeeSumCard}>
@@ -49,9 +48,15 @@ export const EmployeeSumCard = (props) => {
             readOnly
           />
         </div>
-      </div>
-      <div>
-        <button onClick={handleDetailButton}>Detay Bilgi</button>
+        <div className="mt-3 text-center">
+          <button
+            className="btn btn-outline-light"
+            onClick={handleDetailButton}
+            style={{ marginTop: "25px" }}
+          >
+            Detay Bilgi
+          </button>
+        </div>
       </div>
     </>
   );
@@ -102,7 +107,9 @@ export const EmployeeCardLeftSide = (props) => {
       </div>
       <div> {department}</div>
       <br />
-      <button onClick={handleUpdateButton}>Profili Guncelle</button>
+      <button className="btn btn-outline-primary" onClick={handleUpdateButton}>
+        Profili Guncelle
+      </button>
     </div>
   );
 };
@@ -133,12 +140,11 @@ export const EmployeeUpdateCardLeftSide = (props) => {
     props;
 
   return (
-    
-    <div className={styles.leftCard}>
+    <div className={styles.leftCardUpdate}>
       <div className={`${styles.overlayText} font-italic`}>
-          Fotoğrafı değiştirmek için fotoğrafın üzerine tıklayınız
-        </div>
-        <br />
+        Fotoğrafı değiştirmek için fotoğrafın üzerine tıklayınız
+      </div>
+      <br />
       <div className={styles.picture} onClick={handleFileClick}>
         <img src={profilePictureData} alt="" />
         <input
@@ -150,7 +156,7 @@ export const EmployeeUpdateCardLeftSide = (props) => {
         />
       </div>
       <br />
-      
+
       <div>
         {firstName} {secondName} {firstSurname} {secondSurname}
       </div>
