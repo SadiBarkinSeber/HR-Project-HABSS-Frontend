@@ -3,6 +3,7 @@ import { createPermission, uploadPhotoAndGetPath } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEmp } from "../../components/EmployeeContext";
+import { useNavigate } from "react-router-dom";
 
 const Permission = () => {
   const [permissionType, setPermissionType] = useState("");
@@ -14,7 +15,7 @@ const Permission = () => {
   const [showFileUpload, setShowFileUpload] = useState(false);
   const fileInputRef = useRef(null); // Step 2
   const { empData, setEmpData } = useEmp(); // Destructuring kullanarak empData ve setEmpData'ya erişin
-
+  const navigate = useNavigate();
   const handlePermissionTypeChange = (e) => {
     const selectedPermissionType = e.target.value;
     const gender = empData.gender;
@@ -193,8 +194,12 @@ const Permission = () => {
         toast.success("İzin talebi başarıyla oluşturuldu.", {
           position: "top-right",
         });
+        
       }
       handleClear();
+      setTimeout(() => {
+        navigate("/emp-permission-list");
+      }, 2000);
     } catch (error) {
       console.error("İzin talebi oluşturulurken bir hata oluştu:", error);
       toast.warning("Cinsiyetinizle uyumlu olan izinleri seçiniz", {
@@ -217,7 +222,7 @@ const Permission = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="permissionType" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> İzin Türü:
+                    <span style={{ color: 'red' }}>*</span> İzin Türü:
                   </label>
                   <select
                     id="permissionType"
@@ -238,7 +243,7 @@ const Permission = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="startDate" className="form-label">
-                  <span style={{ color: 'red' }}>*</span> İzin Başlangıç Tarihi:
+                    <span style={{ color: 'red' }}>*</span> İzin Başlangıç Tarihi:
                   </label>
                   <input
                     type="date"
@@ -294,7 +299,7 @@ const Permission = () => {
                 {showFileUpload && (
                   <div className="mb-3">
                     <label htmlFor="file" className="form-label">
-                    <span style={{ color: 'red' }}>*</span> Dosya Yükle:
+                      <span style={{ color: 'red' }}>*</span> Dosya Yükle:
                     </label>
                     <input
                       ref={fileInputRef} // Step 4: Attach the ref to file input
@@ -334,7 +339,7 @@ const Permission = () => {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={2000}
         theme="colored"
       />
     </div>
