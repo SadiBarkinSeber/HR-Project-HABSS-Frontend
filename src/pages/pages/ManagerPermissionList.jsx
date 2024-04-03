@@ -157,7 +157,7 @@ function ManagerPermissionList() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-10">
+        <div className="col-md-15 ">
           <h1 className="text-center mb-4">İzin Talebi Listesi</h1>
           <div className="mb-3">
             <label htmlFor="filterOption">Filtrele :</label>
@@ -192,15 +192,21 @@ function ManagerPermissionList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("employeeName")}>
-                    Çalışan Ad Soyad
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("employeeName")}
+                  >
+                    Çalışan Ad Soyad{" "}
                     {sortDirection["employeeName"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("permissionType")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("permissionType")}
+                  >
                     İzin Türü{" "}
                     {sortDirection["permissionType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -208,15 +214,21 @@ function ManagerPermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("requestDate")}>
-                    Talep Tarihi
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("requestDate")}
+                  >
+                    Talep Tarihi{" "}
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("startDate")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("startDate")}
+                  >
                     Başlangıç Tarihi{" "}
                     {sortDirection["startDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -224,7 +236,10 @@ function ManagerPermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("endDate")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("endDate")}
+                  >
                     Bitiş Tarihi{" "}
                     {sortDirection["endDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -232,32 +247,42 @@ function ManagerPermissionList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("approvalStatus")}>
-                    Onay Durumu
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("approvalStatus")}
+                  >
+                    Onay Durumu{" "}
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Dosya İndir</th>
-                  <th>İşlem</th>
+                  <th className="text-center text-nowrap">Dosya İndir</th>
+                  <th className="text-center text-nowrap">İşlem</th>
                 </tr>
               </thead>
+
               <tbody>
                 {currentPermissions.map((permission) => (
                   <tr key={permission.id}>
-                    <td>
-                      {permission.employeeFirstName}
-                      {permission.employeeSecondName}
-                      {permission.employeeLastName}
+                    <td className="text-center">
+                      {permission.employeeFirstName}{" "}
+                      {permission.employeeSecondName}{" "}
+                      {permission.employeeLastName}{" "}
                       {permission.employeeSecondLastName}
                     </td>
-                    <td>{permission.permissionType}</td>
-                    <td>{formatDate(permission.requestDate)}</td>
-                    <td>{formatDate(permission.startDate)}</td>
-                    <td>{formatDate(permission.endDate)}</td>
-                    <td>{permission.approvalStatus}</td>
+                    <td className="text-center">{permission.permissionType}</td>
+                    <td className="text-center">
+                      {formatDate(permission.requestDate)}
+                    </td>
+                    <td className="text-center">
+                      {formatDate(permission.startDate)}
+                    </td>
+                    <td className="text-center">
+                      {formatDate(permission.endDate)}
+                    </td>
+                    <td className="text-center">{permission.approvalStatus}</td>
                     <td className="text-center">
                       {permission.fileName && (
                         <button
@@ -269,20 +294,22 @@ function ManagerPermissionList() {
                       )}
                     </td>
                     <td className="text-center">
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => confirmApprove(permission.id)}
-                        disabled={!isActionEnabled(permission.approvalStatus)}
-                      >
-                        Onayla
-                      </button>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => confirmReject(permission.id)}
-                        disabled={!isActionEnabled(permission.approvalStatus)}
-                      >
-                        Reddet
-                      </button>
+                      <div className="btn-group">
+                        <button
+                          className="btn btn-sm btn-success me-1"
+                          onClick={() => confirmApprove(permission.id)}
+                          disabled={!isActionEnabled(permission.approvalStatus)}
+                        >
+                          Onayla
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => confirmReject(permission.id)}
+                          disabled={!isActionEnabled(permission.approvalStatus)}
+                        >
+                          Reddet
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

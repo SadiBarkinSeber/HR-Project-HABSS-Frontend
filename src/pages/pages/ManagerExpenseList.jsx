@@ -148,7 +148,7 @@ function ManagerExpenseList() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-10">
+        <div className="col-md-15">
           <h1 className="text-center mb-4">Harcama Talebi Listesi</h1>
           <div className="mb-3">
             <label htmlFor="filterOption">Harcama Türü Seçiniz :</label>
@@ -183,7 +183,10 @@ function ManagerExpenseList() {
             <table className="table table-striped table-bordered table-hover">
               <thead className="bg-primary text-light">
                 <tr>
-                  <th onClick={() => sortBy("employeeName")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("employeeName")}
+                  >
                     Çalışan Ad Soyad
                     {sortDirection["employeeName"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -191,7 +194,10 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("expenseType")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("expenseType")}
+                  >
                     Harcama türü
                     {sortDirection["expenseType"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -199,7 +205,10 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("requestDate")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("requestDate")}
+                  >
                     Talep Tarihi
                     {sortDirection["requestDate"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -207,7 +216,10 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("amount")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("amount")}
+                  >
                     Miktar
                     {sortDirection["amount"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -215,15 +227,21 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("currency")}>
-                    Miktar
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("currency")}
+                  >
+                    Para Birimi
                     {sortDirection["currency"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
                     ) : (
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th onClick={() => sortBy("approvalStatus")}>
+                  <th
+                    className="text-center text-nowrap"
+                    onClick={() => sortBy("approvalStatus")}
+                  >
                     Onay Durumu
                     {sortDirection["approvalStatus"] === "asc" ? (
                       <FontAwesomeIcon icon={faSortUp} />
@@ -231,24 +249,25 @@ function ManagerExpenseList() {
                       <FontAwesomeIcon icon={faSortDown} />
                     )}
                   </th>
-                  <th>Döküman</th>
-                  <th>İşlem</th>
+                  <th className="text-center text-nowrap">Döküman</th>
+                  <th className="text-center text-nowrap">İşlem</th>
                 </tr>
               </thead>
               <tbody>
                 {currentExpenses.map((expense) => (
                   <tr key={expense.id}>
-                    <td>
-                      {expense.employeeFirstName}
-                      {expense.employeeSecondName}
-                      {expense.employeeLastName}
+                    <td className="text-center">
+                      {expense.employeeFirstName} {expense.employeeSecondName}{" "}
+                      {expense.employeeLastName}{" "}
                       {expense.employeeSecondLastName}
                     </td>
-                    <td>{expense.expenseType}</td>
-                    <td>{formatDate(expense.requestDate)}</td>
-                    <td>{expense.amount}</td>
-                    <td>{expense.currency}</td>
-                    <td>{expense.approvalStatus}</td>
+                    <td className="text-center">{expense.expenseType}</td>
+                    <td className="text-center">
+                      {formatDate(expense.requestDate)}
+                    </td>
+                    <td className="text-center">{expense.amount}</td>
+                    <td className="text-center">{expense.currency}</td>
+                    <td className="text-center">{expense.approvalStatus}</td>
                     <td className="text-center">
                       {expense.fileName && (
                         <button
@@ -260,20 +279,22 @@ function ManagerExpenseList() {
                       )}
                     </td>
                     <td className="text-center">
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => confirmApprove(expense.id)}
-                        disabled={!isActionEnabled(expense.approvalStatus)}
-                      >
-                        Onayla
-                      </button>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => confirmReject(expense.id)}
-                        disabled={!isActionEnabled(expense.approvalStatus)}
-                      >
-                        Reddet
-                      </button>
+                      <div className="btn-group">
+                        <button
+                          className="btn btn-sm btn-success me-1"
+                          onClick={() => confirmApprove(expense.id)}
+                          disabled={!isActionEnabled(expense.approvalStatus)}
+                        >
+                          Onayla
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => confirmReject(expense.id)}
+                          disabled={!isActionEnabled(expense.approvalStatus)}
+                        >
+                          Reddet
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
