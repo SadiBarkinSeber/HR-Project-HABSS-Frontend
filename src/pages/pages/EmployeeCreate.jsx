@@ -65,36 +65,41 @@ const EmployeeCreate = () => {
       toast.error("Fotoğraf yüklenirken bir hata oluştu."); // Hata bildirimi
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-
+  
     // Geçerli bir telefon numarası kontrolü
     if (employeeData.phoneNumber.length !== 13) {
       toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
-
+  
     // TC kimlik numarası doğrulama işlemi
     const tcValidationResult = validateTcNumber(employeeData.tc);
     if (!tcValidationResult.valid) {
       toast.warning(tcValidationResult.message);
       return;
     }
-
+  
     // Diğer alanların kontrolü
     if (!validateAddress(employeeData.address)) {
       toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
-
+  
     const minWage = 17002; // Asgari ücret tutarı
     if (parseInt(employeeData.wage) < minWage) {
       toast.warning("Maaş asgari ücretin altında olamaz.");
       return;
     }
-
+  
+    // Fotoğrafın seçilip seçilmediğini kontrol et
+    if (!photo) {
+      toast.warning("Lütfen bir fotoğraf seçiniz.");
+      return;
+    }
+  
     try {
       const employeeList = await fetchEmployees2(); // Bu fonksiyonun gerçek implementasyonunu kullanmalısınız
       const existingManager = employeeList.find(
@@ -106,7 +111,7 @@ const EmployeeCreate = () => {
         toast.warning("Bu isim ve soyisimde bir çalışan zaten mevcut.");
         return;
       }
-
+  
       console.log(employeeData);
       const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
       if (confirmed) {
@@ -125,6 +130,7 @@ const EmployeeCreate = () => {
       toast.error("Kaydetme işlemi başarısız oldu.");
     }
   };
+  
 
   const validateAddress = (address) => {
     // Adresin sadece rakam içerip içermediğini kontrol et
@@ -581,3 +587,4 @@ const EmployeeCreate = () => {
 };
 
 export default EmployeeCreate;
+
