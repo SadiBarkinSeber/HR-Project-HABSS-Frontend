@@ -6,6 +6,8 @@ import AuthLayout from "../../layouts/AuthLayout";
 import { changePassword } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/TokenContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = () => {
   // const [email, setEmail] = useState("");
@@ -58,17 +60,17 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!password || !repeatPassword) {
-      setError("Lütfen tüm alanları doldurun.");
+      toast.warning("Lütfen tüm alanları doldurun.");
       return;
     }
 
     if (password !== repeatPassword) {
-      setError("Şifreler eşleşmiyor.");
+      toast.warning("Şifreler eşleşmiyor.");
       return;
     }
 
     if (!isValidPassword(password)) {
-      setError(
+      toast.warning(
         "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermeli ve en az 6 karakter uzunluğunda olmalıdır."
       );
       return;
@@ -79,7 +81,7 @@ const ResetPassword = () => {
     try {
       const response = await changePassword(email, password, repeatPassword);
       if (response.status === 200) {
-        alert("Sifre basarili bir sekilde degistirildi !");
+        toast.warning("Sifre basarili bir sekilde degistirildi !");
         // Başarılı bir şekilde şifre değiştirildiğinde yapılacak işlemler buraya
         setAuthToken(null);
         navigateTo("/"); // Örneğin anasayfaya yönlendirme
@@ -87,11 +89,17 @@ const ResetPassword = () => {
         setError(response.data.message);
       }
     } catch (error) {
-      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+      toast.warning("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 
   return (
+    <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        theme="colored"
+      />
     <Row
       className="align-items-center justify-content-center g-0 min-vh-100"
       style={{
@@ -180,6 +188,7 @@ const ResetPassword = () => {
         </Card>
       </Col>
     </Row>
+    </div>
   );
 };
 
