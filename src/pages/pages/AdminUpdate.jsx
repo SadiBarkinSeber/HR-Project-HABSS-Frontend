@@ -25,6 +25,12 @@ function SiteManagerUpdate() {
 
   const handleUpdateSiteManager = async () => {
     try {
+      if (!phoneNumber) {
+        toast.error("Telefon numarası boş bırakılamaz.", {
+          position: "top-right",
+        });
+        return;
+      }
       if (/[a-zA-Z]/.test(address)) {
         const updatedSiteManager = await updateSiteManager(
           siteMngData.id,
@@ -92,15 +98,23 @@ function SiteManagerUpdate() {
           }}
         >
           {siteMngData && (
-            <EmployeeUpdateCardLeftSide
-              firstName={siteMngData.firstName}
-              secondName={siteMngData.secondName}
-              firstSurname={siteMngData.firstSurname}
-              secondSurname={siteMngData.secondSurname}
-              department={siteMngData.department}
-              imagePath={photoPath}
-              onPhotoChange={handlePhotoChange}
-            />
+            <div style={{ textAlign: "center" }}>
+              <EmployeeUpdateCardLeftSide
+                firstName={siteMngData.firstName}
+                secondName={siteMngData.secondName}
+                firstSurname={siteMngData.firstSurname}
+                secondSurname={siteMngData.secondSurname}
+                department={siteMngData.department}
+                imagePath={photoPath}
+                onPhotoChange={handlePhotoChange}
+              />
+              <button
+                style={{ marginTop: "20px" , marginRight:"120px"}}
+                onClick={handleUpdateSiteManager}
+              >
+                Kaydet
+              </button>
+            </div>
           )}
           {siteMngData && (
             <EmployeePersonalUpdate
@@ -118,15 +132,6 @@ function SiteManagerUpdate() {
               onAddressChange={handleAddressChange}
             />
           )}
-        </div>
-        <div>
-          <br />
-          <button
-            style={{ marginLeft: "264px" }}
-            onClick={handleUpdateSiteManager}
-          >
-            Kaydet
-          </button>
         </div>
       </div>
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />

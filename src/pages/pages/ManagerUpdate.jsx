@@ -24,6 +24,12 @@ function ManagerUpdate() {
 
   const handleUpdateEmployee = async () => {
     try {
+      if (!phoneNumber) {
+        toast.error("Telefon numarası boş bırakılamaz.", {
+          position: "top-right",
+        });
+        return;
+      }
       // Adres alanında en az bir harf kontrolü
       if (/[a-zA-Z]/.test(address)) {
         const updatedMng = await updateManager(
@@ -90,15 +96,23 @@ function ManagerUpdate() {
           }}
         >
           {mngData && (
-            <EmployeeUpdateCardLeftSide
-              firstName={mngData.firstName}
-              secondName={mngData.secondName}
-              firstSurname={mngData.firstSurname}
-              secondSurname={mngData.secondSurname}
-              department={mngData.department}
-              imagePath={photoPath}
-              onPhotoChange={handlePhotoChange}
-            />
+            <div style={{ textAlign: "center" }}>
+              <EmployeeUpdateCardLeftSide
+                firstName={mngData.firstName}
+                secondName={mngData.secondName}
+                firstSurname={mngData.firstSurname}
+                secondSurname={mngData.secondSurname}
+                department={mngData.department}
+                imagePath={photoPath}
+                onPhotoChange={handlePhotoChange}
+              />
+              <button
+                style={{ marginTop: "20px" , marginRight:"120px" }}
+                onClick={handleUpdateEmployee}
+              >
+                Kaydet
+              </button>
+            </div>
           )}
           {mngData && (
             <EmployeePersonalUpdate
@@ -116,15 +130,6 @@ function ManagerUpdate() {
               onAddressChange={handleAddressChange}
             />
           )}
-        </div>
-        <div>
-          <br />
-          <button
-            style={{ marginLeft: "264px" }}
-            onClick={handleUpdateEmployee}
-          >
-            Kaydet
-          </button>
         </div>
       </div>
       <ToastContainer
