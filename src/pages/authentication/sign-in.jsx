@@ -6,6 +6,8 @@ import { LoginCheck } from "../api/api";
 import { useAuth } from "../../components/TokenContext";
 import AuthLayout from "../../layouts/AuthLayout";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -22,11 +24,11 @@ const SignIn = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError("Lütfen tüm alanları doldurun.");
+      toast.warning("Lütfen tüm alanları doldurun.");
       return;
     }
     if (!isValidEmail(email)) {
-      setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+      toast.warning("Geçerli bir Bilge Adam Boost email adresi girin.");
       return;
     }
     try {
@@ -61,15 +63,21 @@ const SignIn = () => {
           navigateTo(`/emp`, { state: { id: userId } });
         }
       } else {
-        setError("Mail adresi veya şifre yanlış. Lütfen tekrar deneyin.");
+        toast.warning("Mail adresi veya şifre yanlış. Lütfen tekrar deneyin.");
       }
     } catch (error) {
       console.error("Giriş yapılırken bir hata oluştu:", error);
-      setError("Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.");
+      toast.warning("Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 
   return (
+    <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="colored"
+      />
     <Row
       className="align-items-center justify-content-center g-0 min-vh-100"
       style={{
@@ -93,7 +101,7 @@ const SignIn = () => {
             </div>
             <Form>
               <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email:</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -104,7 +112,7 @@ const SignIn = () => {
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
-                <Form.Label>Şifre</Form.Label>
+                <Form.Label>Şifre:</Form.Label>
                 <div className="input-group">
                   <Form.Control
                     type={showPassword ? "text" : "password"}
@@ -143,6 +151,7 @@ const SignIn = () => {
         </Card>
       </Col>
     </Row>
+    </div>
   );
 };
 

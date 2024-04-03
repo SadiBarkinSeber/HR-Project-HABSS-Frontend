@@ -3,6 +3,8 @@ import { Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate'ı buradan ekleyin
 import { checkEmailExists } from "../api/api";
 import AuthLayout from "../../layouts/AuthLayout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
@@ -17,29 +19,35 @@ const ForgetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      setError("Lütfen email adresinizi giriniz.");
+      toast.warning("Lütfen email adresinizi giriniz.");
       return;
     }
     if (!isValidEmail(email)) {
-      setError("Geçerli bir Bilge Adam Boost email adresi girin.");
+      toast.warning("Geçerli bir Bilge Adam Boost email adresi girin.");
       return;
     }
 
     try {
       const exists = await checkEmailExists(email);
       if (exists) {
-        alert("Email adresinize tek kullanimlik sifre gonderildi !");
+        toast.warning("Email adresinize tek kullanimlik sifre gonderildi !");
         navigateTo("/"); // navigateTo kullanarak yönlendirme yapın
       } else {
-        setError("Girilen email adresi sistemde bulunamadı.");
+        toast.warning("Girilen email adresi sistemde bulunamadı.");
       }
     } catch (error) {
       console.error("Email kontrolü sırasında bir hata oluştu:", error);
-      setError("Bir hata oluştu. Lütfen tekrar deneyin.");
+      toast.warning("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 
   return (
+    <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        theme="colored"
+      />
     <Row
       className="align-items-center justify-content-center g-0 min-vh-100"
       style={{
@@ -91,6 +99,7 @@ const ForgetPassword = () => {
         </Card>
       </Col>
     </Row>
+    </div>
   );
 };
 
