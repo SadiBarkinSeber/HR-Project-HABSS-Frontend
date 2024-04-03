@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Row,
@@ -37,6 +37,18 @@ const QuickMenu = (props) => {
     const { userRole } = useAuth(); // userRole değerini al
     const roleOfUser = localStorage.getItem("roleOfUser");
 
+    
+
+    
+
+    useEffect(() => {
+      // Retrieve profile picture data from local storage
+      const storedProfilePictureData = localStorage.getItem("profilePictureData");
+      if (storedProfilePictureData) {
+        setProfilePictureData(JSON.parse(storedProfilePictureData));
+      }
+    }, [profilePictureData]);
+
     const handleLogout = () => {
       setShowLogoutModal(true);
     };
@@ -44,6 +56,7 @@ const QuickMenu = (props) => {
     const handleLogoutConfirm = () => {
       setAuthToken(null); // Çıkış yapmak için token'i null yap
       localStorage.removeItem("token");
+      localStorage.removeItem("profilePictureData");
       setShowLogoutModal(false); // Modalı gizle
     };
 
@@ -54,9 +67,8 @@ const QuickMenu = (props) => {
           <>
             {empData && (
               <h5 className="mb-1">
-                {`${empData.firstName || ""} ${empData.secondName || ""} ${
-                  empData.firstSurname || ""
-                }`}
+                {`${empData.firstName || ""} ${empData.secondName || ""} ${empData.firstSurname || ""
+                  }`}
               </h5>
             )}
           </>
@@ -66,9 +78,8 @@ const QuickMenu = (props) => {
           <>
             {mngData && (
               <h5 className="mb-1">
-                {`${mngData.firstName || ""} ${mngData.secondName || ""} ${
-                  mngData.firstSurname || ""
-                }`}
+                {`${mngData.firstName || ""} ${mngData.secondName || ""} ${mngData.firstSurname || ""
+                  }`}
               </h5>
             )}
           </>
@@ -78,9 +89,8 @@ const QuickMenu = (props) => {
           <>
             {siteMngData && (
               <h5 className="mb-1">
-                {`${siteMngData.firstName || ""} ${
-                  siteMngData.secondName || ""
-                } ${siteMngData.firstSurname || ""}`}
+                {`${siteMngData.firstName || ""} ${siteMngData.secondName || ""
+                  } ${siteMngData.firstSurname || ""}`}
               </h5>
             )}
           </>
@@ -174,6 +184,7 @@ const QuickMenu = (props) => {
     );
   };
 
+  /*
   const QuickMenuMobile = () => {
     return (
       <ListGroup
@@ -230,6 +241,7 @@ const QuickMenu = (props) => {
       </ListGroup>
     );
   };
+  */
 
   return <Fragment>{hasMounted && <QuickMenuDesktop />}</Fragment>;
 };

@@ -83,7 +83,10 @@ export const EmployeeCardLeftSide = (props) => {
           { responseType: "blob" }
         );
         const url = window.URL.createObjectURL(new Blob([response.data]));
+        localStorage.setItem("profilePictureData", JSON.stringify(url));
         setProfilePictureData(url);
+        
+          
       } catch (error) {
         console.error("Error fetching image:", error);
       }
