@@ -7,6 +7,8 @@ import { checkEmailExists } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchEmployees2 } from "../api/api";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const EmployeeCreate = () => {
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ const EmployeeCreate = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    setPhoto(URL.createObjectURL(file)); // Fotoğrafı önizleme için URL oluştur
+    setPhoto(URL.createObjectURL(file));
     handlePhotoChange(file);
   };
 
@@ -59,49 +61,46 @@ const EmployeeCreate = () => {
       console.log("Dosya adı:", fileName);
 
       setEmployeeData({ ...employeeData, imagePath: fileName });
-      toast.success("Fotoğraf başarıyla yüklendi"); // Başarılı yükleme bildirimi
+      toast.success("Fotoğraf başarıyla yüklendi");
     } catch (error) {
       console.error("Error uploading photo:", error);
-      toast.error("Fotoğraf yüklenirken bir hata oluştu."); // Hata bildirimi
+      toast.error("Fotoğraf yüklenirken bir hata oluştu.");
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-  
-    // Geçerli bir telefon numarası kontrolü
+
     if (employeeData.phoneNumber.length !== 13) {
       toast.warning("Lütfen geçerli bir telefon numarası giriniz.");
       return;
     }
-  
-    // TC kimlik numarası doğrulama işlemi
+
     const tcValidationResult = validateTcNumber(employeeData.tc);
     if (!tcValidationResult.valid) {
       toast.warning(tcValidationResult.message);
       return;
     }
-  
-    // Diğer alanların kontrolü
+
     if (!validateAddress(employeeData.address)) {
       toast.warning("Adres en az bir harf ve bir rakam içermelidir.");
       return;
     }
-  
-    const minWage = 17002; // Asgari ücret tutarı
+
+    const minWage = 17002;
     if (parseInt(employeeData.wage) < minWage) {
       toast.warning("Maaş asgari ücretin altında olamaz.");
       return;
     }
-  
-    // Fotoğrafın seçilip seçilmediğini kontrol et
+
     if (!photo) {
       toast.warning("Lütfen bir fotoğraf seçiniz.");
       return;
     }
-  
+
     try {
-      const employeeList = await fetchEmployees2(); // Bu fonksiyonun gerçek implementasyonunu kullanmalısınız
+      const employeeList = await fetchEmployees2();
       const existingManager = employeeList.find(
         (employee) =>
           employee.firstName === employeeData.firstName &&
@@ -111,16 +110,18 @@ const EmployeeCreate = () => {
         toast.warning("Bu isim ve soyisimde bir çalışan zaten mevcut.");
         return;
       }
-  
+
       console.log(employeeData);
-      const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
+      const confirmed = await showConfirmationDialog();
       if (confirmed) {
         const response = await createEmployee(employeeData);
         console.log("Employee created:", response, response.email);
         checkEmailExists(response.email);
         resetForm();
         toast.success("Kayıt onaylandı.");
-        navigate("/mng-employee-list");
+        setTimeout(() => {
+          navigate("/mng-employee-list");
+        }, 2000);
       } else {
         console.log("Kaydetme işlemi iptal edildi.");
         toast.warning("Kaydetme işlemi iptal edildi.");
@@ -130,10 +131,8 @@ const EmployeeCreate = () => {
       toast.error("Kaydetme işlemi başarısız oldu.");
     }
   };
-  
 
   const validateAddress = (address) => {
-    // Adresin sadece rakam içerip içermediğini kontrol et
     return !/^\d+$/.test(address);
   };
 
@@ -187,7 +186,6 @@ const EmployeeCreate = () => {
 
     const digits = Array.from(tc, Number);
 
-    // T.C. kimlik numarasının doğruluğunu kontrol et
     const [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11] = digits;
     const total = (t1 + t3 + t5 + t7 + t9) * 7 - (t2 + t4 + t6 + t8);
     const total2 = t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10;
@@ -210,7 +208,6 @@ const EmployeeCreate = () => {
       };
     }
 
-    // Doğrulama başarılı ise true dön
     return { valid: true, message: "" };
   };
 
@@ -231,6 +228,25 @@ const EmployeeCreate = () => {
     }
 
     setEmployeeData({ ...employeeData, dateOfBirth: selectedDate });
+  };
+
+  const showConfirmationDialog = () => {
+    return new Promise((resolve) => {
+      confirmAlert({
+        title: "Onay",
+        message: "Kaydetmeyi onaylıyor musunuz?",
+        buttons: [
+          {
+            label: "Evet",
+            onClick: () => resolve(true),
+          },
+          {
+            label: "Hayır",
+            onClick: () => resolve(false),
+          },
+        ],
+      });
+    });
   };
 
   return (
@@ -280,15 +296,15 @@ const EmployeeCreate = () => {
                   />
                 </div>
                 <div>
-                  <h5><span className="text-danger">*</span> Fotoğraf Seç</h5>
-                  <p>
-                    Fotoğraf ekleyin veya değiştirin{" "}
-                  </p>
+                  <h5>
+                    <span className="text-danger">*</span> Fotoğraf Seç
+                  </h5>
+                  <p>Fotoğraf ekleyin veya değiştirin </p>
                 </div>
               </div>
               <div className="mb-3">
                 <label htmlFor="firstName">
-                <span className="text-danger">*</span> Ad:
+                  <span className="text-danger">*</span> Ad:
                 </label>
                 <input
                   type="text"
@@ -315,7 +331,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="firstSurname">
-                <span className="text-danger">*</span> Soyad:
+                  <span className="text-danger">*</span> Soyad:
                 </label>
                 <input
                   type="text"
@@ -342,7 +358,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="phoneNumber">
-                <span className="text-danger">*</span> Telefon Numarası:
+                  <span className="text-danger">*</span> Telefon Numarası:
                 </label>
                 <PhoneInput
                   country="TR"
@@ -361,7 +377,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="dateOfBirth">
-                <span className="text-danger">*</span> Doğum Tarihi: 
+                  <span className="text-danger">*</span> Doğum Tarihi:
                 </label>
                 <input
                   type="date"
@@ -381,7 +397,9 @@ const EmployeeCreate = () => {
 
               {
                 <div className="mb-3">
-                  <label><span className="text-danger">*</span> Cinsiyet:</label>
+                  <label>
+                    <span className="text-danger">*</span> Cinsiyet:
+                  </label>
                   <div className="form-check">
                     <input
                       type="radio"
@@ -425,7 +443,7 @@ const EmployeeCreate = () => {
             <div className="card-body">
               <div className="mb-3">
                 <label htmlFor="birthPlace">
-                <span className="text-danger">*</span> Doğum Yeri: 
+                  <span className="text-danger">*</span> Doğum Yeri:
                 </label>
                 <input
                   type="text"
@@ -441,7 +459,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="tc">
-                <span className="text-danger">*</span> TC Kimlik No: 
+                  <span className="text-danger">*</span> TC Kimlik No:
                 </label>
                 <input
                   type="text"
@@ -459,7 +477,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="address">
-                <span className="text-danger">*</span>Adres: 
+                  <span className="text-danger">*</span>Adres:
                 </label>
                 <input
                   type="text"
@@ -475,7 +493,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="company">
-                <span className="text-danger">*</span> Şirket Adı: 
+                  <span className="text-danger">*</span> Şirket Adı:
                 </label>
                 <input
                   type="text"
@@ -493,7 +511,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="position">
-                <span className="text-danger">*</span> Pozisyon: 
+                  <span className="text-danger">*</span> Pozisyon:
                 </label>
                 <input
                   type="text"
@@ -509,7 +527,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="department">
-                <span className="text-danger">*</span> Departman: 
+                  <span className="text-danger">*</span> Departman:
                 </label>
                 <input
                   type="text"
@@ -525,7 +543,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="startDate">
-                <span className="text-danger">*</span> İşe Giriş Tarihi: 
+                  <span className="text-danger">*</span> İşe Giriş Tarihi:
                 </label>
                 <input
                   type="date"
@@ -544,7 +562,7 @@ const EmployeeCreate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="wage">
-                <span className="text-danger">*</span> Maaş: 
+                  <span className="text-danger">*</span> Maaş:
                 </label>
                 <input
                   type="number"
@@ -585,6 +603,4 @@ const EmployeeCreate = () => {
   );
 };
 
-
 export default EmployeeCreate;
-
