@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-number-input/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const CompanyAddPage = () => {
   const navigate = useNavigate();
@@ -43,8 +45,6 @@ const CompanyAddPage = () => {
     return taxDepartment.trim() !== "";
   };
 
-  // Diğer doğrulama fonksiyonları burada devam eder...
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "employeeCount" && parseInt(value) < 0) {
@@ -55,7 +55,7 @@ const CompanyAddPage = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (!file) return; // Dosya seçilmediyse işlemi sonlandır
+    if (!file) return;
 
     setPhoto(URL.createObjectURL(file));
     handlePhotoChange(file);
@@ -81,32 +81,40 @@ const CompanyAddPage = () => {
     e.preventDefault();
     setFormSubmitted(true);
 
-    // Logo yüklenip yüklenmediğini kontrol et
     if (!photo) {
       toast.warning("Lütfen bir logo yükleyin.");
       return;
     }
 
-    // Diğer doğrulamalar devam eder...
-
-    try {
-      const confirmed = window.confirm("Kaydetmeyi onaylıyor musunuz?");
-      if (confirmed) {
-        const response = await createCompany(companyData);
-        console.log("Company created:", response);
-        resetForm();
-        toast.success("Şirket başarıyla kaydedildi.");
-        setTimeout(() => {
-          navigate("/admin-company-list");
-        }, 2000);
-      } else {
-        console.log("Kaydetme işlemi iptal edildi.");
-        toast.error("Kaydetme işlemi iptal edildi.");
-      }
-    } catch (error) {
-      console.error("Error creating company:", error);
-      toast.error("Şirket Kaydı onaylanırken bir sorun ile karşılaşıldı.");
-    }
+    confirmAlert({
+      title: "Onaylama",
+      message: "Kaydetmeyi onaylıyor musunuz?",
+      buttons: [
+        {
+          label: "Evet",
+          onClick: async () => {
+            try {
+              const response = await createCompany(companyData);
+              console.log("Company created:", response);
+              resetForm();
+              toast.success("Şirket başarıyla kaydedildi.");
+              setTimeout(() => {
+                navigate("/admin-company-list");
+              }, 2000);
+            } catch (error) {
+              console.error("Error creating company:", error);
+              toast.error(
+                "Şirket Kaydı onaylanırken bir sorun ile karşılaşıldı."
+              );
+            }
+          },
+        },
+        {
+          label: "Hayır",
+          onClick: () => console.log("Kaydetme işlemi iptal edildi."),
+        },
+      ],
+    });
   };
 
   const resetForm = () => {
@@ -132,7 +140,6 @@ const CompanyAddPage = () => {
   const handleCancel = () => {
     resetForm();
   };
-
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Şirket Ekle</h2>
