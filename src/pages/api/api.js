@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://hrprojectwebapi20240311113118.azurewebsites.net/api";
+const BASE_URL = "API ENDPOINT";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -50,7 +50,7 @@ export const uploadPhotoAndGetPath = async (file) => {
     formData.append("file", file); // Dosyanın adı "file" olmalı
 
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/File/upload",
+      "API ENDPOINT",
       formData, // FormData nesnesini doğrudan gönder
       {
         headers: {
@@ -77,7 +77,7 @@ export const LoginCheck = (emailP, passwordP) => {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        "https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/login",
+        "API ENDPOINT",
         {
           email: emailP,
           password: passwordP,
@@ -102,7 +102,7 @@ export const LoginCheck = (emailP, passwordP) => {
 export const checkEmailExists = async (email) => {
   try {
     const response = await axios.post(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/account/resetpassword?email=${email}`
+      `API ENDPOINT =${email}`
     );
     if (response.status === 200) {
       // Başarılı bir yanıt geldi, exists değerini döndür
@@ -120,7 +120,7 @@ export const checkEmailExists = async (email) => {
 export const createPermission = async (formData) => {
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission",
+      "API ENDPOINT",
       formData
     );
     return response.data;
@@ -136,7 +136,7 @@ export const createPermission = async (formData) => {
 //   }
 //   try {
 //     const response = await axios.get(
-//       "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/1/byEmployee"
+//       "API ENDPOINT"
 //     );
 //     return response.data;
 //   } catch (error) {
@@ -155,7 +155,7 @@ export const fetchPermissions = async (token) => {
 
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/1/byEmployee",
+      "API ENDPOINT",
       config // Pass the config object containing headers
     );
     return response.data;
@@ -168,7 +168,7 @@ export const fetchPermissions = async (token) => {
 async function fetchAdvances() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances/1/byEmployee"
+      "API ENDPOINT"
     );
     return response.data;
   } catch (error) {
@@ -182,7 +182,7 @@ export { fetchAdvances };
 async function createAdvance(createObject) {
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances",
+      "API ENDPOINT",
       createObject
     );
     return response.data;
@@ -197,7 +197,7 @@ export { createAdvance };
 async function fetchExpenses() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses/1/byEmployee"
+      "API ENDPOINT"
     );
     return response.data;
   } catch (error) {
@@ -211,7 +211,7 @@ export { fetchExpenses };
 const sendFormData = async (formData) => {
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses",
+      "API ENDPOINT",
       formData
     );
     return response.data;
@@ -225,7 +225,7 @@ export { sendFormData };
 async function createEmployee(createObject) {
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Employees",
+      "API ENDPOINT",
       createObject
     );
     return response.data;
@@ -240,7 +240,7 @@ export { createEmployee };
 async function fetchAllPermission(id) {
   try {
     const response = await axios.get(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission/${id}/byEmployee`
+      `API ENDPOINT`
     );
     return response.data;
   } catch (error) {
@@ -254,7 +254,7 @@ export { fetchAllPermission };
 async function fetchAllAdvances(id) {
   try {
     const response = await axios.get(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances/${id}/byEmployee`
+      `API ENDPOINT`
     );
     return response.data;
   } catch (error) {
@@ -268,7 +268,7 @@ export { fetchAllAdvances };
 async function fetchAllExpenses(id) {
   try {
     const response = await axios.get(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses/${id}/byEmployee`
+      `API ENDPOINT`
     );
     return response.data;
   } catch (error) {
@@ -317,7 +317,7 @@ export const fetchEmployees2 = async () => {
 export async function downloadFile(fileName) {
   try {
     const response = await fetch(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/file/download?fileName=${fileName}`
+      `API ENDPOINT=${fileName}`
     );
 
     if (!response.ok) {
@@ -343,7 +343,7 @@ export async function downloadFile(fileName) {
 export async function updateAdvanceStatus(id, isApproved) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/advances/manager`,
+      `API ENDPOINT`,
       { id, isApproved }
     );
     return { success: true, message: response.data.message };
@@ -356,7 +356,7 @@ export async function updateAdvanceStatus(id, isApproved) {
 export async function updateAdvanceStatusForEmployee(id, isCancelled) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/advances/employee`,
+      `API ENDPOINT`,
       { id, isCancelled }
     );
     return { success: true, message: response.data.message };
@@ -369,7 +369,7 @@ export async function updateAdvanceStatusForEmployee(id, isCancelled) {
 export async function updateExpenseStatus(id, isApproved) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/expenses/manager`,
+      `API ENDPOINT`,
       { id, isApproved }
     );
     return { success: true, message: response.data.message };
@@ -382,7 +382,7 @@ export async function updateExpenseStatus(id, isApproved) {
 export async function updateExpenseStatusForEmployee(id, isCancelled) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/expenses/employee`,
+      `API ENDPOINT`,
       { id, isCancelled }
     );
     return { success: true, message: response.data.message };
@@ -395,7 +395,7 @@ export async function updateExpenseStatusForEmployee(id, isCancelled) {
 export async function updatePermissionStatus(id, isApproved) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/manager`,
+      `API ENDPOINT`,
       { id, isApproved }
     );
     return { success: true, message: response.data.message };
@@ -408,7 +408,7 @@ export async function updatePermissionStatus(id, isApproved) {
 export async function updatePermissionStatusForEmployee(id, isCancelled) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/permission/employee`,
+      `API ENDPOINT`,
       { id, isCancelled }
     );
     return { success: true, message: response.data.message };
@@ -421,7 +421,7 @@ export async function updatePermissionStatusForEmployee(id, isCancelled) {
 export async function changePassword(email, password, repeatPassword) {
   try {
     const response = await axios.put(
-      `https://hrprojectwebapi20240311113118.azurewebsites.net/api/account`,
+      `API ENDPOINT`,
       { email, password, repeatPassword }
     );
     return response;
@@ -434,7 +434,7 @@ export async function changePassword(email, password, repeatPassword) {
 async function createCompany(createObject) {
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Company",
+      "API ENDPOINT",
       createObject
     );
     return response.data;
@@ -479,7 +479,7 @@ export const createManager = async (managerData) => {
   console.log(managerData);
   try {
     const response = await axios.post(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/manager",
+      "API ENDPOINT",
       managerData
     );
     return response.data;
@@ -501,7 +501,7 @@ export const fetchManagers = async () => {
 async function fetchAllPermissionList() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Permission"
+      "API ENDPOINT"
     );
     return response.data;
   } catch (error) {
@@ -515,7 +515,7 @@ export { fetchAllPermissionList };
 async function fetchAllExpenseList() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Expenses"
+      "API ENDPOINT"
     );
     return response.data;
   } catch (error) {
@@ -529,7 +529,7 @@ export { fetchAllExpenseList };
 async function fetchAllAdvanceList() {
   try {
     const response = await axios.get(
-      "https://hrprojectwebapi20240311113118.azurewebsites.net/api/Advances"
+      "API ENDPOINT"
     );
     return response.data;
   } catch (error) {

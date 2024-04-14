@@ -40,15 +40,14 @@ const QuickMenu = (props) => {
     
 
     
-
+    
     useEffect(() => {
       // Retrieve profile picture data from local storage
+      
       const storedProfilePictureData = localStorage.getItem("profilePictureData");
-      if (storedProfilePictureData) {
-        setProfilePictureData(JSON.parse(storedProfilePictureData));
-      }
+      
     }, [profilePictureData]);
-
+    
     const handleLogout = () => {
       setShowLogoutModal(true);
     };
@@ -114,7 +113,7 @@ const QuickMenu = (props) => {
             <div className="avatar avatar-md avatar-indicators avatar-online">
               <Image
                 alt="avatar"
-                src={profilePictureData}
+                src={storedProfilePictureData}
                 className="rounded-circle"
               />
             </div>
